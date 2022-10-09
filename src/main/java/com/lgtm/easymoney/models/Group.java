@@ -26,8 +26,8 @@ public class Group implements Serializable {
     @ManyToMany
     @JoinTable(
         name = "grp_user",
-        joinColumns = @JoinColumn(name = "group_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
+        joinColumns = @JoinColumn(name = "gid"),
+        inverseJoinColumns = @JoinColumn(name = "uid")
     )
     Set<User> groupUsers;
 }
