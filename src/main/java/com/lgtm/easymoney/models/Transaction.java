@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.lgtm.easymoney.enums.Category;
-import com.lgtm.easymoney.enums.MoneyRequestStatus;
+import com.lgtm.easymoney.enums.TransactionStatus;;
 
 @Entity
-@Table(name="money_request")
+@Table(name="transaction")
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class MoneyRequest implements Serializable {
+public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -40,12 +40,12 @@ public class MoneyRequest implements Serializable {
     @Column(nullable = true)
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private TransactionStatus status;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date time;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 8, nullable = false)
-    private MoneyRequestStatus status;
+    private Date lastUpdateTime;
 }
