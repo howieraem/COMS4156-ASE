@@ -23,7 +23,7 @@ public class Group implements Serializable {
     @Column(nullable = true)
     private String description;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
         name = "grp_user",
         joinColumns = @JoinColumn(name = "gid"),

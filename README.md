@@ -1,6 +1,6 @@
-# COMS4156-ASE 
+# COMS W4156 ASE Project
 
-## Team member
+## Team members
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 ## How to run locally

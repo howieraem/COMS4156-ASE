@@ -17,23 +17,20 @@ public class Friendship implements Serializable {
     @NoArgsConstructor
     @Embeddable
     public static class Key implements Serializable {
-        @Column(nullable = false)
-        private Long ownerId;
-
-        @Column(nullable = false)
-        private Long otherId;
+        private Long uid1;
+        private Long uid2;
     }
 
     @EmbeddedId
     private Key key;
 
     @ManyToOne
-    @MapsId("ownerId")
-    private User owner;
+    @MapsId("uid1")
+    private User user1;
 
     @ManyToOne
-    @MapsId("otherId")
-    private User other;
+    @MapsId("uid2")
+    private User user2;
 
     @Column(nullable = false)
     private Boolean active = false;
