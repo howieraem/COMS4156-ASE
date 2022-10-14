@@ -2,6 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.ErrorRsp;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.RegisterRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
@@ -9,11 +10,14 @@ import com.lgtm.easymoney.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -28,12 +32,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq, Errors errors) {
         if (userRepository.existsByEmail(registerReq.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered!");
+            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
+            errorFields.add("email");
+            errorMessages.add("Email already registered!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessages));
         }
         if (accountRepository.existsByNumberAndRoutingNumber(registerReq.getAccountNumber(), registerReq.getRoutingNumber())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bank account already registered!");
+            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
+            errorFields.add("number");
+            errorFields.add("rountingNumber");
+            errorMessages.add("Bank account already registered!");
+            errorMessages.add("Bank account already registered!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessages));
         }
 
         var user = new User();

@@ -2,6 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.ErrorRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/balance")
@@ -24,8 +27,11 @@ public class BalanceController {
     public ResponseEntity<?> update(@Valid @RequestBody BalanceReq balanceReq) {
         var userWrapper = userRepository.findById(balanceReq.getUid());
         if (userWrapper.isEmpty()) {
+            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
+            errorFields.add("uid");
+            errorMessages.add("User not found!");
             // TODO load the current authenticated user, no need to check existence
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessages));
         }
 
         // TODO maybe better to move the logics below to service layer?
