@@ -1,5 +1,7 @@
 package com.lgtm.easymoney.models;
 
+import com.lgtm.easymoney.enums.Category;
+import com.lgtm.easymoney.enums.TransactionStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -7,10 +9,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.lgtm.easymoney.enums.Category;
-import com.lgtm.easymoney.enums.TransactionStatus;;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="transaction")
@@ -44,7 +43,7 @@ public class Transaction implements Serializable {
     @Column(length = 20, nullable = false)
     private TransactionStatus status;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date lastUpdateTime;

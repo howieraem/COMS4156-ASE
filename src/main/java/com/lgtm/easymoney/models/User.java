@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.models;
 
+import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -8,8 +9,6 @@ import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import com.lgtm.easymoney.enums.UserType;
 
 @Entity
 @Table(name="user")
@@ -62,4 +61,15 @@ public class User implements Serializable {
 
     @OneToOne(mappedBy = "bizUser", optional = true, cascade = CascadeType.ALL)
     private BizProfile bizProfile;
+
+    public void setTypeByStr(String userTypeStr) {
+        userTypeStr = userTypeStr.toLowerCase();
+        if (userTypeStr.equals("financial")) {
+            type = UserType.FINANCIAL;
+        } else if (userTypeStr.equals("business")) {
+            type = UserType.BUSINESS;
+        } else {
+            type = UserType.PERSONAL;
+        }
+    }
 }
