@@ -27,11 +27,10 @@ public class BalanceController {
     public ResponseEntity<?> update(@Valid @RequestBody BalanceReq balanceReq) {
         var userWrapper = userRepository.findById(balanceReq.getUid());
         if (userWrapper.isEmpty()) {
-            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
+            List<String> errorFields = new ArrayList<>();
             errorFields.add("uid");
-            errorMessages.add("User not found!");
             // TODO load the current authenticated user, no need to check existence
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessages));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, "User not found!"));
         }
 
         // TODO maybe better to move the logics below to service layer?

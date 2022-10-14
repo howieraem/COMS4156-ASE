@@ -1,7 +1,6 @@
 package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.lgtm.easymoney.payload.ErrorRsp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,37 +20,38 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorRsp> handle(MethodArgumentNotValidException ex) {
         List<String> errorFields = new ArrayList<>();
-        List<String> errorMessages = new ArrayList<>();
+        String errorMessage;
         try {
             var fieldErrors = Objects.requireNonNull(ex.getBindingResult().getFieldErrors());
             for (var fieldError : fieldErrors) {
                 errorFields.add(fieldError.getField());
-                errorMessages.add(fieldError.getDefaultMessage());
             }
+            errorMessage = "Invalid input format!";
         } catch (NullPointerException npe) {
-            errorMessages.add("Unknown error(s)!");
+            // TODO not sure when `fieldErrors` is null
+            errorMessage = "Unknown input error!";
         }
 
-        return new ResponseEntity<>(new ErrorRsp(errorFields, errorMessages), null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
     }
 
     /** This handles exceptions caused by incorrect data types. */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorRsp> handle(HttpMessageNotReadableException ex) throws IOException {
         List<String> errorFields = new ArrayList<>();
-        List<String> errorMessages = new ArrayList<>();
+        String errorMessage;
         var cause = ex.getCause();
 
         if (cause instanceof JsonParseException) {
             /* If there are multiple problematic fields, this kind of exception only includes the first one. */
             JsonParseException jsonEx = (JsonParseException) ex.getCause();
             errorFields.add(jsonEx.getProcessor().currentName());
-            errorMessages.add(jsonEx.getMessage());
+            errorMessage = "JSON parse error!";
         } else {
-            // TODO consider other cases not yet encountered?
-            errorMessages.add(cause.getMessage());
+            // TODO not sure about other causes
+            errorMessage = "Unknown http read error!";
         }
 
-        return new ResponseEntity<>(new ErrorRsp(errorFields, errorMessages), null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
     }
 }

@@ -34,18 +34,15 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq, Errors errors) {
         if (userRepository.existsByEmail(registerReq.getEmail())) {
-            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
+            List<String> errorFields = new ArrayList<>();
             errorFields.add("email");
-            errorMessages.add("Email already registered!");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessages));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, "Email already registered!"));
         }
         if (accountRepository.existsByNumberAndRoutingNumber(registerReq.getAccountNumber(), registerReq.getRoutingNumber())) {
-            List<String> errorFields = new ArrayList<>(), errorMessages = new ArrayList<>();
-            errorFields.add("number");
+            List<String> errorFields = new ArrayList<>();
+            errorFields.add("accountNumber");
             errorFields.add("rountingNumber");
-            errorMessages.add("Bank account already registered!");
-            errorMessages.add("Bank account already registered!");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessages));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, "Bank account already registered!"));
         }
 
         var user = new User();

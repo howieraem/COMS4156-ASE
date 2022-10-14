@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ErrorRsp {
     private List<String> errorFields;
-    private List<String> errorMessages;
+    private String message;
 }
