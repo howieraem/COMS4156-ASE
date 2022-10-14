@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="account")
+@Table(
+    name="account",
+    uniqueConstraints=@UniqueConstraint(columnNames={"number", "routingNumber"})
+)
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -19,7 +22,7 @@ public class Account implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false, length = 17)
+    @Column(nullable = false, length = 17)
     private String number;
 
     @Column(nullable = false, length = 9)

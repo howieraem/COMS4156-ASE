@@ -4,6 +4,7 @@ import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.RegisterRsp;
+import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,16 +19,21 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq) {
         if (userRepository.existsByEmail(registerReq.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered!");
+        }
+        if (accountRepository.existsByNumberAndRoutingNumber(registerReq.getAccountNumber(), registerReq.getRoutingNumber())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bank account already registered!");
         }
 
         var user = new User();
