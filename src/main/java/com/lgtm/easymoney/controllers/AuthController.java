@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq) {
+    public ResponseEntity<RegisterRsp> register(@Valid @RequestBody RegisterReq registerReq) {
         var user = new User();
         user.setEmail(registerReq.getEmail());
         user.setPassword(registerReq.getPassword());  // TODO spring security password encoding

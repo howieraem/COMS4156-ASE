@@ -20,11 +20,11 @@ public class UserController {
     }
 
     @PutMapping("/deposit")
-    public ResponseEntity<?> deposit(@Valid @RequestBody BalanceReq req) {
+    public ResponseEntity<BalanceRsp> deposit(@Valid @RequestBody BalanceReq req) {
         return userService.makeADeposit(req);
     }
     @PutMapping("/withdraw")
-    public ResponseEntity<?> withdraw(@Valid @RequestBody BalanceReq req) {
+    public ResponseEntity<BalanceRsp> withdraw(@Valid @RequestBody BalanceReq req) {
         return userService.makeAWithdraw(req);
     }
 

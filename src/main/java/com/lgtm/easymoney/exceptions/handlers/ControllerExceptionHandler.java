@@ -74,6 +74,6 @@ public class ControllerExceptionHandler {
         String constraint = cause.getConstraintName().split("\\.")[1];
         List<String> errorFields = Arrays.asList(Consts.DB_CONSTRAINTS_FIELDS.get(constraint));
         String errorMessage = Consts.DB_CONSTRAINTS_ERR_MSGS.get(constraint);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessage));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
     }
 }
