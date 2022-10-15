@@ -1,10 +1,11 @@
-package com.lgtm.easymoney.services;
+package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
+import com.lgtm.easymoney.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,10 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Override
+    public boolean existsByID(Long id) {
+        return userRepository.existsById(id);
+    }
     @Override
     public User getUserByID(Long id) {
         var userWrapper = userRepository.findById(id);
