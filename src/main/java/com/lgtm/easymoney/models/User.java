@@ -1,13 +1,12 @@
 package com.lgtm.easymoney.models;
 
+import com.lgtm.easymoney.configs.Consts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-
-import com.lgtm.easymoney.configs.Consts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
