@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @RestController
-@RequestMapping("/balance")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
