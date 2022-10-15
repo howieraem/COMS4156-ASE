@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserService {
+    boolean existsByID(Long id);
     User getUserByID(Long id);
     User saveUser(User user);
     List<User> getAllUsers();
