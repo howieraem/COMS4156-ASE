@@ -12,8 +12,8 @@ public class BalanceReq {
     @NotNull
     private Long uid;
 
-    @NotNull
-    private Boolean isDeposit;
+//    @NotNull
+//    private Boolean isDeposit;
 
     @NotNull
     @Digits(integer = 100, fraction = 2)
