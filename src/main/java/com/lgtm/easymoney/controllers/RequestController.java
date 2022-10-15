@@ -3,8 +3,10 @@ package com.lgtm.easymoney.controllers;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.payload.RequestReq;
+import com.lgtm.easymoney.payload.RequestRsp;
 import com.lgtm.easymoney.services.RequestService;
 import com.lgtm.easymoney.services.UserService;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,7 @@ public class RequestController {
 
     @PostMapping("/create")
     // make a new request
-    public ResponseEntity<BalanceRsp> createARequest(@Valid @RequestBody RequestReq req) {
+    public ResponseEntity<RequestRsp> createARequest(@Valid @RequestBody RequestReq req) {
         return requestService.createARequest(req);
     }
     // TODO handle other request routes

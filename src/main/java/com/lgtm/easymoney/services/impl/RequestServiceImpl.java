@@ -2,11 +2,11 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
-import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.payload.RequestReq;
+import com.lgtm.easymoney.payload.RequestRsp;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.RequestService;
 import com.lgtm.easymoney.services.UserService;
@@ -65,19 +65,19 @@ public class RequestServiceImpl implements RequestService {
         return true;
     }
     @Override
-    public ResponseEntity<BalanceRsp> createARequest(RequestReq req) {
+    public ResponseEntity<RequestRsp> createARequest(RequestReq req) {
         // get params
-        Long from_uid = req.getFrom_uid();      // from = req by
-        Long to_uid = req.getTo_uid();          // to = req to
+        Long from_uid = req.getFromUid();      // from = req by
+        Long to_uid = req.getToUid();          // to = req to
         BigDecimal amount = req.getAmount();
         Category category = req.getCategory();
         String desc = req.getDescription();
-        // make a deposit
+        // create a request
         User from_user = userService.getUserByID(from_uid);
         User to_user = userService.getUserByID(to_uid);
         boolean success = createARequest(from_user, to_user, amount, desc, category);
         // payload
-        BalanceRsp res = new BalanceRsp();
+        RequestRsp res = new RequestRsp();
         res.setSuccess(success);
         res.setCurrBalance(from_user.getBalance());
         if (success) {

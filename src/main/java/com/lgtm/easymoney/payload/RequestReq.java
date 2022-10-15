@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Data
 public class RequestReq {
     @NotNull
-    private Long from_uid;
+    private Long fromUid;
     @NotNull
-    private Long to_uid;
+    private Long toUid;
 
     @NotNull
     @Digits(integer = 100, fraction = 2)
