@@ -71,10 +71,12 @@ public class UserServiceImpl implements UserService {
         // payload
         BalanceRsp res = new BalanceRsp();
         res.setSuccess(success);
-        res.setCurrBalance(user.getBalance());
-
-        return success ? ResponseEntity.status(HttpStatus.OK).body(res) :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a deposit."));
+        if (success) {
+            res.setCurrBalance(user.getBalance());
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a deposit."));
     }
     @Override
     public ResponseEntity<?> makeAWithdraw(BalanceReq req) {
@@ -87,10 +89,12 @@ public class UserServiceImpl implements UserService {
         // payload
         BalanceRsp res = new BalanceRsp();
         res.setSuccess(success);
-        res.setCurrBalance(user.getBalance());
+        if (success) {
+            res.setCurrBalance(user.getBalance());
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        }
 
-        return success ? ResponseEntity.status(HttpStatus.OK).body(res) :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a withdraw."));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a withdraw."));
 
     }
 }
