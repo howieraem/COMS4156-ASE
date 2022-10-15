@@ -1,7 +1,11 @@
 package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.lgtm.easymoney.configs.Consts;
+import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ErrorRsp;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,5 +58,22 @@ public class ControllerExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorRsp> handle(ResourceNotFoundException ex) {
+        List<String> errorFields = new ArrayList<>();
+        errorFields.add(ex.getFieldName());
+        String errorMessage = ex.getMessage();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessage));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorRsp> handle(DataIntegrityViolationException ex) {
+        var cause = (ConstraintViolationException) ex.getCause();
+        String constraint = cause.getConstraintName().split("\\.")[1];
+        List<String> errorFields = Arrays.asList(Consts.DB_CONSTRAINTS_FIELDS.get(constraint));
+        String errorMessage = Consts.DB_CONSTRAINTS_ERR_MSGS.get(constraint);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessage));
     }
 }

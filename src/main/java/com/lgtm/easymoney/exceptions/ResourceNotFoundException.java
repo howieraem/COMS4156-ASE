@@ -1,12 +1,7 @@
 package com.lgtm.easymoney.exceptions;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serial;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-// it's intended to handle resource not found exceptions
-// ref: https://4156aseteam.slack.com/archives/C046MNCJ2U9/p1665800409627119?thread_ts=1665794183.617079&cid=C046MNCJ2U9
 public class ResourceNotFoundException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
