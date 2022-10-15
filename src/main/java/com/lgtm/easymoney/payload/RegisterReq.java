@@ -3,6 +3,7 @@ package com.lgtm.easymoney.payload;
 import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
@@ -20,7 +21,7 @@ public class RegisterReq {
 
     private String address;
 
-    @Size(min = 10, max = 10)
+    @Pattern(regexp="[\\d]{10}")
     private String phone;
 
     @NotBlank
@@ -28,9 +29,9 @@ public class RegisterReq {
 
     /* Regarding account number lengths: https://qr.ae/pvJXyd */
     @NotBlank
-    @Size(min = 1, max = 17)
+    @Pattern(regexp="[\\d]{1,17}")
     private String accountNumber;
     @NotBlank
-    @Size(min = 9, max = 9)
+    @Pattern(regexp="[\\d]{9}")
     private String routingNumber;
 }
