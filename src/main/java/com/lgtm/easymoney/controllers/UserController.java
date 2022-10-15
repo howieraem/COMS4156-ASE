@@ -18,8 +18,13 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PutMapping("/deposit")
     public ResponseEntity<?> deposit(@Valid @RequestBody BalanceReq req) {
         return userService.makeADeposit(req);

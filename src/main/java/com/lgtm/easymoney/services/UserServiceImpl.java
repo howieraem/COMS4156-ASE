@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services;
 
+import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByID(Long id) {
         var userWrapper = userRepository.findById(id);
         if (userWrapper.isEmpty()) {
-            return null;
+            throw new ResourceNotFoundException("User", "id", id);
         }
         return userWrapper.get();
     }
