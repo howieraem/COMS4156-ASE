@@ -1,11 +1,11 @@
 package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.repositories.UserRepository;
 import static org.junit.Assert.*;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
