@@ -1,6 +1,6 @@
 package com.lgtm.easymoney.models;
 
-import com.lgtm.easymoney.configs.Consts;
+import com.lgtm.easymoney.configs.DBConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name="user",
-        uniqueConstraints=@UniqueConstraint(name=Consts.USER_EMAIL_CONSTRAINT, columnNames={"email"})
+        uniqueConstraints=@UniqueConstraint(name= DBConsts.USER_EMAIL_CONSTRAINT, columnNames={"email"})
 )
 @AllArgsConstructor
 @Data

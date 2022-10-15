@@ -1,6 +1,6 @@
 package com.lgtm.easymoney.models;
 
-import com.lgtm.easymoney.configs.Consts;
+import com.lgtm.easymoney.configs.DBConsts;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name="account",
-        uniqueConstraints=@UniqueConstraint(name=Consts.ACCOUNT_NUMBERS_CONSTRAINT, columnNames={"accountNumber", "routingNumber"})
+        uniqueConstraints=@UniqueConstraint(name= DBConsts.ACCOUNT_NUMBERS_CONSTRAINT, columnNames={"accountNumber", "routingNumber"})
 )
 @AllArgsConstructor
 @Data

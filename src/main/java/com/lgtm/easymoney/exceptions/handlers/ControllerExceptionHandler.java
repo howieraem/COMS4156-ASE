@@ -1,7 +1,7 @@
 package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.lgtm.easymoney.configs.Consts;
+import com.lgtm.easymoney.configs.DBConsts;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ErrorRsp;
 import org.hibernate.exception.ConstraintViolationException;
@@ -60,6 +60,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
     }
 
+    /** This handles when a resource is not found in DB. */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorRsp> handle(ResourceNotFoundException ex) {
         List<String> errorFields = new ArrayList<>();
@@ -68,12 +69,13 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(errorFields, errorMessage));
     }
 
+    /** This handles when a database constraint (e.g., unique) is violated when creating/updating data. */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorRsp> handle(DataIntegrityViolationException ex) {
         var cause = (ConstraintViolationException) ex.getCause();
         String constraint = cause.getConstraintName().split("\\.")[1];
-        List<String> errorFields = Arrays.asList(Consts.DB_CONSTRAINTS_FIELDS.get(constraint));
-        String errorMessage = Consts.DB_CONSTRAINTS_ERR_MSGS.get(constraint);
+        List<String> errorFields = Arrays.asList(DBConsts.CONSTRAINTS_FIELDS.get(constraint));
+        String errorMessage = DBConsts.CONSTRAINTS_ERR_MSGS.get(constraint);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorRsp(errorFields, errorMessage));
     }
 }

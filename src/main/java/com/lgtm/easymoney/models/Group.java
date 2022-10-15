@@ -1,6 +1,6 @@
 package com.lgtm.easymoney.models;
 
-import com.lgtm.easymoney.configs.Consts;
+import com.lgtm.easymoney.configs.DBConsts;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name="grp", // "group" or "groups" will cause SQL syntax errors
-        uniqueConstraints=@UniqueConstraint(name=Consts.GROUP_NAME_CONSTRAINT, columnNames={"name"})
+        uniqueConstraints=@UniqueConstraint(name= DBConsts.GROUP_NAME_CONSTRAINT, columnNames={"name"})
 )
 @AllArgsConstructor
 @Data
