@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.models;
 
+import com.lgtm.easymoney.configs.DBConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,7 +12,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="user")
+@Table(
+        name="user",
+        uniqueConstraints=@UniqueConstraint(name= DBConsts.USER_EMAIL_CONSTRAINT, columnNames={"email"})
+)
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -21,7 +25,7 @@ public class User implements Serializable {
     private Long id;
 
     @Email
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
