@@ -1,11 +1,18 @@
 package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.BalanceReq;
+import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.ErrorRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -53,5 +60,37 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;
     }
+    @Override
+    public ResponseEntity<?> makeADeposit(BalanceReq req) {
+        // get params
+        Long uid = req.getUid();
+        BigDecimal amount = req.getAmount();
+        // make a deposit
+        User user = getUserByID(uid);
+        boolean success = makeADeposit(user, amount);
+        // payload
+        BalanceRsp res = new BalanceRsp();
+        res.setSuccess(success);
+        res.setCurrBalance(user.getBalance());
 
+        return success ? ResponseEntity.status(HttpStatus.OK).body(res) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a deposit."));
+    }
+    @Override
+    public ResponseEntity<?> makeAWithdraw(BalanceReq req) {
+        // get params
+        Long uid = req.getUid();
+        BigDecimal amount = req.getAmount();
+        // make a withdraw
+        User user = getUserByID(uid);
+        boolean success = makeAWithdraw(user, amount);
+        // payload
+        BalanceRsp res = new BalanceRsp();
+        res.setSuccess(success);
+        res.setCurrBalance(user.getBalance());
+
+        return success ? ResponseEntity.status(HttpStatus.OK).body(res) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRsp(new ArrayList<>(Arrays.asList("i think we need to refactor this")), "Error in making a withdraw."));
+
+    }
 }
