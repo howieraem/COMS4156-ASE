@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
-        name="account",
-        uniqueConstraints=@UniqueConstraint(name= DBConsts.ACCOUNT_NUMBERS_CONSTRAINT, columnNames={"accountNumber", "routingNumber"})
+        name = "account",
+        uniqueConstraints = @UniqueConstraint(name = DBConsts.ACCOUNT_NUMBERS_CONSTRAINT, columnNames = {"accountNumber", "routingNumber"})
 )
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class Account implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
