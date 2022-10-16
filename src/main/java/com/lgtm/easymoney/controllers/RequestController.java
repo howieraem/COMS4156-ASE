@@ -40,12 +40,12 @@ public class RequestController {
 
 
     @PutMapping("/accept")
-        public ResponseEntity<RequestRsp> acceptRequest(@RequestBody RequestAcceptDeclineReq r) {
+        public ResponseEntity<RequestRsp> acceptRequest(@Valid @RequestBody RequestAcceptDeclineReq r) {
         return requestService.acceptRequest(r.getRequestID(),r.getFromUid(),r.getToUid());
     }
 
     @PutMapping("/decline")
-    public ResponseEntity<RequestRsp> declineRequest(@RequestBody RequestAcceptDeclineReq r) {
+    public ResponseEntity<RequestRsp> declineRequest(@Valid @RequestBody RequestAcceptDeclineReq r) {
         return requestService.declineRequest(r.getRequestID(), r.getFromUid(), r.getToUid());
     }
 }

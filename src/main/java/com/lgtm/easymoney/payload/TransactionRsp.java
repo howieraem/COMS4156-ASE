@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @AllArgsConstructor
 @Data
@@ -19,4 +20,5 @@ public class TransactionRsp {
     private TransactionStatus status;
     private String desc;
     private Category category;
+    private Date lastUpdateTime;
 }

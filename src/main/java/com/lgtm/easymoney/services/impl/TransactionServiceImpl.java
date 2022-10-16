@@ -90,6 +90,7 @@ public class TransactionServiceImpl implements TransactionService
         r.setStatus(t.getStatus());
         r.setDesc(t.getDescription());
         r.setCategory(t.getCategory());
+        r.setLastUpdateTime(t.getLastUpdateTime());
         return r;
     }
     @Override
