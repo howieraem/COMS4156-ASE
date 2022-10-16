@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import com.lgtm.easymoney.payload.RequestAcceptDeclineReq;
 import com.lgtm.easymoney.payload.RequestReq;
 import com.lgtm.easymoney.payload.RequestRsp;
 import com.lgtm.easymoney.services.RequestService;
@@ -39,12 +40,12 @@ public class RequestController {
 
 
     @PutMapping("/accept")
-        public ResponseEntity<RequestRsp> acceptRequest(@RequestBody Map<String, Long> r) {
-        return requestService.acceptRequest(r.get("requestID"),r.get("fromUid"),r.get("toUid"));
+        public ResponseEntity<RequestRsp> acceptRequest(@RequestBody RequestAcceptDeclineReq r) {
+        return requestService.acceptRequest(r.getRequestID(),r.getFromUid(),r.getToUid());
     }
 
     @PutMapping("/decline")
-    public ResponseEntity<RequestRsp> declineRequest(@RequestBody Map<String, Long> r) {
-        return requestService.declineRequest(r.get("requestID"),r.get("fromUid"),r.get("toUid"));
+    public ResponseEntity<RequestRsp> declineRequest(@RequestBody RequestAcceptDeclineReq r) {
+        return requestService.declineRequest(r.getRequestID(), r.getFromUid(), r.getToUid());
     }
 }
