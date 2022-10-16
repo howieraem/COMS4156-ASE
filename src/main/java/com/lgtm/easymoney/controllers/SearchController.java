@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import com.lgtm.easymoney.payload.ProfileRsp;
 import com.lgtm.easymoney.payload.SearchRsp;
 import com.lgtm.easymoney.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ public class SearchController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<SearchRsp> searchByID(@PathVariable(value = "id") String id) {
-        return searchService.search(Long.valueOf(id));
+        return searchService.searchByID(Long.valueOf(id));
     }
     @GetMapping("/info/{info}")
     public ResponseEntity<SearchRsp> searchByInfo(@PathVariable(value = "info") String info) {
-        return searchService.search(info);
+        return searchService.searchByInfo(info);
     }
 
 }
