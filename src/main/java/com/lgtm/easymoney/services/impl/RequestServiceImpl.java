@@ -1,18 +1,14 @@
 package com.lgtm.easymoney.services.impl;
 
-import com.google.gson.Gson;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.payload.RequestReq;
 import com.lgtm.easymoney.payload.RequestRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.RequestService;
 import com.lgtm.easymoney.services.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,10 +123,8 @@ public class RequestServiceImpl implements RequestService {
             return false;
         }
         // maybe need to refactor this
-        boolean success = transactionService.executeTransaction(request);
-        return success;
-
-    };
+        return transactionService.executeTransaction(request);
+    }
     @Override
     public boolean declineRequest(Transaction request) {
         // here user is reqTo
@@ -148,8 +142,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                         userService.existsByID(fUid) &&
                         userService.existsByID(tUid) &&
-                        getRequestByID(tid).getFrom().getId() == fUid &&
-                        getRequestByID(tid).getTo().getId() == tUid &&
+                        getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                        getRequestByID(tid).getTo().getId().equals(tUid) &&
                         getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
 
         // find request
@@ -180,8 +174,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                 userService.existsByID(fUid) &&
                 userService.existsByID(tUid) &&
-                getRequestByID(tid).getFrom().getId() == fUid &&
-                getRequestByID(tid).getTo().getId() == tUid &&
+                getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                getRequestByID(tid).getTo().getId().equals(tUid) &&
                 getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
 
         // find request
