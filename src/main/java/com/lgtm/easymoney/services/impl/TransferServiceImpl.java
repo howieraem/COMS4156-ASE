@@ -4,17 +4,21 @@ import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.TransactionRsp;
 import com.lgtm.easymoney.payload.TransferReq;
 import com.lgtm.easymoney.payload.TransferRsp;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.TransferService;
 import com.lgtm.easymoney.services.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class TransferServiceImpl implements TransferService {
@@ -27,16 +31,23 @@ public class TransferServiceImpl implements TransferService {
         this.userService = userService;
     }
 
-    private boolean makeATransfer(User fromUser, User toUser, BigDecimal amount, Category category, String desc) {
-        Transaction t = new Transaction();
-        t.setFrom(fromUser);
-        t.setTo(toUser);
-        t.setAmount(amount);
-        t.setCategory(category);
-        t.setDescription(desc);
-        t.setStatus(TransactionStatus.REQ_PENDING);
-        t = transactionService.saveTransaction(t);
-        return transactionService.executeTransaction(t);
+    private Transaction createATransaction(User fromUser, User toUser, BigDecimal amount, Category category, String desc) {
+        Transaction transaction = new Transaction();
+        transaction.setFrom(fromUser);
+        transaction.setTo(toUser);
+        transaction.setAmount(amount);
+        transaction.setCategory(category);
+        transaction.setDescription(desc);
+        transaction.setStatus(TransactionStatus.REQ_PENDING);
+        return transactionService.saveTransaction(transaction);
+    }
+
+    private boolean makeATransfer(Transaction transaction) {
+        return transactionService.executeTransaction(transaction);
+    }
+
+    private List<Transaction> getTransfersByUser(User user) {
+        return transactionService.getAllTransactionsWithUser(user);
     }
 
     @Override
@@ -51,14 +62,35 @@ public class TransferServiceImpl implements TransferService {
         // make a transfer
         User fromUser = userService.getUserByID(fromUid);
         User toUser = userService.getUserByID(toUid);
-        boolean success = makeATransfer(fromUser, toUser, amount, category, desc);
+        Transaction transaction = createATransaction(fromUser, toUser, amount, category, desc);
+        boolean success = makeATransfer(transaction);
         // payload
         TransferRsp response = new TransferRsp();
         response.setSuccess(success);
         response.setCurrBalance(fromUser.getBalance());
+        List<TransactionRsp> transferRsps = transactionService.generateListResponseFromTransactions(List.of(transaction));
+        response.setTransfers(transferRsps);
         if (success) {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @Override
+    public ResponseEntity<TransferRsp> getTransfersByUid(Long uid) {
+        User user = userService.getUserByID(uid);
+        List<Transaction> transfers = getTransfersByUser(user);
+        boolean success = transfers != null;
+        // payload
+        TransferRsp response = new TransferRsp();
+        response.setSuccess(success);
+        response.setCurrBalance(user.getBalance());
+        List<TransactionRsp> transferRsps = transactionService.generateListResponseFromTransactions(transfers);
+        response.setTransfers(transferRsps);
+        response.setMessage("User's transfers returned");
+        if (success) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

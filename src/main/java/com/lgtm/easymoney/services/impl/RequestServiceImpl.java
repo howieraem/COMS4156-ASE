@@ -1,6 +1,5 @@
 package com.lgtm.easymoney.services.impl;
 
-import com.google.gson.Gson;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.Transaction;
