@@ -3,7 +3,6 @@ package com.lgtm.easymoney.payload;
 import com.lgtm.easymoney.enums.Category;
 import lombok.Data;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
