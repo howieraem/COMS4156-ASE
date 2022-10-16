@@ -3,6 +3,7 @@ package com.lgtm.easymoney.payload;
 import com.lgtm.easymoney.enums.Category;
 import lombok.Data;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,6 @@ public class RequestReq {
     private Long fromUid;
     @NotNull
     private Long toUid;
-
     @NotNull
     @Digits(integer = 100, fraction = 2)
     @DecimalMin(value = "0.0", inclusive = false)

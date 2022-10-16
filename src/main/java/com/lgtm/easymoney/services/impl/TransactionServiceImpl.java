@@ -4,12 +4,14 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.TransactionRsp;
 import com.lgtm.easymoney.repositories.TransactionRepository;
 import com.lgtm.easymoney.services.UserService;
 import com.lgtm.easymoney.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService
     }
     @Override
     public List<Transaction> getAllTransactionsWithUser(User user) {
-        return transactionRepository.findByFromOrTo(user.getId(), user.getId());
+        return transactionRepository.findByFromOrTo(user, user);
     }
     @Override
     public boolean executeTransaction(Transaction t) {
@@ -76,5 +78,24 @@ public class TransactionServiceImpl implements TransactionService
         // not supported transaction status to execute
         return false;
 
+    }
+    @Override
+    public TransactionRsp generateResponseFromTransaction(Transaction t) {
+        TransactionRsp r = new TransactionRsp();
+        r.setFromUid(t.getFrom().getId());
+        r.setToUid(t.getTo().getId());
+        r.setAmount(t.getAmount());
+        r.setStatus(t.getStatus());
+        r.setDesc(t.getDescription());
+        r.setCategory(t.getCategory());
+        return r;
+    }
+    @Override
+    public List<TransactionRsp> generateListResponseFromTransactions(List<Transaction> l) {
+        List<TransactionRsp> res = new ArrayList<>();
+        for (Transaction t : l) {
+            res.add(generateResponseFromTransaction(t));
+        }
+        return res;
     }
 }

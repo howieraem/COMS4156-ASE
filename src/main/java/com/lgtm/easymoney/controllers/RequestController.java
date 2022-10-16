@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/request")
@@ -25,11 +26,36 @@ public class RequestController {
         this.requestService = requestService;
     }
 
+
     @PostMapping("/create")
-    // make a new request
     public ResponseEntity<RequestRsp> createARequest(@Valid @RequestBody RequestReq req) {
         return requestService.createARequest(req);
     }
-    // TODO handle other request routes
+
+    @GetMapping("/get/{uid}")
+    public ResponseEntity<RequestRsp> getRequests(@PathVariable(value="uid") Long uid) {
+        // get all requests that are sent/received by user
+        // param: uid (from/to are the same for now) we may add filtering features later
+        // return: list of requests
+        System.out.println("in get!");
+        return requestService.getRequestsByUser(userService.getUserByID(uid));
+    }
+
+
+    @GetMapping("/accept")
+        public ResponseEntity<RequestRsp> acceptRequest(@RequestParam(name="rid")Long requestID,
+                                                        @RequestParam(name="fromUid")Long fromUid,
+                                                        @RequestParam(name="toUid")Long toUid) {
+        return requestService.acceptRequest(requestID, fromUid, toUid);
+    }
+
+    @GetMapping("/decline")
+    public ResponseEntity<RequestRsp> declineRequest(@RequestParam(name="rid")Long requestID,
+                                                     @RequestParam(name="fromUid")Long fromUid,
+                                                     @RequestParam(name="toUid")Long toUid) {
+        return requestService.declineRequest(requestID, fromUid, toUid);
+    }
+
+
 
 }

@@ -18,11 +18,14 @@ public interface RequestService {
     Transaction saveRequest(Transaction trans);
     List<Transaction> getRequestByUser(User user);
     List<Transaction> getAllRequests();
-    boolean createARequest(User reqBy, User reqTo, BigDecimal amount, String desc, Category category);
+    Transaction createARequest(User reqBy, User reqTo, BigDecimal amount, String desc, Category category);
     boolean validateRequest(Transaction request);
     boolean acceptRequest(Transaction request);
+    ResponseEntity<RequestRsp> acceptRequest(Long tid, Long fUid, Long tUid);
     boolean declineRequest(Transaction request);
+    ResponseEntity<RequestRsp> declineRequest(Long tid, Long fUid, Long tUid);
     // below are internal APIs
     ResponseEntity<RequestRsp> createARequest(RequestReq req);
+    ResponseEntity<RequestRsp> getRequestsByUser(User user);
     // TODO: request response
 }
