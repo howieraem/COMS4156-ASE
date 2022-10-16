@@ -58,6 +58,7 @@ public class TransferServiceImpl implements TransferService {
         BigDecimal amount = req.getAmount();
         Category category = req.getCategory();
         String desc = req.getDescription();
+        // TODO: add validation to prevent abnormal behavior
         // account validation is currently eliminated because account is guaranteed to exist
         // make a transfer
         User fromUser = userService.getUserByID(fromUid);
