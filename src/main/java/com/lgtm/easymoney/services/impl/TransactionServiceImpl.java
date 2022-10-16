@@ -24,7 +24,7 @@ public class TransactionServiceImpl implements TransactionService
     }
     @Override
     public boolean transactionExists(Transaction t) {
-        return transactionRepository.existsById(t.getId());
+        return t.getId() != null && transactionRepository.existsById(t.getId());
     }
     @Override
     public boolean existsTransactionByID(Long id) {
@@ -71,7 +71,7 @@ public class TransactionServiceImpl implements TransactionService
             userService.saveUser(receiver);
             // update status
             t.setStatus(TransactionStatus.REQ_COMPLETE);
-            transactionRepository.save(t);
+//            transactionRepository.save(t);
             return true;
         }
         // not supported transaction status to execute
