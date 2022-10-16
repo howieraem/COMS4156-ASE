@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProfileRsp {
+    private Long uid;
     private String accountName;
     private String email;
     private String address;

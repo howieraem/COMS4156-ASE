@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
@@ -93,21 +95,25 @@ public class SearchServiceImpl implements SearchService {
     public ResponseEntity<SearchRsp> searchByInfo(String userInfo) {
         
         List<User> userList;
+        Set<Long> uids = new HashSet<>();
         
         //regex to check valid phone number
-        String phoneRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
-        
-        //regex to check valid email pattern
-        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        java.util.regex.Matcher matcher = p.matcher(userInfo);
+//        String phoneRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+//
+//        //regex to check valid email pattern
+//        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+//        java.util.regex.Matcher matcher = p.matcher(userInfo);
+//
+//        //Parse userInfo
+//        if(matcher.find() || userInfo.matches(phoneRegex)) {
+//            userList = getUserByEmailOrPhone(userInfo, userInfo);
+//        }
+//        else {
+//            userList = getUserByName(userInfo);
+//        }
 
-        //Parse userInfo
-        if(matcher.find() || userInfo.matches(phoneRegex)) {
-            userList = getUserByEmailOrPhone(userInfo, userInfo);
-        }
-        else {
-            userList = getUserByName(userInfo);
-        }
+        userList = getUserByEmailOrPhone(userInfo, userInfo);
+        userList.addAll(getUserByName(userInfo));
 
         //Successful search
         boolean searchResult = true;
@@ -115,13 +121,16 @@ public class SearchServiceImpl implements SearchService {
         //Compose profile list
         List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
         for (User user : userList){
+            if (uids.contains(user.getId())) continue;
             ProfileRsp res = new ProfileRsp();
+            res.setUid(user.getId());
             res.setAccountName(user.getAccount().getAccountName());
             res.setEmail(user.getEmail());
             res.setAddress(user.getAddress());
             res.setUserType(user.getType());
             res.setPhone(user.getPhone());
             profileList.add(res);
+            uids.add(user.getId());
         }
        
         //Insert profile list into search response
