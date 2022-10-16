@@ -7,9 +7,8 @@ import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(
@@ -17,7 +16,8 @@ import lombok.NoArgsConstructor;
         uniqueConstraints=@UniqueConstraint(name= DBConsts.USER_EMAIL_CONSTRAINT, columnNames={"email"})
 )
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User implements Serializable {
     @Id
