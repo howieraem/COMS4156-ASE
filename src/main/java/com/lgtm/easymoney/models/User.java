@@ -8,7 +8,10 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(

@@ -4,7 +4,10 @@ import com.lgtm.easymoney.configs.DBConsts;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
