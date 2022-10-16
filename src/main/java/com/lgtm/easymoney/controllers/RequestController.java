@@ -28,12 +28,11 @@ public class RequestController {
         return requestService.createARequest(req);
     }
 
-    @GetMapping("/get/{uid}")
+    @GetMapping("/{uid}")
     public ResponseEntity<RequestRsp> getRequests(@PathVariable(value="uid") Long uid) {
         // get all requests that are sent/received by user
         // param: uid (from/to are the same for now) we may add filtering features later
         // return: list of requests
-        System.out.println("in get!");
         return requestService.getRequestsByUser(userService.getUserByID(uid));
     }
 

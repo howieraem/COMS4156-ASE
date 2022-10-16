@@ -73,6 +73,8 @@ public class TransactionServiceImpl implements TransactionService
             userService.saveUser(receiver);
             // update status
             t.setStatus(TransactionStatus.REQ_COMPLETE);
+            // save
+            saveTransaction(t);
             return true;
         }
         // not supported transaction status to execute
