@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/request")
@@ -37,20 +38,13 @@ public class RequestController {
     }
 
 
-    @GetMapping("/accept")
-        public ResponseEntity<RequestRsp> acceptRequest(@RequestParam(name="rid")Long requestID,
-                                                        @RequestParam(name="fromUid")Long fromUid,
-                                                        @RequestParam(name="toUid")Long toUid) {
-        return requestService.acceptRequest(requestID, fromUid, toUid);
+    @PutMapping("/accept")
+        public ResponseEntity<RequestRsp> acceptRequest(@RequestBody Map<String, Long> r) {
+        return requestService.acceptRequest(r.get("requestID"),r.get("fromUid"),r.get("toUid"));
     }
 
-    @GetMapping("/decline")
-    public ResponseEntity<RequestRsp> declineRequest(@RequestParam(name="rid")Long requestID,
-                                                     @RequestParam(name="fromUid")Long fromUid,
-                                                     @RequestParam(name="toUid")Long toUid) {
-        return requestService.declineRequest(requestID, fromUid, toUid);
+    @PutMapping("/decline")
+    public ResponseEntity<RequestRsp> declineRequest(@RequestBody Map<String, Long> r) {
+        return requestService.declineRequest(r.get("requestID"),r.get("fromUid"),r.get("toUid"));
     }
-
-
-
 }
