@@ -43,26 +43,16 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<User> getUserByName(String accountName) {
         var accountWrapper = accountRepository.findByAccountNameContainingIgnoreCase(accountName);
-        if (accountWrapper.isEmpty()) {
-            throw new ResourceNotFoundException("Account", "accountName", accountName);
-        }
-        
         List<User> userList = new ArrayList<User>();
-        for(Account account : accountWrapper){
+        for (Account account : accountWrapper) {
             userList.add(account.getAccountUser());
         }
-        
         return userList;
     }
 
     @Override
     public List<User> getUserByEmailOrPhone(String email, String phone) {
-        var userList = userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(email, phone);
-        if (userList.isEmpty()) {
-            //TODO: better exception handling to verify which field is empty
-            throw new ResourceNotFoundException("User", "email", email);
-        }
-        return userList;
+        return userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(email, phone);
     }
 
     @Override
