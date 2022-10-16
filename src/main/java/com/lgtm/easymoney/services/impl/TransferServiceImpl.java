@@ -28,14 +28,15 @@ public class TransferServiceImpl implements TransferService {
     }
 
     private boolean makeATransfer(User fromUser, User toUser, BigDecimal amount, Category category, String desc) {
-        Transaction transaction = new Transaction();
-        transaction.setFrom(fromUser);
-        transaction.setTo(toUser);
-        transaction.setAmount(amount);
-        transaction.setCategory(category);
-        transaction.setDescription(desc);
-        transaction.setStatus(TransactionStatus.REQ_PENDING);
-        return transactionService.executeTransaction(transaction);
+        Transaction t = new Transaction();
+        t.setFrom(fromUser);
+        t.setTo(toUser);
+        t.setAmount(amount);
+        t.setCategory(category);
+        t.setDescription(desc);
+        t.setStatus(TransactionStatus.REQ_PENDING);
+        t = transactionService.saveTransaction(t);
+        return transactionService.executeTransaction(t);
     }
 
     @Override
