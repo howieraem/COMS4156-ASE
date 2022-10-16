@@ -3,6 +3,7 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.TransactionRsp;
 
 import java.util.List;
 
@@ -14,5 +15,8 @@ public interface TransactionService {
     List<Transaction> getAllTransactions();
     boolean executeTransaction(Transaction t);
     List<Transaction> getAllTransactionsWithUser(User user);
+
+    TransactionRsp generateResponseFromTransaction(Transaction t);
+    List<TransactionRsp> generateListResponseFromTransactions(List<Transaction> l);
 
 }
