@@ -123,10 +123,8 @@ public class RequestServiceImpl implements RequestService {
             return false;
         }
         // maybe need to refactor this
-        boolean success = transactionService.executeTransaction(request);
-        return success;
-
-    };
+        return transactionService.executeTransaction(request);
+    }
     @Override
     public boolean declineRequest(Transaction request) {
         // here user is reqTo
@@ -144,8 +142,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                         userService.existsByID(fUid) &&
                         userService.existsByID(tUid) &&
-                        getRequestByID(tid).getFrom().getId() == fUid &&
-                        getRequestByID(tid).getTo().getId() == tUid &&
+                        getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                        getRequestByID(tid).getTo().getId().equals(tUid) &&
                         getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
 
         // find request
@@ -176,8 +174,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                 userService.existsByID(fUid) &&
                 userService.existsByID(tUid) &&
-                getRequestByID(tid).getFrom().getId() == fUid &&
-                getRequestByID(tid).getTo().getId() == tUid &&
+                getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                getRequestByID(tid).getTo().getId().equals(tUid) &&
                 getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
 
         // find request
