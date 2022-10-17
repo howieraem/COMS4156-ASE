@@ -3,9 +3,11 @@ package com.lgtm.easymoney.models;
 import com.lgtm.easymoney.configs.DBConsts;
 import java.io.Serializable;
 import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -13,7 +15,8 @@ import lombok.NoArgsConstructor;
         uniqueConstraints = @UniqueConstraint(name = DBConsts.ACCOUNT_NUMBERS_CONSTRAINT, columnNames = {"accountNumber", "routingNumber"})
 )
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Account implements Serializable {
     @Id
