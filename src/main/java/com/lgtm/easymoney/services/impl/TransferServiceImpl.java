@@ -38,7 +38,7 @@ public class TransferServiceImpl implements TransferService {
         transaction.setAmount(amount);
         transaction.setCategory(category);
         transaction.setDescription(desc);
-        transaction.setStatus(TransactionStatus.REQ_PENDING);
+        transaction.setStatus(TransactionStatus.TRANS_PENDING);
         return transactionService.saveTransaction(transaction);
     }
 
@@ -47,7 +47,8 @@ public class TransferServiceImpl implements TransferService {
     }
 
     private List<Transaction> getTransfersByUser(User user) {
-        return transactionService.getAllTransactionsWithUser(user);
+        List<TransactionStatus> status = List.of(TransactionStatus.TRANS_COMPLETE);
+        return transactionService.getAllTransactionsWithUser(user, status);
     }
 
     @Override

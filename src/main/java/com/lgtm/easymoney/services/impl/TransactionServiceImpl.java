@@ -50,8 +50,8 @@ public class TransactionServiceImpl implements TransactionService
         return transactionRepository.findAll();
     }
     @Override
-    public List<Transaction> getAllTransactionsWithUser(User user) {
-        return transactionRepository.findByFromOrTo(user, user);
+    public List<Transaction> getAllTransactionsWithUser(User user, List<TransactionStatus> status) {
+        return transactionRepository.findByFromOrToAndStatusIn(user, user, status);
     }
     @Override
     public boolean executeTransaction(Transaction t) {
@@ -60,7 +60,7 @@ public class TransactionServiceImpl implements TransactionService
                 !userService.existsByID(t.getTo().getId())) {
             return false;
         }
-        if (t.getStatus() == TransactionStatus.REQ_PENDING) {
+        if (t.getStatus() == TransactionStatus.TRANS_PENDING) {
             User sender = t.getFrom();
             User receiver = t.getTo();
             if (sender.getBalance().compareTo(t.getAmount()) < 0) {
@@ -72,7 +72,7 @@ public class TransactionServiceImpl implements TransactionService
             userService.saveUser(sender);
             userService.saveUser(receiver);
             // update status
-            t.setStatus(TransactionStatus.REQ_COMPLETE);
+            t.setStatus(TransactionStatus.TRANS_COMPLETE);
             // save
             saveTransaction(t);
             return true;
