@@ -148,8 +148,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                         userService.existsByID(fUid) &&
                         userService.existsByID(tUid) &&
-                        getRequestByID(tid).getFrom().getId() == fUid &&
-                        getRequestByID(tid).getTo().getId() == tUid &&
+                        getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                        getRequestByID(tid).getTo().getId().equals(tUid) &&
                         getRequestByID(tid).getStatus() == TransactionStatus.TRANS_PENDING;
 
         // find request
@@ -180,8 +180,8 @@ public class RequestServiceImpl implements RequestService {
         boolean valid = existsRequestByID(tid) &&
                 userService.existsByID(fUid) &&
                 userService.existsByID(tUid) &&
-                getRequestByID(tid).getFrom().getId() == fUid &&
-                getRequestByID(tid).getTo().getId() == tUid &&
+                getRequestByID(tid).getFrom().getId().equals(fUid) &&
+                getRequestByID(tid).getTo().getId().equals(tUid) &&
                 getRequestByID(tid).getStatus() == TransactionStatus.TRANS_PENDING;
 
         // find request
