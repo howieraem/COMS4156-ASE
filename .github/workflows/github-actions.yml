@@ -5,11 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      - name: ========== Set up JDK 17 ==========
         uses: actions/setup-java@v1
         with:
           java-version: 17
-      - name: Set up mysql testing database
+      - name: ========== Set up mysql testing database ==========
         uses: mirromutth/mysql-action@v1.1
         with:
 #          host port: 3800 # Optional, default value is 3306. The port of host
@@ -18,16 +18,16 @@ jobs:
 #          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
           mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
           mysql database: '4156dbtest' # Optional, default value is "test". The specified database which will be create
-          mysql root password: 'testpassword' # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql root password: 'dbuserdbuser' # Required if "mysql user" is empty, default is empty. The root superuser password
           mysql user: 'testuser' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: 'testpassword' # Required if "mysql user" exists. The password for the "mysql user"
+          mysql password: 'dbuserdbuser' # Required if "mysql user" exists. The password for the "mysql user"
 
-      - name: Cache the Maven packages to speed up build
+      - name: ========== Cache the Maven packages to speed up build ==========
         uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and test project with Maven
-        run: mvn -B package --file pom.xml
+      - name: ========== Running Tests ==========
+        run: mvn clean test
