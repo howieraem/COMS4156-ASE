@@ -2,6 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.controllers.AuthController;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.services.UserService;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
+//@AutoConfigureMockMvc
 @WebMvcTest(AuthController.class)
 public class AuthControllerTest {
     @Autowired

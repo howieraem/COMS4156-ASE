@@ -2,6 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.controllers.UserController;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.services.UserService;
