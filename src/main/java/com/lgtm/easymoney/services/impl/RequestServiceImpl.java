@@ -41,7 +41,8 @@ public class RequestServiceImpl implements RequestService {
     }
     @Override
     public List<Transaction> getRequestByUser(User user) {
-        return transactionService.getAllTransactionsWithUser(user);
+        List<TransactionStatus> status = List.of(TransactionStatus.TRANS_PENDING, TransactionStatus.TRANS_DENIED);
+        return transactionService.getAllTransactionsWithUser(user, status);
     }
     @Override
     public ResponseEntity<RequestRsp> getRequestsByUser(User user) {
@@ -78,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
         trans.setAmount(amount);
         trans.setDescription(desc);
         trans.setCategory(category);
-        trans.setStatus(TransactionStatus.REQ_PENDING);
+        trans.setStatus(TransactionStatus.TRANS_PENDING);
 
         return transactionService.saveTransaction(trans);
     }
@@ -131,7 +132,7 @@ public class RequestServiceImpl implements RequestService {
         if (!validateRequest(request)) {
             return false;
         }
-        request.setStatus(TransactionStatus.REQ_DENIED);
+        request.setStatus(TransactionStatus.TRANS_DENIED);
         transactionService.saveTransaction(request);
         return true;
     }
@@ -144,7 +145,7 @@ public class RequestServiceImpl implements RequestService {
                         userService.existsByID(tUid) &&
                         getRequestByID(tid).getFrom().getId().equals(fUid) &&
                         getRequestByID(tid).getTo().getId().equals(tUid) &&
-                        getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
+                        getRequestByID(tid).getStatus() == TransactionStatus.TRANS_PENDING;
 
         // find request
         Transaction trans = getRequestByID(tid);
@@ -176,7 +177,7 @@ public class RequestServiceImpl implements RequestService {
                 userService.existsByID(tUid) &&
                 getRequestByID(tid).getFrom().getId().equals(fUid) &&
                 getRequestByID(tid).getTo().getId().equals(tUid) &&
-                getRequestByID(tid).getStatus() == TransactionStatus.REQ_PENDING;
+                getRequestByID(tid).getStatus() == TransactionStatus.TRANS_PENDING;
 
         // find request
         Transaction trans = getRequestByID(tid);
@@ -188,9 +189,9 @@ public class RequestServiceImpl implements RequestService {
         if (!valid) {
             res.setSuccess(false);
             StringBuilder msg = new StringBuilder("Invalid params for declining request. ");
-            if (trans.getStatus() == TransactionStatus.REQ_DENIED) {
+            if (trans.getStatus() == TransactionStatus.TRANS_DENIED) {
                 msg.append("Request is already declined.");
-            } else if (trans.getStatus() == TransactionStatus.REQ_COMPLETE) {
+            } else if (trans.getStatus() == TransactionStatus.TRANS_COMPLETE) {
                 msg.append("Request is already completed. ");
             }
             res.setMessage(msg.toString());
