@@ -5,7 +5,7 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 ## How to build and run locally
 
-1. Install [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+1. Install [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) and MySQL server (version >= 8)
 2. Create a schema named "4156db" in your local MySQL server
 3. Enter the username and the password of your local MySQL server in `src/main/resources/application.properties`
 4. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in `src/main/resources/application.properties`
@@ -23,7 +23,7 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 ## API Documentation
 
-First, [run the service locally](#how-to-run-locally). Then open your browser. The API documentation can be viewed in 3 ways (change the port below if needed):
+First, [run the service locally](#how-to-build-and-run-locally). Then open your browser. The API documentation can be viewed in 3 ways (change the port below if needed):
 1. UI (recommended): http://localhost:8080/swagger-ui/index.html
 2. JSON: http://localhost:8080/api-docs
 3. Download the YAML: http://localhost:8080/api-docs.yaml
