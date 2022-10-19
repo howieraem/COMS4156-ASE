@@ -1,10 +1,12 @@
 package com.lgtm.easymoney.services.impl;
 
+import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
+import com.lgtm.easymoney.models.Account;
+import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.*;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,32 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @Override
+    public ResourceCreatedRsp createUser(RegisterReq registerReq) {
+        var user = new User();
+        user.setEmail(registerReq.getEmail());
+        user.setPassword(registerReq.getPassword());  // TODO spring security password encoding
+        user.setTypeByStr(registerReq.getUserType());
+        user.setPhone(registerReq.getPhone());
+        user.setAddress(registerReq.getAddress());
+
+        var account = new Account();
+        account.setAccountName(registerReq.getAccountName());
+        account.setAccountNumber(registerReq.getAccountNumber());
+        account.setRoutingNumber(registerReq.getRoutingNumber());
+        user.setAccount(account);
+
+        if (user.getType() != UserType.PERSONAL) {
+            BizProfile bizProfile = new BizProfile();
+            bizProfile.setPromotionText(registerReq.getBizPromotionText());
+            user.setBizProfile(bizProfile);
+        }
+
+        var userCreated = saveUser(user);
+        return new ResourceCreatedRsp(userCreated.getId());
+    }
+
     @Override
     public boolean makeADeposit(User user, BigDecimal amount) {
 //        if (user == null || amount == null) {

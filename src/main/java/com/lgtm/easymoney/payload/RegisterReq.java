@@ -34,4 +34,6 @@ public class RegisterReq {
     @NotBlank
     @Pattern(regexp="[\\d]{9}")
     private String routingNumber;
+
+    private String bizPromotionText;
 }
