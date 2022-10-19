@@ -4,6 +4,7 @@ import com.lgtm.easymoney.configs.DBConsts;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.lgtm.easymoney.configs.ValidationConsts;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
@@ -26,10 +27,10 @@ public class Account implements Serializable {
     @Column(nullable = false)
     private String accountName;
 
-    @Column(nullable = false, length = 17)
+    @Column(nullable = false, length = ValidationConsts.MAX_ACCOUNT_NUMBER_LEN)
     private String accountNumber;
 
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false, length = ValidationConsts.ROUTING_NUMBER_LEN)
     private String routingNumber;
 
     @OneToOne(mappedBy = "account")

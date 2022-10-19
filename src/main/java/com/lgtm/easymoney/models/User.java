@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.models;
 
 import com.lgtm.easymoney.configs.DBConsts;
+import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Entity
 @Table(
         name="user",
-        uniqueConstraints=@UniqueConstraint(name= DBConsts.USER_EMAIL_CONSTRAINT, columnNames={"email"})
+        uniqueConstraints = @UniqueConstraint(name= DBConsts.USER_EMAIL_CONSTRAINT, columnNames = {"email"})
 )
 @AllArgsConstructor
 @Getter
@@ -24,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Email
@@ -34,14 +35,14 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true, length = 10)
+    @Column(nullable = true, length = ValidationConsts.PHONE_LEN)
     private String phone;
 
     @Column(nullable = true)
     private String address;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 9, nullable = false)
+    @Column(length = ValidationConsts.MAX_USER_TYPE_LEN, nullable = false)
     private UserType type;
 
     @Column(nullable = false)
@@ -69,14 +70,7 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "bizUser", optional = true, cascade = CascadeType.ALL)
     private BizProfile bizProfile;
 
-    public void setTypeByStr(String userTypeStr) {
-        userTypeStr = userTypeStr.toLowerCase();
-        if (userTypeStr.equals("financial")) {
-            type = UserType.FINANCIAL;
-        } else if (userTypeStr.equals("business")) {
-            type = UserType.BUSINESS;
-        } else {
-            type = UserType.PERSONAL;
-        }
+    public void setTypeByStr(final String userTypeStr) {
+        type = UserType.valueOf(userTypeStr.toUpperCase());
     }
 }

@@ -34,7 +34,7 @@ public class UserServiceImplIntegrationTest {
         User user1 = new User();
         user1.setEmail("a@a.com");
         user1.setPassword("a");
-        user1.setTypeByStr("personal");
+        user1.setTypeByStr("PERSONAL");
         Account a1 = new Account();
         a1.setAccountName("a");
         a1.setAccountNumber("123");
@@ -49,7 +49,7 @@ public class UserServiceImplIntegrationTest {
         User user = new User();
         user.setEmail("a@a.com");
         user.setPassword("c");
-        user.setTypeByStr("personal");
+        user.setTypeByStr("PERSONAL");
         Account a = new Account();
         a.setAccountName("a");
         a.setAccountNumber("123456");
@@ -66,7 +66,7 @@ public class UserServiceImplIntegrationTest {
         User user = new User();
         user.setEmail("c@c.com");
         user.setPassword("c");
-        user.setTypeByStr("personal");
+        user.setTypeByStr("PERSONAL");
         Account a = new Account();
         a.setAccountName("a");
         a.setAccountNumber("123");
