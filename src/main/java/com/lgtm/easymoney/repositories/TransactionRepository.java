@@ -13,5 +13,4 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     @Query("select t from Transaction t where (t.from = ?1 or t.to = ?2) and t.status in ?3")
     List<Transaction> findByFromOrToAndStatusIn(User from, User to, List<TransactionStatus> status);
-//    boolean existsByEmail(String email);
 }

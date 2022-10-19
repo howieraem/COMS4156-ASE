@@ -44,8 +44,6 @@ public class UserServiceImplTest {
 
         Mockito.when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         Mockito.when(userRepository.findById(user2.getId())).thenReturn(Optional.of(user2));
-        Mockito.when(userRepository.existsByEmail(user1.getEmail())).thenReturn(Boolean.TRUE);
-        Mockito.when(userRepository.existsByEmail(user2.getEmail())).thenReturn(Boolean.FALSE);
 
         List<User> users = new ArrayList<>();
         users.add(user1);
