@@ -2,7 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lgtm.easymoney.controllers.UserController;
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
@@ -102,6 +102,11 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.errorFields").value("amount"));
 
         req.setAmount(new BigDecimal("0.001"));
+        putWithdraw(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
+
+        req.setAmount(new BigDecimal(2000));
+        Mockito.when(userService.makeAWithdraw(req)).thenThrow(new InvalidUpdateException("User", user.getId(), "amount", req.getAmount()));
         putWithdraw(req).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorFields").value("amount"));
     }

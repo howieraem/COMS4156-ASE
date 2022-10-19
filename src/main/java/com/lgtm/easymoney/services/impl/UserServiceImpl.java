@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -48,6 +50,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResourceCreatedRsp createUser(RegisterReq registerReq) {
+        return new ResourceCreatedRsp(saveUser(buildUser(registerReq)).getId());
+    }
+
+    public User buildUser(RegisterReq registerReq) {
         var user = new User();
         user.setEmail(registerReq.getEmail());
         user.setPassword(registerReq.getPassword());  // TODO spring security password encoding
@@ -66,34 +72,29 @@ public class UserServiceImpl implements UserService {
             bizProfile.setPromotionText(registerReq.getBizPromotionText());
             user.setBizProfile(bizProfile);
         }
-
-        var userCreated = saveUser(user);
-        return new ResourceCreatedRsp(userCreated.getId());
+        return user;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean makeADeposit(User user, BigDecimal amount) {
-//        if (user == null || amount == null) {
-//            return false;
-//        }
         var balance = user.getBalance();
         balance = balance.add(amount);
         user.setBalance(balance);
-        userRepository.save(user);
+        saveUser(user);
         return true;
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean makeAWithdraw(User user, BigDecimal amount) {
-//        if (user == null || amount == null) {
-//            return false;
-//        }
         var balance = user.getBalance();
         if (balance.compareTo(amount) < 0) {
-            throw new InvalidUpdateException("User", user.getId(), "balance", amount);
+            // Not enough balance
+            throw new InvalidUpdateException("User", user.getId(), "amount", amount);
         }
         balance = balance.subtract(amount);
         user.setBalance(balance);
-        userRepository.save(user);
+        saveUser(user);
         return true;
     }
     @Override
@@ -103,12 +104,9 @@ public class UserServiceImpl implements UserService {
         BigDecimal amount = req.getAmount();
         // make a deposit
         User user = getUserByID(uid);
-        boolean success = makeADeposit(user, amount);
+        makeADeposit(user, amount);
         // payload
-        BalanceRsp res = new BalanceRsp();
-        res.setSuccess(success);
-        res.setCurrBalance(user.getBalance());
-        return res;
+        return new BalanceRsp(user.getBalance());
     }
     @Override
     public BalanceRsp makeAWithdraw(BalanceReq req) {
@@ -117,11 +115,8 @@ public class UserServiceImpl implements UserService {
         BigDecimal amount = req.getAmount();
         // make a withdraw
         User user = getUserByID(uid);
-        boolean success = makeAWithdraw(user, amount);
+        makeAWithdraw(user, amount);
         // payload
-        BalanceRsp res = new BalanceRsp();
-        res.setSuccess(success);
-        res.setCurrBalance(user.getBalance());
-        return res;
+        return new BalanceRsp(user.getBalance());
     }
 }

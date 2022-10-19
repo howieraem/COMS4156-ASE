@@ -9,6 +9,5 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 public class BalanceRsp {
-    private Boolean success;
     private BigDecimal currBalance;
 }
