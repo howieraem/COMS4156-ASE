@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.math.BigDecimal;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -66,13 +67,16 @@ public class UserControllerTest {
     @Test
     public void depositFailedByInvalidAmount() throws Exception {
         req.setAmount(new BigDecimal(-100));
-        putDeposit(req).andExpect(status().isBadRequest());
+        putDeposit(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
 
         req.setAmount(BigDecimal.ZERO);
-        putDeposit(req).andExpect(status().isBadRequest());
+        putDeposit(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
 
         req.setAmount(new BigDecimal("0.001"));
-        putDeposit(req).andExpect(status().isBadRequest());
+        putDeposit(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
     }
 
     @Test
@@ -90,13 +94,16 @@ public class UserControllerTest {
     @Test
     public void withdrawFailedByInvalidAmount() throws Exception {
         req.setAmount(new BigDecimal(-100));
-        putWithdraw(req).andExpect(status().isBadRequest());
+        putWithdraw(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
 
         req.setAmount(BigDecimal.ZERO);
-        putWithdraw(req).andExpect(status().isBadRequest());
+        putWithdraw(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
 
         req.setAmount(new BigDecimal("0.001"));
-        putWithdraw(req).andExpect(status().isBadRequest());
+        putWithdraw(req).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorFields").value("amount"));
     }
 
     public ResultActions putDeposit(BalanceReq req) throws Exception {

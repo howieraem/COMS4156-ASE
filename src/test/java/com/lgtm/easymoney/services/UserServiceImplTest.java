@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services;
 
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
@@ -97,11 +98,9 @@ public class UserServiceImplTest {
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
         var rsp = userService.makeADeposit(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.OK);
-        assertNotNull(body);
-        assertTrue(body.getSuccess());
-        assertEquals(body.getCurrBalance(), req.getAmount());
+        assertNotNull(rsp);
+        assertTrue(rsp.getSuccess());
+        assertEquals(rsp.getCurrBalance(), req.getAmount());
     }
 
     @Test
@@ -110,11 +109,9 @@ public class UserServiceImplTest {
         req.setUid(2L);
         req.setAmount(new BigDecimal(100));
         var rsp = userService.makeAWithdraw(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.OK);
-        assertNotNull(body);
-        assertTrue(body.getSuccess());
-        assertEquals(body.getCurrBalance(), BigDecimal.ZERO);
+        assertNotNull(rsp);
+        assertTrue(rsp.getSuccess());
+        assertEquals(rsp.getCurrBalance(), BigDecimal.ZERO);
     }
 
     @Test
@@ -122,11 +119,8 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeAWithdraw(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertNotNull(body);
-        assertFalse(body.getSuccess());
-        assertEquals(body.getCurrBalance(), BigDecimal.ZERO);
+        assertThrows(InvalidUpdateException.class, () -> {
+            userService.makeAWithdraw(req);
+        });
     }
 }

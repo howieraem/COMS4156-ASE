@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services.impl;
 
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
@@ -71,10 +72,11 @@ public class GroupServiceImpl implements GroupService {
         User invitee = userService.getUserByID(inviteToGroupReq.getInviteeId());
         SimpApiRsp r = new SimpApiRsp();
         if (!isInGroup(g, inviter)) {
-            r.setSuccess(Boolean.FALSE);
+            throw new InvalidUpdateException("Group", g.getId(), "uids", inviter.getId());
         } else {
             r.setSuccess(joinAGroup(g, invitee));
         }
+
         // TODO may refactor this
         return ResponseEntity.status(r.getSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(r);
     }
@@ -92,7 +94,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Boolean joinAGroup(Group group, User user) {
         if (isInGroup(group, user)) {
-            return Boolean.FALSE;
+            throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
         }
         group.getGroupUsers().add(user);
         groupRepository.save(group);
@@ -102,7 +104,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Boolean leaveAGroup(Group group, User user) {
         if (!isInGroup(group, user)) {
-            return Boolean.FALSE;
+            throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
         }
         group.getGroupUsers().remove(user);
         groupRepository.save(group);

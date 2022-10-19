@@ -16,6 +16,6 @@ public interface UserService {
     List<User> getAllUsers();
     boolean makeADeposit(User user, BigDecimal amount);
     boolean makeAWithdraw(User user, BigDecimal amount);
-    ResponseEntity<BalanceRsp> makeADeposit(BalanceReq req);
-    ResponseEntity<BalanceRsp> makeAWithdraw(BalanceReq req);
+    BalanceRsp makeADeposit(BalanceReq req);
+    BalanceRsp makeAWithdraw(BalanceReq req);
 }

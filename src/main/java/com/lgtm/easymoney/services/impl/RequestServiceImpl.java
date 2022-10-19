@@ -51,16 +51,12 @@ public class RequestServiceImpl implements RequestService {
         // payload
         RequestRsp res = new RequestRsp();
         List<Transaction> listTrans = getRequestByUser(user);
-        res.setSuccess(listTrans != null);
+        res.setSuccess(true);
         res.setCurrBalance(user.getBalance());
 
         res.setRequests(transactionService.generateListResponseFromTransactions(listTrans));
         res.setMessage("Retrieved user's requests!");
-        if (listTrans != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        }
-        // TODO refactor this?
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @Override
     public List<Transaction> getAllRequests() {

@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services.impl;
 
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 //        }
         var balance = user.getBalance();
         if (balance.compareTo(amount) < 0) {
-            return false;
+            throw new InvalidUpdateException("User", user.getId(), "balance", amount);
         }
         balance = balance.subtract(amount);
         user.setBalance(balance);
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
     @Override
-    public ResponseEntity<BalanceRsp> makeADeposit(BalanceReq req) {
+    public BalanceRsp makeADeposit(BalanceReq req) {
         // get params
         Long uid = req.getUid();
         BigDecimal amount = req.getAmount();
@@ -79,13 +80,10 @@ public class UserServiceImpl implements UserService {
         BalanceRsp res = new BalanceRsp();
         res.setSuccess(success);
         res.setCurrBalance(user.getBalance());
-        if (success) {
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        return res;
     }
     @Override
-    public ResponseEntity<BalanceRsp> makeAWithdraw(BalanceReq req) {
+    public BalanceRsp makeAWithdraw(BalanceReq req) {
         // get params
         Long uid = req.getUid();
         BigDecimal amount = req.getAmount();
@@ -96,9 +94,6 @@ public class UserServiceImpl implements UserService {
         BalanceRsp res = new BalanceRsp();
         res.setSuccess(success);
         res.setCurrBalance(user.getBalance());
-        if (success) {
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        return res;
     }
 }
