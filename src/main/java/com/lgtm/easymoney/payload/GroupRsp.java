@@ -1,17 +1,19 @@
 package com.lgtm.easymoney.payload;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+/**
+ * group response payload.
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class GroupRsp {
-    private Long gid;
-    private String name;
-    private String description;
-    private List<Long> uids;
+  private Long gid;
+  private String name;
+  private String description;
+  private List<Long> uids;
 }

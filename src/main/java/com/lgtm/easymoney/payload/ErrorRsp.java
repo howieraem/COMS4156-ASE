@@ -1,14 +1,17 @@
 package com.lgtm.easymoney.payload;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
+/**
+ * error response payload.
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class ErrorRsp {
-    private List<String> errorFields;
-    private String message;
+  private List<String> errorFields;
+  private String message;
 }

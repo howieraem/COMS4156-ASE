@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * register response payload.
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class RegisterRsp {
-    private Long uid;
+  private Long uid;
 
-    // TODO include token?
+  // TODO include token?
 }

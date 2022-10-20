@@ -1,27 +1,29 @@
 package com.lgtm.easymoney.payload;
 
 import com.lgtm.easymoney.enums.Category;
-import lombok.Data;
-
+import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import lombok.Data;
 
+/**
+ * request for transfer related.
+ */
 @Data
 public class TransferReq {
-    @NotNull
-    private Long fromUid;
+  @NotNull
+  private Long fromUid;
 
-    @NotNull
-    private Long toUid;
+  @NotNull
+  private Long toUid;
 
-    @NotNull
-    @Digits(integer = 100, fraction = 2)
-    @DecimalMin(value = "0.0",inclusive = false)
-    private BigDecimal amount;
+  @NotNull
+  @Digits(integer = 100, fraction = 2)
+  @DecimalMin(value = "0.0", inclusive = false)
+  private BigDecimal amount;
 
-    private String description;
+  private String description;
 
-    private Category category;
+  private Category category;
 }

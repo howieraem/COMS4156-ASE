@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.BDDMockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -56,7 +55,7 @@ public class UserServiceImplTest {
     @Test
     public void shouldGetUserByID() {
         Long id = 1L;
-        User user = userService.getUserByID(id);
+        User user = userService.getUserById(id);
         assertEquals(user.getId(), id);
     }
 
@@ -65,7 +64,7 @@ public class UserServiceImplTest {
         Long id = 3L;
         Mockito.when(userRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> {
-            userService.getUserByID(id);
+            userService.getUserById(id);
         });
     }
 
@@ -98,7 +97,7 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeADeposit(req);
+        var rsp = userService.makeDeposit(req);
         var body = rsp.getBody();
         assertEquals(rsp.getStatusCode(), HttpStatus.OK);
         assertNotNull(body);
@@ -111,7 +110,7 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(2L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeAWithdraw(req);
+        var rsp = userService.makeWithdraw(req);
         var body = rsp.getBody();
         assertEquals(rsp.getStatusCode(), HttpStatus.OK);
         assertNotNull(body);
@@ -124,7 +123,7 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeAWithdraw(req);
+        var rsp = userService.makeWithdraw(req);
         var body = rsp.getBody();
         assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
         assertNotNull(body);

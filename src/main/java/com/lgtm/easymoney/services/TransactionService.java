@@ -5,19 +5,29 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.TransactionRsp;
-
 import java.util.List;
 
+/**
+ * transaction service interface.
+ */
 public interface TransactionService {
-    boolean transactionExists(Transaction t);
-    boolean existsTransactionByID(Long id);
-    Transaction getTransactionByID(Long id);
-    Transaction saveTransaction(Transaction t);
-    List<Transaction> getAllTransactions();
-    boolean executeTransaction(Transaction t);
-    List<Transaction> getAllTransactionsWithUser(User user, List<TransactionStatus> status);
+  boolean transactionExists(Transaction t);
 
-    TransactionRsp generateResponseFromTransaction(Transaction t);
-    List<TransactionRsp> generateListResponseFromTransactions(List<Transaction> l);
+  boolean existsTransactionById(Long id);
+
+  Transaction getTransactionById(Long id);
+
+  Transaction saveTransaction(Transaction t);
+
+  List<Transaction> getAllTransactions();
+
+  boolean executeTransaction(Transaction t);
+
+  List<Transaction> getAllTransactionsWithUser(User user, List<TransactionStatus> status);
+
+
+  TransactionRsp generateResponseFromTransaction(Transaction t);
+
+  List<TransactionRsp> generateListResponseFromTransactions(List<Transaction> l);
 
 }
