@@ -24,14 +24,14 @@ public class SearchController {
   }
 
   @GetMapping("/id/{id}")
-  @Operation(description = "Method to retrieve the public profile of a user by user ID.")
+  @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
   public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") String id) {
     return searchService.searchById(Long.valueOf(id));
   }
 
   @GetMapping("/info/{info}")
-  @Operation(description = "Method to retrieve a list"
-          + " of public profiles of users matched by search info.")
+  @Operation(summary =
+      "Method to retrieve a list of public profiles of users matched by search info.")
   public ResponseEntity<SearchRsp> searchByInfo(@PathVariable(value = "info") String info) {
     return searchService.searchByInfo(info);
   }

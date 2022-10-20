@@ -34,28 +34,30 @@ public class GroupController {
   }
 
   @PostMapping("/create")
-  @Operation(description = "Method for new group creation.")
-  public ResponseEntity<ResourceCreatedRsp> createAGroup(@Valid @RequestBody CreateGroupReq createGroupReq) {
+  @Operation(summary = "Method for new group creation.")
+  public ResponseEntity<ResourceCreatedRsp> createGroup(
+      @Valid @RequestBody CreateGroupReq createGroupReq) {
     return new ResponseEntity<>(groupService.createGroup(createGroupReq), HttpStatus.CREATED);
   }
 
   @PutMapping("/invite")
-  @Operation(description = "Method for a user to invite another user to a group.")
-  public ResponseEntity<Void> inviteToAGroup(@Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
+  @Operation(summary = "Method for a user to invite another user to a group.")
+  public ResponseEntity<Void> inviteToGroup(@Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
     groupService.inviteToGroup(inviteToGroupReq);
     return ResponseEntity.ok().build();
   }
 
   @PutMapping("/leave")
-  @Operation(description = "Method for a user to leave a group.")
-  public ResponseEntity<Void> leaveAGroup(@Valid @RequestBody LeaveGroupReq leaveGroupReq) {
+  @Operation(summary = "Method for a user to leave a group.")
+  public ResponseEntity<Void> leaveGroup(@Valid @RequestBody LeaveGroupReq leaveGroupReq) {
     groupService.leaveGroup(leaveGroupReq);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/{id}")
-  @Operation(description = "Method to get the list of user IDs, the name and the description of a group by a group ID.")
-  public ResponseEntity<GroupRsp> getAGroup(@PathVariable(value = "id") @NotNull Long id) {
+  @Operation(summary =
+      "Method to get a group's name, description and the list of user IDs, by a group ID.")
+  public ResponseEntity<GroupRsp> getGroup(@PathVariable(value = "id") @NotNull Long id) {
     return new ResponseEntity<>(groupService.getGroupProfile(id), HttpStatus.OK);
   }
 }

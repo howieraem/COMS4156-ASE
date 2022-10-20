@@ -23,7 +23,9 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 ## API Documentation
 
-First, [run the service locally](#how-to-build-and-run-locally). Then open your browser. The API documentation can be viewed in 3 ways (change the port below if needed):
+You can view an online version [here](https://app.swaggerhub.com/apis/LHUN1660_1/COMS-W4156-Service).
+
+Alternatively, if you'd like to see immediate documentation update after you change the local code: [Run the service locally](#how-to-build-and-run-locally), and then open your browser. The API documentation can be viewed in 3 ways (change the port below if needed):
 1. UI (recommended): http://localhost:8080/swagger-ui/index.html
 2. JSON: http://localhost:8080/api-docs
 3. Download the YAML: http://localhost:8080/api-docs.yaml
