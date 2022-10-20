@@ -74,7 +74,7 @@ public class GroupServiceImpl implements GroupService {
     User inviter = userService.getUserById(inviteToGroupReq.getInviterId());
     User invitee = userService.getUserById(inviteToGroupReq.getInviteeId());
     if (!isInGroup(g, inviter)) {
-      throw new InvalidUpdateException("Group", g.getId(), "uids", inviter.getId());
+      throw new InvalidUpdateException("Group", g.getId(), "inviterId", inviter.getId());
     }
     joinGroup(g, invitee);
   }
@@ -89,7 +89,7 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public void joinGroup(Group group, User user) {
     if (isInGroup(group, user)) {
-      throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
+      throw new InvalidUpdateException("Group", group.getId(), "inviteeId", user.getId());
     }
     group.getGroupUsers().add(user);
     groupRepository.save(group);
@@ -98,7 +98,7 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public void leaveGroup(Group group, User user) {
     if (!isInGroup(group, user)) {
-      throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
+      throw new InvalidUpdateException("Group", group.getId(), "uid", user.getId());
     }
     group.getGroupUsers().remove(user);
     groupRepository.save(group);

@@ -15,7 +15,7 @@ public class InvalidUpdateException extends RuntimeException {
     private final Object fieldValue;
 
     public InvalidUpdateException(String resourceName, Object resourceId, String fieldName, Object fieldValue) {
-        super(String.format("Invalid change to %s with ID %s with %s update: '%s'", resourceName, resourceId, fieldName, fieldValue));
+        super(String.format("Invalid change to %s ID %s with %s: '%s' provided", resourceName, resourceId, fieldName, fieldValue));
         this.resourceName = resourceName;
         this.resourceId = resourceId;
         this.fieldName = fieldName;
