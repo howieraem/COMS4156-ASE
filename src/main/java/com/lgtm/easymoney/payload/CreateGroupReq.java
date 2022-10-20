@@ -1,19 +1,21 @@
 package com.lgtm.easymoney.payload;
 
-import lombok.Data;
-
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import lombok.Data;
 
+/**
+ * request for creating a group.
+ */
 @Data
 public class CreateGroupReq {
-    @NotEmpty
-    private List<@NotNull Long> uids;
+  @NotEmpty
+  private List<@NotNull Long> uids;
 
-    @NotBlank
-    private String name;
+  @NotBlank
+  private String name;
 
-    private String description;
+  private String description;
 }

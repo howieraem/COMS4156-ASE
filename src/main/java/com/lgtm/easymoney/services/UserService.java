@@ -5,20 +5,28 @@ import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import org.apache.coyote.Response;
-import org.springframework.http.ResponseEntity;
-
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * user service interface. restful api for accessing users.
+ */
 public interface UserService {
-    boolean existsByID(Long id);
-    User getUserByID(Long id);
-    User saveUser(User user);
-    List<User> getAllUsers();
-    ResourceCreatedRsp createUser(RegisterReq registerReq);
-    boolean makeADeposit(User user, BigDecimal amount);
-    boolean makeAWithdraw(User user, BigDecimal amount);
-    BalanceRsp makeADeposit(BalanceReq req);
-    BalanceRsp makeAWithdraw(BalanceReq req);
+  boolean existsById(Long id);
+
+  User getUserById(Long id);
+
+  User saveUser(User user);
+
+  List<User> getAllUsers();
+
+  ResourceCreatedRsp createUser(RegisterReq registerReq);
+
+  boolean makeDeposit(User user, BigDecimal amount);
+
+  boolean makeWithdraw(User user, BigDecimal amount);
+
+  BalanceRsp makeDeposit(BalanceReq req);
+  
+  BalanceRsp makeWithdraw(BalanceReq req);
 }

@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * starting application.
+ */
 @SpringBootApplication
-@OpenAPIDefinition(info=@Info(title="EasyMoney Service"))
+@OpenAPIDefinition(info = @Info(title = "EasyMoney Service"))
 public class EasymoneyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EasymoneyApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(EasymoneyApplication.class, args);
+  }
 
 }

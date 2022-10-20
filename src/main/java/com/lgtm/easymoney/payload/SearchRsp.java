@@ -1,14 +1,17 @@
 package com.lgtm.easymoney.payload;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
+/**
+ * search response, returns the list of matching user profile.
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class SearchRsp {
-    boolean success;
-    private List<ProfileRsp> userProfiles;
+  boolean success;
+  private List<ProfileRsp> userProfiles;
 }

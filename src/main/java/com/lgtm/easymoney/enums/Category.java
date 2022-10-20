@@ -1,5 +1,8 @@
 package com.lgtm.easymoney.enums;
 
+/**
+ * category enums for specifying each transaction.
+ */
 public enum Category {
     FOOD,
     TRAVEL,

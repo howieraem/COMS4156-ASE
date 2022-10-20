@@ -1,19 +1,17 @@
 package com.lgtm.easymoney.payload;
 
-import com.lgtm.easymoney.enums.Category;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-
+/**
+ * payload for handling accpet/decline a payment request.
+ */
 @Data
 public class RequestAcceptDeclineReq {
-    @NotNull
-    private Long fromUid;
-    @NotNull
-    private Long toUid;
-    @NotNull
-    private Long requestID;
+  @NotNull
+  private Long fromUid;
+  @NotNull
+  private Long toUid;
+  @NotNull
+  private Long requestid;
 }

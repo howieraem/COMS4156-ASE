@@ -2,16 +2,29 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.*;
-import org.springframework.http.ResponseEntity;
+import com.lgtm.easymoney.payload.CreateGroupReq;
+import com.lgtm.easymoney.payload.GroupRsp;
+import com.lgtm.easymoney.payload.InviteToGroupReq;
+import com.lgtm.easymoney.payload.LeaveGroupReq;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 
+/**
+ * group service.
+ */
 public interface GroupService {
-    Group getGroupById(Long gid);
-    ResourceCreatedRsp createAGroup(CreateGroupReq createGroupReq);
-    void inviteToAGroup(InviteToGroupReq inviteToGroupReq);
-    void leaveAGroup(LeaveGroupReq leaveGroupReq);
-    GroupRsp getGroupProfile(Long gid);
-    void joinAGroup(Group group, User user);
-    void leaveAGroup(Group group, User user);
-    boolean isInGroup(Group group, User user);
+  Group getGroupById(Long gid);
+
+  ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq);
+
+  void inviteToGroup(InviteToGroupReq inviteToGroupReq);
+
+  void leaveGroup(LeaveGroupReq leaveGroupReq);
+
+  GroupRsp getGroupProfile(Long gid);
+
+  void joinGroup(Group group, User user);
+
+  void leaveGroup(Group group, User user);
+
+  boolean isInGroup(Group group, User user);
 }
