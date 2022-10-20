@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services.impl;
 
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
@@ -38,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ResponseEntity<GroupRsp> getGroup(Long gid) {
+    public GroupRsp getGroupProfile(Long gid) {
         Group g = getGroupById(gid);
         GroupRsp r = new GroupRsp();
         r.setGid(g.getId());
@@ -47,11 +48,11 @@ public class GroupServiceImpl implements GroupService {
         r.setUids(g.getGroupUsers().stream()
                 .map(User::getId)
                 .collect(Collectors.toList()));
-        return ResponseEntity.status(HttpStatus.OK).body(r);
+        return r;
     }
 
     @Override
-    public ResponseEntity<ResourceCreatedRsp> createAGroup(CreateGroupReq createGroupReq) {
+    public ResourceCreatedRsp createAGroup(CreateGroupReq createGroupReq) {
         Set<User> users = new HashSet<>();
         for (Long uid : createGroupReq.getUids()) {
             users.add(userService.getUserByID(uid));
@@ -61,52 +62,43 @@ public class GroupServiceImpl implements GroupService {
         group.setName(createGroupReq.getName());
         group.setDescription(createGroupReq.getDescription());
         group = groupRepository.save(group);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResourceCreatedRsp(group.getId()));
+        return new ResourceCreatedRsp(group.getId());
     }
 
     @Override
-    public ResponseEntity<SimpApiRsp> inviteToAGroup(InviteToGroupReq inviteToGroupReq) {
+    public void inviteToAGroup(InviteToGroupReq inviteToGroupReq) {
         Group g = getGroupById(inviteToGroupReq.getGid());
         User inviter = userService.getUserByID(inviteToGroupReq.getInviterId());
         User invitee = userService.getUserByID(inviteToGroupReq.getInviteeId());
-        SimpApiRsp r = new SimpApiRsp();
         if (!isInGroup(g, inviter)) {
-            r.setSuccess(Boolean.FALSE);
-        } else {
-            r.setSuccess(joinAGroup(g, invitee));
+            throw new InvalidUpdateException("Group", g.getId(), "uids", inviter.getId());
         }
-        // TODO may refactor this
-        return ResponseEntity.status(r.getSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(r);
+        joinAGroup(g, invitee);
     }
 
     @Override
-    public ResponseEntity<SimpApiRsp> leaveAGroup(LeaveGroupReq leaveGroupReq) {
+    public void leaveAGroup(LeaveGroupReq leaveGroupReq) {
         Group g = getGroupById(leaveGroupReq.getGid());
         User u = userService.getUserByID(leaveGroupReq.getUid());
-        SimpApiRsp r = new SimpApiRsp();
-        r.setSuccess(leaveAGroup(g, u));
-        // TODO may refactor this
-        return ResponseEntity.status(r.getSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(r);
+        leaveAGroup(g, u);
     }
 
     @Override
-    public Boolean joinAGroup(Group group, User user) {
+    public void joinAGroup(Group group, User user) {
         if (isInGroup(group, user)) {
-            return Boolean.FALSE;
+            throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
         }
         group.getGroupUsers().add(user);
         groupRepository.save(group);
-        return Boolean.TRUE;
     }
 
     @Override
-    public Boolean leaveAGroup(Group group, User user) {
+    public void leaveAGroup(Group group, User user) {
         if (!isInGroup(group, user)) {
-            return Boolean.FALSE;
+            throw new InvalidUpdateException("Group", group.getId(), "uids", user.getId());
         }
         group.getGroupUsers().remove(user);
         groupRepository.save(group);
-        return Boolean.TRUE;
     }
 
     @Override
