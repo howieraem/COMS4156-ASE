@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public boolean makeADeposit(User user, BigDecimal amount) {
+  public boolean makeDeposit(User user, BigDecimal amount) {
     var balance = user.getBalance();
     balance = balance.add(amount);
     user.setBalance(balance);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public boolean makeAWithdraw(User user, BigDecimal amount) {
+  public boolean makeWithdraw(User user, BigDecimal amount) {
     var balance = user.getBalance();
     if (balance.compareTo(amount) < 0) {
         // Not enough balance
@@ -103,25 +103,25 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public BalanceRsp makeADeposit(BalanceReq req) {
+  public BalanceRsp makeDeposit(BalanceReq req) {
     // get params
     Long uid = req.getUid();
     BigDecimal amount = req.getAmount();
     // make a deposit
     User user = getUserById(uid);
-    makeADeposit(user, amount);
+    makeDeposit(user, amount);
     // payload
     return new BalanceRsp(user.getBalance());
   }
 
   @Override
-  public BalanceRsp makeAWithdraw(BalanceReq req) {
+  public BalanceRsp makeWithdraw(BalanceReq req) {
     // get params
     Long uid = req.getUid();
     BigDecimal amount = req.getAmount();
     // make a withdraw
     User user = getUserById(uid);
-    makeAWithdraw(user, amount);
+    makeWithdraw(user, amount);
     // payload
     return new BalanceRsp(user.getBalance());
   }

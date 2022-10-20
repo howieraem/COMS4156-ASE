@@ -22,11 +22,11 @@ public interface UserService {
 
   ResourceCreatedRsp createUser(RegisterReq registerReq);
 
-  boolean makeADeposit(User user, BigDecimal amount);
+  boolean makeDeposit(User user, BigDecimal amount);
 
-  boolean makeAWithdraw(User user, BigDecimal amount);
+  boolean makeWithdraw(User user, BigDecimal amount);
 
-  BalanceRsp makeADeposit(BalanceReq req);
+  BalanceRsp makeDeposit(BalanceReq req);
   
-  BalanceRsp makeAWithdraw(BalanceReq req);
+  BalanceRsp makeWithdraw(BalanceReq req);
 }

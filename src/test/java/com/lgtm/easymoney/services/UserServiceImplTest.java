@@ -55,7 +55,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void shouldGetUserByID() {
+    public void shouldGetUserById() {
         Long id = 1L;
         User user = userService.getUserById(id);
         assertEquals(user.getId(), id);
@@ -65,9 +65,7 @@ public class UserServiceImplTest {
     public void shouldThrowExceptionWhenUserNotFound() {
         Long id = 3L;
         Mockito.when(userRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> {
-            userService.getUserById(id);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> userService.getUserById(id));
     }
 
     @Test
@@ -136,7 +134,7 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeADeposit(req);
+        var rsp = userService.makeDeposit(req);
         assertNotNull(rsp);
         assertEquals(rsp.getCurrBalance(), req.getAmount());
     }
@@ -146,7 +144,7 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(2L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeAWithdraw(req);
+        var rsp = userService.makeWithdraw(req);
         assertNotNull(rsp);
         assertEquals(rsp.getCurrBalance(), BigDecimal.ZERO);
     }
@@ -156,8 +154,6 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        assertThrows(InvalidUpdateException.class, () -> {
-            userService.makeAWithdraw(req);
-        });
+        assertThrows(InvalidUpdateException.class, () -> userService.makeWithdraw(req));
     }
 }

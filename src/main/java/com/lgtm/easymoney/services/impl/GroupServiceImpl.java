@@ -58,7 +58,7 @@ public class GroupServiceImpl implements GroupService {
   public ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq) {
     Set<User> users = new HashSet<>();
     for (Long uid : createGroupReq.getUids()) {
-      users.add(userService.getUserByID(uid));
+      users.add(userService.getUserById(uid));
     }
     Group group = new Group();
     group.setGroupUsers(users);
@@ -71,8 +71,8 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public void inviteToGroup(InviteToGroupReq inviteToGroupReq) {
     Group g = getGroupById(inviteToGroupReq.getGid());
-    User inviter = userService.getUserByID(inviteToGroupReq.getInviterId());
-    User invitee = userService.getUserByID(inviteToGroupReq.getInviteeId());
+    User inviter = userService.getUserById(inviteToGroupReq.getInviterId());
+    User invitee = userService.getUserById(inviteToGroupReq.getInviteeId());
     if (!isInGroup(g, inviter)) {
       throw new InvalidUpdateException("Group", g.getId(), "uids", inviter.getId());
     }
@@ -82,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public void leaveGroup(LeaveGroupReq leaveGroupReq) {
     Group g = getGroupById(leaveGroupReq.getGid());
-    User u = userService.getUserByID(leaveGroupReq.getUid());
+    User u = userService.getUserById(leaveGroupReq.getUid());
     leaveGroup(g, u);
   }
 
