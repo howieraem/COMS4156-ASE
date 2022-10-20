@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.models;
 
 import com.lgtm.easymoney.configs.DbConsts;
+import com.lgtm.easymoney.configs.ValidationConsts;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,10 +45,10 @@ public class Account implements Serializable {
   @Column(nullable = false)
   private String accountName;
   /*account number, string*/
-  @Column(nullable = false, length = 17)
+  @Column(nullable = false, length = ValidationConsts.MAX_ACCOUNT_NUMBER_LEN)
   private String accountNumber;
   /*routing number, string*/
-  @Column(nullable = false, length = 9)
+  @Column(nullable = false, length = ValidationConsts.ROUTING_NUMBER_LEN)
   private String routingNumber;
   /*associated User, one-to-one mapping*/
   @OneToOne(mappedBy = "account")

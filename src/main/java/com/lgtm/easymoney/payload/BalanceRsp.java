@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BalanceRsp {
-  private Boolean success;
   private BigDecimal currBalance;
 }

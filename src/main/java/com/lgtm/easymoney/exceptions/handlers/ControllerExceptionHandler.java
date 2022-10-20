@@ -2,6 +2,7 @@ package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.lgtm.easymoney.configs.DbConsts;
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ErrorRsp;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 /**
- * genric controller exception handler.
+ * Generic controller exception handler.
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -84,6 +85,17 @@ public class ControllerExceptionHandler {
     String constraint = cause.getConstraintName().split("\\.")[1];
     List<String> errorFields = Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint));
     String errorMessage = DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ErrorRsp(errorFields, errorMessage));
+  }
+
+  /** This handles when an update to a resource is invalid 
+   * according to business logics. */
+  @ExceptionHandler(InvalidUpdateException.class)
+  public ResponseEntity<ErrorRsp> handle(InvalidUpdateException ex) {
+    List<String> errorFields = new ArrayList<>();
+    errorFields.add(ex.getFieldName());
+    String errorMessage = ex.getMessage();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorRsp(errorFields, errorMessage));
   }

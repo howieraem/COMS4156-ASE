@@ -6,6 +6,7 @@ import com.lgtm.easymoney.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,19 +26,18 @@ public class UserController {
     this.userService = userService;
   }
 
-
   @PutMapping("/deposit")
   @Operation(description = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
   public ResponseEntity<BalanceRsp> deposit(@Valid @RequestBody BalanceReq req) {
-    return userService.makeDeposit(req);
+    return new ResponseEntity<>(userService.makeDeposit(req), HttpStatus.OK);
   }
 
   @PutMapping("/withdraw")
   @Operation(description = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")
   public ResponseEntity<BalanceRsp> withdraw(@Valid @RequestBody BalanceReq req) {
-    return userService.makeWithdraw(req);
+    return new ResponseEntity<>(userService.makeWithdraw(req), HttpStatus.OK);
   }
 
 }

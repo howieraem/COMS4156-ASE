@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.models;
 
 import com.lgtm.easymoney.configs.DbConsts;
+import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -52,14 +53,14 @@ public class User implements Serializable {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = true, length = 10)
+  @Column(nullable = true, length = ValidationConsts.PHONE_LEN)
   private String phone;
 
   @Column(nullable = true)
   private String address;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 9, nullable = false)
+  @Column(length = ValidationConsts.MAX_USER_TYPE_LEN, nullable = false)
   private UserType type;
 
   @Column(nullable = false)
@@ -92,14 +93,7 @@ public class User implements Serializable {
    *
    * @param userTypeStr user type, can be one of three types.
    */
-  public void setTypeByStr(String userTypeStr) {
-    userTypeStr = userTypeStr.toLowerCase();
-    if (userTypeStr.equals("financial")) {
-      type = UserType.FINANCIAL;
-    } else if (userTypeStr.equals("business")) {
-      type = UserType.BUSINESS;
-    } else {
-      type = UserType.PERSONAL;
-    }
+  public void setTypeByStr(final String userTypeStr) {
+    type = UserType.valueOf(userTypeStr.toUpperCase());
   }
 }

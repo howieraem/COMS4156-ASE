@@ -3,9 +3,10 @@ package com.lgtm.easymoney.services;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 /**
  * user service interface. restful api for accessing users.
@@ -19,12 +20,13 @@ public interface UserService {
 
   List<User> getAllUsers();
 
-  boolean makeDeposit(User user, BigDecimal amount);
+  ResourceCreatedRsp createUser(RegisterReq registerReq);
 
-  ResponseEntity<BalanceRsp> makeDeposit(BalanceReq req);
+  boolean makeADeposit(User user, BigDecimal amount);
 
-  boolean makeWithdraw(User user, BigDecimal amount);
+  boolean makeAWithdraw(User user, BigDecimal amount);
 
-  ResponseEntity<BalanceRsp> makeWithdraw(BalanceReq req);
-
+  BalanceRsp makeADeposit(BalanceReq req);
+  
+  BalanceRsp makeAWithdraw(BalanceReq req);
 }

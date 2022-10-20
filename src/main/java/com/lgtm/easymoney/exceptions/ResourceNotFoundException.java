@@ -1,10 +1,13 @@
 package com.lgtm.easymoney.exceptions;
 
+import lombok.Getter;
+
 import java.io.Serial;
 
 /**
  * resource not found exception wrapper.
  */
+@Getter
 public class ResourceNotFoundException extends RuntimeException {
   @Serial
   private static final long serialVersionUID = 1L;
@@ -25,17 +28,5 @@ public class ResourceNotFoundException extends RuntimeException {
     this.resourceName = resourceName;
     this.fieldName = fieldName;
     this.fieldValue = fieldValue;
-  }
-
-  public String getResourceName() {
-    return resourceName;
-  }
-
-  public String getFieldName() {
-    return fieldName;
-  }
-
-  public Object getFieldValue() {
-    return fieldValue;
   }
 }

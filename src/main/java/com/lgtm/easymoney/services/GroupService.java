@@ -7,8 +7,6 @@ import com.lgtm.easymoney.payload.GroupRsp;
 import com.lgtm.easymoney.payload.InviteToGroupReq;
 import com.lgtm.easymoney.payload.LeaveGroupReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.SimpApiRsp;
-import org.springframework.http.ResponseEntity;
 
 /**
  * group service.
@@ -16,18 +14,17 @@ import org.springframework.http.ResponseEntity;
 public interface GroupService {
   Group getGroupById(Long gid);
 
-  ResponseEntity<ResourceCreatedRsp> createGroup(CreateGroupReq createGroupReq);
+  ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq);
 
-  Boolean joinGroup(Group group, User user);
+  void inviteToGroup(InviteToGroupReq inviteToGroupReq);
 
-  ResponseEntity<SimpApiRsp> inviteToGroup(InviteToGroupReq inviteToGroupReq);
+  void leaveGroup(LeaveGroupReq leaveGroupReq);
 
-  ResponseEntity<SimpApiRsp> leaveGroup(LeaveGroupReq leaveGroupReq);
+  GroupRsp getGroupProfile(Long gid);
 
-  Boolean leaveGroup(Group group, User user);
+  void joinGroup(Group group, User user);
 
-  ResponseEntity<GroupRsp> getGroup(Long gid);
-
+  void leaveGroup(Group group, User user);
 
   boolean isInGroup(Group group, User user);
 }

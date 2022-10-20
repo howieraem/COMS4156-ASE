@@ -1,8 +1,11 @@
 package com.lgtm.easymoney.services;
 
+import com.lgtm.easymoney.enums.UserType;
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
+import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.repositories.UserRepository;
 import static org.junit.Assert.*;
 import com.lgtm.easymoney.services.impl.UserServiceImpl;
@@ -12,8 +15,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.http.HttpStatus;
+import org.mockito.BDDMockito;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,8 +47,6 @@ public class UserServiceImplTest {
 
         Mockito.when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         Mockito.when(userRepository.findById(user2.getId())).thenReturn(Optional.of(user2));
-        Mockito.when(userRepository.existsByEmail(user1.getEmail())).thenReturn(Boolean.TRUE);
-        Mockito.when(userRepository.existsByEmail(user2.getEmail())).thenReturn(Boolean.FALSE);
 
         List<User> users = new ArrayList<>();
         users.add(user1);
@@ -68,20 +70,57 @@ public class UserServiceImplTest {
         });
     }
 
-    // Perhaps this is better done in the integration test?
+    @Test
+    public void shouldCreateUser() {
+        // Register req payload passed to UserService has been validated
+        RegisterReq req = new RegisterReq();
+        req.setEmail("c@c.com");
+        req.setPassword("c");
+        req.setUserType("BUSINESS");
+        req.setAccountName("c");
+        req.setAccountNumber("789");
+        req.setRoutingNumber("123456789");
+        req.setBizPromotionText("hello");
+
+        var user = userService.buildUser(req);
+        assertEquals(user.getEmail(), req.getEmail());
+        assertEquals(user.getPassword(), req.getPassword());
+        assertEquals(user.getType(), UserType.valueOf(req.getUserType()));
+        var account = user.getAccount();
+        assertEquals(account.getAccountName(), req.getAccountName());
+        assertEquals(account.getAccountNumber(), req.getAccountNumber());
+        assertEquals(account.getRoutingNumber(), req.getRoutingNumber());
+        var bisProfile = user.getBizProfile();
+        assertEquals(bisProfile.getPromotionText(), req.getBizPromotionText());
+
+        Long expectedId = 3L;
+
+        // Assume userRepository.save() always succeeds
+        Mockito.doAnswer(invocation -> {
+            ReflectionTestUtils.setField((User) invocation.getArgument(0), "id", expectedId);
+            return invocation.getArgument(0);
+        }).when(userRepository).save(Mockito.any(User.class));
+
+        var rsp = userService.createUser(req);
+        assertEquals(rsp.getId(), expectedId);
+    }
+
     @Test
     public void shouldSaveUser() {
         User user = new User();
-        user.setId(3L);
         user.setEmail("c@c.com");
         user.setPassword("c");
+        Long expectedId = 3L;
 
         // Assume userRepository.save() always succeeds
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.doAnswer(invocation -> {
+            ReflectionTestUtils.setField((User) invocation.getArgument(0), "id", expectedId);
+            return invocation.getArgument(0);
+        }).when(userRepository).save(Mockito.any(User.class));
         User saved = userService.saveUser(user);
 
         assertNotNull(saved);
-        assertEquals(saved.getId(), user.getId());
+        assertEquals(saved.getId(), expectedId);
         assertEquals(saved.getEmail(), user.getEmail());
         assertEquals(saved.getPassword(), user.getPassword());
     }
@@ -97,12 +136,9 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeDeposit(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.OK);
-        assertNotNull(body);
-        assertTrue(body.getSuccess());
-        assertEquals(body.getCurrBalance(), req.getAmount());
+        var rsp = userService.makeADeposit(req);
+        assertNotNull(rsp);
+        assertEquals(rsp.getCurrBalance(), req.getAmount());
     }
 
     @Test
@@ -110,12 +146,9 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(2L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeWithdraw(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.OK);
-        assertNotNull(body);
-        assertTrue(body.getSuccess());
-        assertEquals(body.getCurrBalance(), BigDecimal.ZERO);
+        var rsp = userService.makeAWithdraw(req);
+        assertNotNull(rsp);
+        assertEquals(rsp.getCurrBalance(), BigDecimal.ZERO);
     }
 
     @Test
@@ -123,11 +156,8 @@ public class UserServiceImplTest {
         BalanceReq req = new BalanceReq();
         req.setUid(1L);
         req.setAmount(new BigDecimal(100));
-        var rsp = userService.makeWithdraw(req);
-        var body = rsp.getBody();
-        assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertNotNull(body);
-        assertFalse(body.getSuccess());
-        assertEquals(body.getCurrBalance(), BigDecimal.ZERO);
+        assertThrows(InvalidUpdateException.class, () -> {
+            userService.makeAWithdraw(req);
+        });
     }
 }
