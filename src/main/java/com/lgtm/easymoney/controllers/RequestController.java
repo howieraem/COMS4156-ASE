@@ -33,7 +33,7 @@ public class RequestController {
   }
 
   @PostMapping("/create")
-  @Operation(description = "Method for a user to create a money request to another user.")
+  @Operation(summary = "Method for a user to create a money request to another user.")
   public ResponseEntity<RequestRsp> createRequest(@Valid @RequestBody RequestReq req) {
     return requestService.createRequest(req);
   }
@@ -45,7 +45,7 @@ public class RequestController {
    * @return response entity with list of requests.
    */
   @GetMapping("/{uid}")
-  @Operation(description = "Method for a user "
+  @Operation(summary = "Method for a user "
           + "to get all money requests sent (but not yet completed).")
   public ResponseEntity<RequestRsp> getRequests(@PathVariable(value = "uid") Long uid) {
     // get all requests that are sent/received by user
@@ -56,13 +56,13 @@ public class RequestController {
 
 
   @PutMapping("/accept")
-  @Operation(description = "Method for a user to accept a money request from another user.")
+  @Operation(summary = "Method for a user to accept a money request from another user.")
   public ResponseEntity<RequestRsp> acceptRequest(@Valid @RequestBody RequestAcceptDeclineReq r) {
     return requestService.acceptRequest(r.getRequestid(), r.getFromUid(), r.getToUid());
   }
 
   @PutMapping("/decline")
-  @Operation(description = "Method for a user to decline a money request from another user.")
+  @Operation(summary = "Method for a user to decline a money request from another user.")
   public ResponseEntity<RequestRsp> declineRequest(@Valid @RequestBody RequestAcceptDeclineReq r) {
     return requestService.declineRequest(r.getRequestid(), r.getFromUid(), r.getToUid());
   }

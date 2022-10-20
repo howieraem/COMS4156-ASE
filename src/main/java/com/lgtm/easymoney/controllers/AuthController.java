@@ -30,10 +30,10 @@ public class AuthController {
    * handle register requests.
    *
    * @param registerReq reg request with user's info.
-   * @return response entity of the ID of the registered user if succeeded or error information if failed
+   * @return response entity of the new user's ID if succeeded or error information if failed
    */
   @PostMapping("/register")
-  @Operation(description = "Method for new user registration.")
+  @Operation(summary = "Method for new user registration.")
   public ResponseEntity<ResourceCreatedRsp> register(@Valid @RequestBody RegisterReq registerReq) {
     return new ResponseEntity<>(userService.createUser(registerReq), HttpStatus.CREATED);
   }

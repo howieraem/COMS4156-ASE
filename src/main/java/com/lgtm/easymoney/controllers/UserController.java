@@ -27,14 +27,14 @@ public class UserController {
   }
 
   @PutMapping("/deposit")
-  @Operation(description = "Method for a user to "
+  @Operation(summary = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
   public ResponseEntity<BalanceRsp> deposit(@Valid @RequestBody BalanceReq req) {
     return new ResponseEntity<>(userService.makeDeposit(req), HttpStatus.OK);
   }
 
   @PutMapping("/withdraw")
-  @Operation(description = "Method for a user to"
+  @Operation(summary = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")
   public ResponseEntity<BalanceRsp> withdraw(@Valid @RequestBody BalanceReq req) {
     return new ResponseEntity<>(userService.makeWithdraw(req), HttpStatus.OK);
