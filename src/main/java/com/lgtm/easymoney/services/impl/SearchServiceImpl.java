@@ -60,16 +60,16 @@ public class SearchServiceImpl implements SearchService {
   public ResponseEntity<SearchRsp> searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
-    boolean searchResult = true;
-
     //Compose response
-    List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
     ProfileRsp res = new ProfileRsp();
     res.setAccountName(user.getAccount().getAccountName());
     res.setEmail(user.getEmail());
     res.setAddress(user.getAddress());
     res.setUserType(user.getType());
     res.setPhone(user.getPhone());
+
+    List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
+    boolean searchResult = true;
     profileList.add(res);
     SearchRsp searchRes = new SearchRsp();
     searchRes.setSuccess(searchResult);
