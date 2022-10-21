@@ -18,6 +18,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 
 /**
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
-  /** This handles exceptions caused by correct data types but invalid data ranges. */
+  /** This handles exceptions caused by correct data types but invalid data ranges in body. */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorRsp> handle(MethodArgumentNotValidException ex) {
     List<String> errorFields = new ArrayList<>();
@@ -43,6 +44,16 @@ public class ControllerExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorRsp(errorFields, errorMessage));
+  }
+
+  /** This handles exceptions caused by invalid path variables. */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorRsp> handle(MethodArgumentTypeMismatchException ex) {
+    List<String> errorFields = new ArrayList<>();
+    errorFields.add(ex.getName());
+    String errorMessage = ex.getMessage();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorRsp(errorFields, errorMessage));
   }
 
   /** This handles exceptions caused by incorrect data types. */
