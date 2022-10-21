@@ -38,11 +38,5 @@ public interface RequestService {
 
   ResponseEntity<RequestRsp> declineRequest(Long tid, Long fuid, Long tuid);
 
-  // below are internal APIs
-
-
-  ResponseEntity<RequestRsp> getRequestsByUser(User user);
-
   ResponseEntity<RequestRsp> getRequestsByUid(Long uid);
-  // TODO: request response
 }

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
+import com.lgtm.easymoney.models.Transaction;
+import com.lgtm.easymoney.payload.RequestAcceptDeclineReq;
 import com.lgtm.easymoney.payload.RequestReq;
 import com.lgtm.easymoney.payload.RequestRsp;
 import com.lgtm.easymoney.payload.TransactionRsp;
@@ -49,8 +51,12 @@ public class RequestControllerTest {
   private RequestReq requestReq;
   private RequestRsp requestRsp;
   private TransactionRsp transactionRsp;
+
+  private Transaction transaction;
   private Long fromUid = 1L;
   private Long toUid = 2L;
+
+  private Long requestId = 3L;
   private BigDecimal amount = BigDecimal.valueOf(30.0);
   private String description = "this is a test request";
   private Date lastUpdateTime = new Date(20221020L);
@@ -69,7 +75,7 @@ public class RequestControllerTest {
 
     transactionRsp = new TransactionRsp(fromUid, toUid, amount,
             TransactionStatus.TRANS_COMPLETE, description, Category.PARTY, lastUpdateTime);
-
+    transaction = new Transaction();
     requestRsp = new RequestRsp();
     requestRsp.setSuccess(true);
     requestRsp.setCurrBalance(BigDecimal.valueOf(70.0));
@@ -167,6 +173,21 @@ public class RequestControllerTest {
             jsonPath("$.requests[0].status").value("TRANS_COMPLETE"),
             jsonPath("$.requests[0].desc").value(description),
             jsonPath("$.requests[0].category").value("PARTY"));
+  }
+
+  @Test
+  public void acceptRequestSuccess() throws Exception {
+    // Arrange
+    RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
+    req.setFromUid(fromUid);
+    req.setToUid(toUid);
+    // TODO mock related service calls for accepting request
+    // also mock a transaction, validation related.
+//    req.setRequestid();
+//    Mockito.when(requestService.acceptRequest(req.getRequestid()))
+    // Act
+
+    // Assert
   }
 
   private ResultActions postRequest(RequestReq req) throws Exception {

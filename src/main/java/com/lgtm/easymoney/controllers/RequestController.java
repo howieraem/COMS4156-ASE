@@ -23,12 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/request")
 public class RequestController {
-  private final UserService userService;
   private final RequestService requestService;
 
   @Autowired
-  public RequestController(UserService userService, RequestService requestService) {
-    this.userService = userService;
+  public RequestController(RequestService requestService) {
     this.requestService = requestService;
   }
 
@@ -51,7 +49,7 @@ public class RequestController {
     // get all requests that are sent/received by user
     // param: uid (from/to are the same for now) we may add filtering features later
     // return: list of requests
-    return requestService.getRequestsByUser(userService.getUserById(uid));
+    return requestService.getRequestsByUid(uid);
   }
 
 

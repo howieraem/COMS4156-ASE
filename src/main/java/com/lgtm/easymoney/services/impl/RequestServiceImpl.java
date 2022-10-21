@@ -54,10 +54,27 @@ public class RequestServiceImpl implements RequestService {
     return transactionService.getAllTransactionsWithUser(user, status);
   }
 
+//  @Override
+//  public ResponseEntity<RequestRsp> getRequestsByUser(User user) {
+//    // get params
+//    // payload
+//    RequestRsp res = new RequestRsp();
+//    List<Transaction> listTrans = getRequestByUser(user);
+//    res.setSuccess(listTrans != null);
+//    res.setCurrBalance(user.getBalance());
+//
+//    res.setRequests(transactionService.generateListResponseFromTransactions(listTrans));
+//    res.setMessage("Retrieved user's requests!");
+//    if (listTrans != null) {
+//      return ResponseEntity.status(HttpStatus.OK).body(res);
+//    }
+//    // TODO refactor this?
+//    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+//  }
+
   @Override
-  public ResponseEntity<RequestRsp> getRequestsByUser(User user) {
-    // get params
-    // payload
+  public ResponseEntity<RequestRsp> getRequestsByUid(Long uid) {
+    User user = userService.getUserById(uid);
     RequestRsp res = new RequestRsp();
     List<Transaction> listTrans = getRequestByUser(user);
     res.setSuccess(listTrans != null);
@@ -70,12 +87,6 @@ public class RequestServiceImpl implements RequestService {
     }
     // TODO refactor this?
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-  }
-
-  @Override
-  public ResponseEntity<RequestRsp> getRequestsByUid(Long uid) {
-    User user = userService.getUserById(uid);
-    return getRequestsByUser(user);
   }
 
   @Override
