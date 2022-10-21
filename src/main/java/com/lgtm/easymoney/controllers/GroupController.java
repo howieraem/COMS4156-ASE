@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
 import com.lgtm.easymoney.payload.CreateGroupReq;
+import com.lgtm.easymoney.payload.GroupAdsRsp;
 import com.lgtm.easymoney.payload.GroupRsp;
 import com.lgtm.easymoney.payload.InviteToGroupReq;
 import com.lgtm.easymoney.payload.LeaveGroupReq;
@@ -59,5 +60,13 @@ public class GroupController {
       "Method to get a group's name, description and the list of user IDs, by a group ID.")
   public ResponseEntity<GroupRsp> getGroup(@PathVariable(value = "id") @NotNull Long id) {
     return new ResponseEntity<>(groupService.getGroupProfile(id), HttpStatus.OK);
+  }
+
+  @GetMapping("/{id}/business")
+  @Operation(summary =
+          "Method to get a group's ads(texts from business profiles"
+                  + "), description and the list of user IDs, by a group ID.")
+  public ResponseEntity<GroupAdsRsp> getGroupAds(@PathVariable(value = "id") @NotNull Long id) {
+    return new ResponseEntity<>(groupService.getGroupAds(id), HttpStatus.OK);
   }
 }
