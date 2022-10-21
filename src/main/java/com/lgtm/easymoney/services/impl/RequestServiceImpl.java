@@ -100,7 +100,7 @@ public class RequestServiceImpl implements RequestService {
             userService.getUserById(req.getToUid()),
             req.getAmount(),
             req.getDescription(),
-            Category.valueOf(req.getCategory()));
+            Category.valueOf(req.getCategory().toUpperCase()));
     // response
     return trans == null ? new ResourceCreatedRsp(null) : new ResourceCreatedRsp(trans.getId());
   }

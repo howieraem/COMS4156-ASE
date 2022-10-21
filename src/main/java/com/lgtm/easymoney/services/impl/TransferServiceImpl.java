@@ -65,7 +65,7 @@ public class TransferServiceImpl implements TransferService {
     User fromUser = userService.getUserById(fromUid);
     User toUser = userService.getUserById(toUid);
     Transaction transaction =
-            createTransaction(fromUser, toUser, amount, Category.valueOf(category), desc);
+            createTransaction(fromUser, toUser, amount, Category.valueOf(category.toUpperCase()), desc);
     boolean success = makeTransfer(transaction);
     // payload
     TransferRsp response = new TransferRsp();
