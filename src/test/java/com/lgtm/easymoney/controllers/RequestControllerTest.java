@@ -71,13 +71,13 @@ public class RequestControllerTest {
     requestReq.setFromUid(fromUid);
     requestReq.setToUid(toUid);
     requestReq.setAmount(amount);
-    requestReq.setCategory(Category.PARTY);
+    requestReq.setCategory("PARTY");
     requestReq.setDescription(description);
     // transaction response
     transactionRsp = new TransactionRsp(fromUid, toUid, amount,
             TransactionStatus.TRANS_COMPLETE, description, Category.PARTY, lastUpdateTime);
     // response for making requests
-    resourceCreatedRsp = new ResourceCreatedRsp(1L);
+    resourceCreatedRsp = new ResourceCreatedRsp(requestId);
     requestRsp = new RequestRsp();
     requestRsp.setSuccess(true);
     requestRsp.setCurrBalance(BigDecimal.valueOf(70.0));
@@ -95,53 +95,70 @@ public class RequestControllerTest {
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isOk(),
+            status().isCreated(),
             jsonPath("$.id").value(1L));
   }
 
   @Test
-  public void createRequestFailedWithNegativeAmount() throws Exception {
-    // Arrange
+  public void createRequestFailedWithInvalidAmount() throws Exception {
+    // negative amount
     requestReq.setAmount(BigDecimal.valueOf(-100));
-    Mockito.when(requestService.createRequest(requestReq)).thenReturn(resourceCreatedRsp);
-
-    // Act
-    ResultActions returnedResponse = postRequest(requestReq);
-
-    // Assert
-    returnedResponse.andExpectAll(
+    postRequest(requestReq).andExpectAll(
             status().isBadRequest(),
             jsonPath("$.errorFields").value("amount"));
-  }
-
-  @Test
-  public void createRequestFailedWithZeroAmount() throws Exception {
-    // Arrange
+    // zero
     requestReq.setAmount(BigDecimal.ZERO);
-    Mockito.when(requestService.createRequest(requestReq)).thenReturn(resourceCreatedRsp);
-
-    // Act
-    ResultActions returnedResponse = postRequest(requestReq);
-
-    // Assert
-    returnedResponse.andExpectAll(
+    postRequest(requestReq).andExpectAll(
             status().isBadRequest(),
             jsonPath("$.errorFields").value("amount"));
+    // too small
+    requestReq.setAmount(BigDecimal.valueOf(0.001));
+    postRequest(requestReq).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$.errorFields").value("amount"));
+
   }
 
   @Test
-  public void createRequestFailedWithInvalidDecimalAmount() throws Exception {
-    // Arrange
-    requestReq.setAmount(BigDecimal.valueOf(0.001));
-    Mockito.when(requestService.createRequest(requestReq)).thenReturn(resourceCreatedRsp);
+  public void createRequestFailedWithInvalidFromUid() throws Exception {
+    // fromUid that does not exsist
+    requestReq.setFromUid(3L);
+    Mockito.when(requestService.createRequest(requestReq))
+            .thenThrow(new ResourceNotFoundException("uid", "uid", 3L));
+    postRequest(requestReq).andExpectAll(
+            status().isNotFound(),
+            jsonPath("$.errorFields").value("uid"));
+  }
 
-    // Act
-    ResultActions returnedResponse = postRequest(requestReq);
+  @Test
+  public void createRequestFailedWithInvalidToUid() throws Exception {
+    // fromUid that does not exsist
+    requestReq.setToUid(3L);
+    Mockito.when(requestService.createRequest(requestReq))
+            .thenThrow(new ResourceNotFoundException("uid", "uid", 3L));
+    postRequest(requestReq).andExpectAll(
+            status().isNotFound(),
+            jsonPath("$.errorFields").value("uid"));
+  }
 
-    // Assert
-    returnedResponse.andExpectAll(
+  @Test
+  public void createRequestFailedWithInvalidCategory() throws Exception {
+    // null category
+    requestReq.setCategory(null);
+    postRequest(requestReq).andExpectAll(
             status().isBadRequest(),
-            jsonPath("$.errorFields").value("amount"));
+            jsonPath("$.errorFields").value("category"));
+    // empty string
+    requestReq.setCategory("");
+    postRequest(requestReq).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$.errorFields").value("category"));
+    // string not in Category enum
+    requestReq.setCategory("wtf");
+    postRequest(requestReq).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$.errorFields").value("category"));
+
   }
 
   @Test
