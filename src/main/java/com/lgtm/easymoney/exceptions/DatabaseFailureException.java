@@ -15,7 +15,7 @@ public class DatabaseFailureException extends RuntimeException {
   private final String operation;
 
   /**
-   * handling database failures
+   * handling database failures.
    *
    * @param resourceName resource name, i.e.user
    */
