@@ -57,14 +57,15 @@ public class TransferServiceImpl implements TransferService {
     Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
     BigDecimal amount = req.getAmount();
-    Category category = req.getCategory();
+    String category = req.getCategory();
     String desc = req.getDescription();
     // TODO: add validation to prevent abnormal behavior
     // account validation is currently eliminated because account is guaranteed to exist
     // make a transfer
     User fromUser = userService.getUserById(fromUid);
     User toUser = userService.getUserById(toUid);
-    Transaction transaction = createTransaction(fromUser, toUser, amount, category, desc);
+    Transaction transaction =
+            createTransaction(fromUser, toUser, amount, Category.valueOf(category), desc);
     boolean success = makeTransfer(transaction);
     // payload
     TransferRsp response = new TransferRsp();

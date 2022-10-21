@@ -100,17 +100,17 @@ public class RequestServiceImpl implements RequestService {
             userService.getUserById(req.getToUid()),
             req.getAmount(),
             req.getDescription(),
-            req.getCategory());
+            Category.valueOf(req.getCategory()));
     // response
     return trans == null ? new ResourceCreatedRsp(null) : new ResourceCreatedRsp(trans.getId());
   }
 
   @Override
   public boolean canAcceptDeclineRequest(Long tid, Long fuid, Long tuid) {
-    return
-            getRequestById(tid).getFrom().getId().equals(fuid)
-            && getRequestById(tid).getTo().getId().equals(tuid)
-            && getRequestById(tid).getStatus() == TransactionStatus.TRANS_PENDING;
+    Transaction t = getRequestById(tid);
+    return t.getFrom().getId().equals(fuid)
+            && t.getTo().getId().equals(tuid)
+            && t.getStatus() == TransactionStatus.TRANS_PENDING;
   }
 
   @Override

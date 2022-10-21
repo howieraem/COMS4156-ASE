@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.TransactionStatus;
+import com.lgtm.easymoney.exceptions.DatabaseFailureException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
@@ -50,7 +51,11 @@ public class TransactionServiceImpl implements TransactionService {
 
   @Override
   public Transaction saveTransaction(Transaction t) {
-    return transactionRepository.save(t);
+    Transaction res =  transactionRepository.save(t);
+    if (res == null) {
+      throw new DatabaseFailureException("Transaction", "saveTransaction");
+    }
+    return res;
   }
 
   @Override

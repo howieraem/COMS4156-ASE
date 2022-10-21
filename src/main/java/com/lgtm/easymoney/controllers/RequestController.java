@@ -35,7 +35,7 @@ public class RequestController {
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money request to another user.")
   public ResponseEntity<ResourceCreatedRsp> createRequest(@Valid @RequestBody RequestReq req) {
-    return new ResponseEntity<>(requestService.createRequest(req), HttpStatus.OK);
+    return new ResponseEntity<>(requestService.createRequest(req), HttpStatus.CREATED);
   }
 
   /**
