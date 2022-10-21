@@ -1,8 +1,7 @@
 package com.lgtm.easymoney.exceptions;
 
-import lombok.Getter;
-
 import java.io.Serial;
+import lombok.Getter;
 
 /**
  * resource not found exception wrapper.

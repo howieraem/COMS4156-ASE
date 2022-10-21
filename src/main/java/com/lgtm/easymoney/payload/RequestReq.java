@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.payload;
 
 import com.lgtm.easymoney.enums.Category;
+import com.lgtm.easymoney.enums.validator.ValueOfEnum;
 import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
@@ -22,6 +23,6 @@ public class RequestReq {
   private BigDecimal amount;
 
   private String description;
-
-  private Category category;
+  @ValueOfEnum(enumClass = Category.class)
+  private String category;
 }

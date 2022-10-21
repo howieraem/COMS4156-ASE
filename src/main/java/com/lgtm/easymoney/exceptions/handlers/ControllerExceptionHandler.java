@@ -2,6 +2,7 @@ package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.lgtm.easymoney.configs.DbConsts;
+import com.lgtm.easymoney.exceptions.DatabaseFailureException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ErrorRsp;
@@ -97,6 +98,16 @@ public class ControllerExceptionHandler {
     errorFields.add(ex.getFieldName());
     String errorMessage = ex.getMessage();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ErrorRsp(errorFields, errorMessage));
+  }
+
+  /** This handles dataabse failure. e.g. saving transaction failed */
+  @ExceptionHandler(DatabaseFailureException.class)
+  public ResponseEntity<ErrorRsp> handle(DatabaseFailureException ex) {
+    List<String> errorFields = new ArrayList<>();
+    errorFields.add(ex.getResourceName());
+    String errorMessage = ex.getMessage();
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 }
