@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
       BizProfile bizProfile = new BizProfile();
       bizProfile.setPromotionText(registerReq.getBizPromotionText());
       user.setBizProfile(bizProfile);
+      bizProfile.setBizUser(user);
     }
     return user;
   }
