@@ -87,6 +87,15 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
+  public void leaveGroup(Group group, User user) {
+    if (!isInGroup(group, user)) {
+      throw new InvalidUpdateException("Group", group.getId(), "uid", user.getId());
+    }
+    group.getGroupUsers().remove(user);
+    groupRepository.save(group);
+  }
+
+  @Override
   public void joinGroup(Group group, User user) {
     if (isInGroup(group, user)) {
       throw new InvalidUpdateException("Group", group.getId(), "inviteeId", user.getId());
@@ -95,14 +104,7 @@ public class GroupServiceImpl implements GroupService {
     groupRepository.save(group);
   }
 
-  @Override
-  public void leaveGroup(Group group, User user) {
-    if (!isInGroup(group, user)) {
-      throw new InvalidUpdateException("Group", group.getId(), "uid", user.getId());
-    }
-    group.getGroupUsers().remove(user);
-    groupRepository.save(group);
-  }
+
 
   @Override
   public boolean isInGroup(Group group, User user) {

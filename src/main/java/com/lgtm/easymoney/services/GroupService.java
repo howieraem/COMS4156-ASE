@@ -20,11 +20,13 @@ public interface GroupService {
 
   void leaveGroup(LeaveGroupReq leaveGroupReq);
 
+  void leaveGroup(Group group, User user);
+
   GroupRsp getGroupProfile(Long gid);
 
   void joinGroup(Group group, User user);
 
-  void leaveGroup(Group group, User user);
+
 
   boolean isInGroup(Group group, User user);
 }

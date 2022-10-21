@@ -60,7 +60,7 @@ public class TransferControllerTest {
     transferReq.setFromUid(fromUid);
     transferReq.setToUid(toUid);
     transferReq.setAmount(amount);
-    transferReq.setCategory(Category.PARTY);
+    transferReq.setCategory("party");
     transferReq.setDescription(description);
 
     transactionRsp = new TransactionRsp(fromUid, toUid, amount,

@@ -2,6 +2,7 @@ package com.lgtm.easymoney.models;
 
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
+import com.lgtm.easymoney.enums.validator.ValueOfEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

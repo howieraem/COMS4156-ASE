@@ -24,9 +24,12 @@ public interface UserService {
 
   boolean makeDeposit(User user, BigDecimal amount);
 
+  BalanceRsp makeDeposit(BalanceReq req);
+
+  BalanceRsp makeWithdraw(BalanceReq req);
+
   boolean makeWithdraw(User user, BigDecimal amount);
 
-  BalanceRsp makeDeposit(BalanceReq req);
   
-  BalanceRsp makeWithdraw(BalanceReq req);
+
 }
