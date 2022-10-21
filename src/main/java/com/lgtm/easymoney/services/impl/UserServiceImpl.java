@@ -6,7 +6,10 @@ import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.*;
+import com.lgtm.easymoney.payload.BalanceReq;
+import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
@@ -51,11 +54,23 @@ public class UserServiceImpl implements UserService {
     return userRepository.findAll();
   }
 
+  /**
+   * create a user.
+   *
+   * @param registerReq request of register info
+   * @return uid if createed successfully.
+   */
   @Override
   public ResourceCreatedRsp createUser(RegisterReq registerReq) {
     return new ResourceCreatedRsp(saveUser(buildUser(registerReq)).getId());
   }
 
+  /**
+   * build user given register request.
+   *
+   * @param registerReq request.
+   * @return user
+   */
   public User buildUser(RegisterReq registerReq) {
     var user = new User();
     user.setEmail(registerReq.getEmail());
@@ -71,9 +86,9 @@ public class UserServiceImpl implements UserService {
     user.setAccount(account);
 
     if (user.getType() != UserType.PERSONAL) {
-        BizProfile bizProfile = new BizProfile();
-        bizProfile.setPromotionText(registerReq.getBizPromotionText());
-        user.setBizProfile(bizProfile);
+      BizProfile bizProfile = new BizProfile();
+      bizProfile.setPromotionText(registerReq.getBizPromotionText());
+      user.setBizProfile(bizProfile);
     }
     return user;
   }
@@ -83,20 +98,6 @@ public class UserServiceImpl implements UserService {
   public boolean makeDeposit(User user, BigDecimal amount) {
     var balance = user.getBalance();
     balance = balance.add(amount);
-    user.setBalance(balance);
-    saveUser(user);
-    return true;
-  }
-
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public boolean makeWithdraw(User user, BigDecimal amount) {
-    var balance = user.getBalance();
-    if (balance.compareTo(amount) < 0) {
-        // Not enough balance
-        throw new InvalidUpdateException("User", user.getId(), "amount", amount);
-    }
-    balance = balance.subtract(amount);
     user.setBalance(balance);
     saveUser(user);
     return true;
@@ -115,6 +116,20 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
+  public boolean makeWithdraw(User user, BigDecimal amount) {
+    var balance = user.getBalance();
+    if (balance.compareTo(amount) < 0) {
+      // Not enough balance
+      throw new InvalidUpdateException("User", user.getId(), "amount", amount);
+    }
+    balance = balance.subtract(amount);
+    user.setBalance(balance);
+    saveUser(user);
+    return true;
+  }
+
+  @Override
   public BalanceRsp makeWithdraw(BalanceReq req) {
     // get params
     Long uid = req.getUid();
@@ -125,4 +140,6 @@ public class UserServiceImpl implements UserService {
     // payload
     return new BalanceRsp(user.getBalance());
   }
+
+
 }

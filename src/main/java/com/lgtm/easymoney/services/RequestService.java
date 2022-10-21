@@ -5,6 +5,7 @@ import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.RequestReq;
 import com.lgtm.easymoney.payload.RequestRsp;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +27,17 @@ public interface RequestService {
   Transaction createRequest(
           User reqBy, User reqTo, BigDecimal amount, String desc, Category category);
 
-  ResponseEntity<RequestRsp> createRequest(RequestReq req);
+  ResourceCreatedRsp createRequest(RequestReq req);
 
-  boolean validateRequest(Transaction request);
+  boolean canAcceptDeclineRequest(Long tid, Long fuid, Long tuid);
 
   boolean acceptRequest(Transaction request);
 
-  ResponseEntity<RequestRsp> acceptRequest(Long tid, Long fuid, Long tuid);
+  ResourceCreatedRsp acceptRequest(Long tid, Long fuid, Long tuid);
 
   boolean declineRequest(Transaction request);
 
-  ResponseEntity<RequestRsp> declineRequest(Long tid, Long fuid, Long tuid);
+  ResourceCreatedRsp declineRequest(Long tid, Long fuid, Long tuid);
 
-  ResponseEntity<RequestRsp> getRequestsByUid(Long uid);
+  RequestRsp getRequestsByUid(Long uid);
 }
