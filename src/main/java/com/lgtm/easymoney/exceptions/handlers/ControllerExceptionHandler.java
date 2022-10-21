@@ -107,7 +107,7 @@ public class ControllerExceptionHandler {
     List<String> errorFields = new ArrayList<>();
     errorFields.add(ex.getResourceName());
     String errorMessage = ex.getMessage();
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 }
