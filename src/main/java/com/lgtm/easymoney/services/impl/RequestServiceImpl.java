@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 /**
  * request service implementation.
  */
-@Service
+@Service("requestService")
 public class RequestServiceImpl implements RequestService {
   private final TransactionService transactionService;
   private final UserService userService;
@@ -70,6 +70,12 @@ public class RequestServiceImpl implements RequestService {
     }
     // TODO refactor this?
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  }
+
+  @Override
+  public ResponseEntity<RequestRsp> getRequestsByUid(Long uid) {
+    User user = userService.getUserById(uid);
+    return getRequestsByUser(user);
   }
 
   @Override

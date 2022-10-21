@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * user service implementation. restful apis for accessing users.
  */
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 

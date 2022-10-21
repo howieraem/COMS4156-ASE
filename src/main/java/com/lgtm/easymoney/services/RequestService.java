@@ -42,5 +42,7 @@ public interface RequestService {
 
 
   ResponseEntity<RequestRsp> getRequestsByUser(User user);
+
+  ResponseEntity<RequestRsp> getRequestsByUid(Long uid);
   // TODO: request response
 }
