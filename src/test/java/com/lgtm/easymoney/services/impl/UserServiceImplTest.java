@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.services;
+package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
