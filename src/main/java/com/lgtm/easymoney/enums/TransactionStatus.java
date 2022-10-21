@@ -9,5 +9,6 @@ public enum TransactionStatus {
     TRANS_PENDING,
     TRANS_COMPLETE,
     TRANS_DENIED,
+    TRANS_FAILED,
     SELF_COMPLETE
 }

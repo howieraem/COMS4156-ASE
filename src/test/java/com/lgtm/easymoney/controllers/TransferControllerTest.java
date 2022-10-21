@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.payload.TransactionRsp;
 import com.lgtm.easymoney.payload.TransferReq;
 import com.lgtm.easymoney.payload.TransferRsp;
@@ -50,22 +51,24 @@ public class TransferControllerTest {
   private BigDecimal amount = BigDecimal.valueOf(30.0);
   private String description = "this is a test transfer";
   private Date lastUpdateTime = new Date(20221020L);
+  private Long transactionId = 11L;
 
   /**
    * Set up reusable test fixtures.
    * */
   @Before
   public void setUp() {
+    // transferReq
     transferReq = new TransferReq();
     transferReq.setFromUid(fromUid);
     transferReq.setToUid(toUid);
     transferReq.setAmount(amount);
     transferReq.setCategory("party");
     transferReq.setDescription(description);
-
+    // transactionRsp
     transactionRsp = new TransactionRsp(fromUid, toUid, amount,
         TransactionStatus.TRANS_COMPLETE, description, Category.PARTY, lastUpdateTime);
-
+    // transferRsp
     transferRsp = new TransferRsp();
     transferRsp.setSuccess(true);
     transferRsp.setCurrBalance(BigDecimal.valueOf(70.0));
@@ -75,31 +78,51 @@ public class TransferControllerTest {
   @Test
   public void transferSuccess() throws Exception {
     // Arrange
+    ResourceCreatedRsp resourceCreatedRsp = new ResourceCreatedRsp(transactionId);
     Mockito.when(transferService.makeTransfer(transferReq))
-        .thenReturn(ResponseEntity.of(Optional.of(transferRsp)));
+        .thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse = postTransfer(transferReq);
 
     // Assert
     returnedResponse.andExpectAll(
-        status().isOk(),
-        jsonPath("$.success").value(true),
-        jsonPath("$.currBalance").value("70.0"),
-        jsonPath("$.transfers[0].fromUid").value(fromUid),
-        jsonPath("$.transfers[0].toUid").value(toUid),
-        jsonPath("$.transfers[0].amount").value(amount),
-        jsonPath("$.transfers[0].status").value("TRANS_COMPLETE"),
-        jsonPath("$.transfers[0].desc").value(description),
-        jsonPath("$.transfers[0].category").value("PARTY"));
+        status().isCreated(),
+        jsonPath("$.id").value(transactionId));
+  }
+
+  @Test
+  public void transferFailedWithNullFromUid() throws Exception {
+    // Arrange
+    transferReq.setFromUid(null);
+
+    // Act
+    ResultActions returnedResponse = postTransfer(transferReq);
+
+    // Assert
+    returnedResponse.andExpectAll(
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("fromUid"));
+  }
+
+  @Test
+  public void transferFailedWithNullToUid() throws Exception {
+    // Arrange
+    transferReq.setToUid(null);
+
+    // Act
+    ResultActions returnedResponse = postTransfer(transferReq);
+
+    // Assert
+    returnedResponse.andExpectAll(
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("toUid"));
   }
 
   @Test
   public void transferFailedWithNegativeAmount() throws Exception {
     // Arrange
     transferReq.setAmount(BigDecimal.valueOf(-100));
-    Mockito.when(transferService.makeTransfer(transferReq))
-        .thenReturn(ResponseEntity.of(Optional.of(transferRsp)));
 
     // Act
     ResultActions returnedResponse = postTransfer(transferReq);
@@ -114,8 +137,6 @@ public class TransferControllerTest {
   public void transferFailedWithZeroAmount() throws Exception {
     // Arrange
     transferReq.setAmount(BigDecimal.ZERO);
-    Mockito.when(transferService.makeTransfer(transferReq))
-        .thenReturn(ResponseEntity.of(Optional.of(transferRsp)));
 
     // Act
     ResultActions returnedResponse = postTransfer(transferReq);
@@ -130,8 +151,6 @@ public class TransferControllerTest {
   public void transferFailedWithInvalidDecimalAmount() throws Exception {
     // Arrange
     transferReq.setAmount(BigDecimal.valueOf(0.001));
-    Mockito.when(transferService.makeTransfer(transferReq))
-        .thenReturn(ResponseEntity.of(Optional.of(transferRsp)));
 
     // Act
     ResultActions returnedResponse = postTransfer(transferReq);
@@ -143,10 +162,37 @@ public class TransferControllerTest {
   }
 
   @Test
+  public void transferFailedWithInvalidCategory() throws Exception {
+    // Arrange
+    transferReq.setCategory("lunch");
+
+    // Act
+    ResultActions returnedResponse = postTransfer(transferReq);
+
+    // Assert
+    returnedResponse.andExpectAll(
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("category"));
+  }
+
+  @Test
+  public void transferFailedWithEmptyCategory() throws Exception {
+    // Arrange
+    transferReq.setCategory("");
+
+    // Act
+    ResultActions returnedResponse = postTransfer(transferReq);
+
+    // Assert
+    returnedResponse.andExpectAll(
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("category"));
+  }
+
+  @Test
   public void getTransfersSuccess() throws Exception {
     // Arrange
-    Mockito.when(transferService.getTransfersByUid(fromUid))
-        .thenReturn(ResponseEntity.of(Optional.of(transferRsp)));
+    Mockito.when(transferService.getTransfersByUid(fromUid)).thenReturn(transferRsp);
 
     // Act
     ResultActions returnedResponse =

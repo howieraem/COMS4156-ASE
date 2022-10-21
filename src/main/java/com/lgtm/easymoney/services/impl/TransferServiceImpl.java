@@ -2,8 +2,11 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
+import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.payload.TransactionRsp;
 import com.lgtm.easymoney.payload.TransferReq;
 import com.lgtm.easymoney.payload.TransferRsp;
@@ -18,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
- * transfer service implementation.
+ * Transfer service implementation.
  */
 @Service
 public class TransferServiceImpl implements TransferService {
@@ -52,14 +55,13 @@ public class TransferServiceImpl implements TransferService {
   }
 
   @Override
-  public ResponseEntity<TransferRsp> makeTransfer(TransferReq req) {
+  public ResourceCreatedRsp makeTransfer(TransferReq req) {
     // get params
     Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
     BigDecimal amount = req.getAmount();
     String category = req.getCategory();
     String desc = req.getDescription();
-    // TODO: add validation to prevent abnormal behavior
     // account validation is currently eliminated because account is guaranteed to exist
     // make a transfer
     User fromUser = userService.getUserById(fromUid);
@@ -68,16 +70,13 @@ public class TransferServiceImpl implements TransferService {
             createTransaction(fromUser, toUser, amount, Category.valueOf(category.toUpperCase()), desc);
     boolean success = makeTransfer(transaction);
     // payload
-    TransferRsp response = new TransferRsp();
-    response.setSuccess(success);
-    response.setCurrBalance(fromUser.getBalance());
-    List<TransactionRsp> transferRsps =
-            transactionService.generateListResponseFromTransactions(List.of(transaction));
-    response.setTransfers(transferRsps);
-    if (success) {
-      return ResponseEntity.status(HttpStatus.OK).body(response);
+    if (!success) {
+      transaction.setStatus(TransactionStatus.TRANS_FAILED);
+      transaction = transactionService.saveTransaction(transaction);
+      throw new InvalidUpdateException("make transfer", transaction.getId(),
+          "transfer id", transaction.getId());
     }
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    return new ResourceCreatedRsp(transaction.getId());
   }
 
   private List<Transaction> getTransfersByUser(User user) {
@@ -85,13 +84,14 @@ public class TransferServiceImpl implements TransferService {
     return transactionService.getAllTransactionsWithUser(user, status);
   }
 
-
-
   @Override
-  public ResponseEntity<TransferRsp> getTransfersByUid(Long uid) {
+  public TransferRsp getTransfersByUid(Long uid) {
     User user = userService.getUserById(uid);
     List<Transaction> transfers = getTransfersByUser(user);
-    boolean success = transfers != null;
+    boolean success = !transfers.isEmpty();
+    if (!success) {
+      throw new ResourceNotFoundException("transfers", "uid", String.valueOf(uid));
+    }
     // payload
     TransferRsp response = new TransferRsp();
     response.setSuccess(success);
@@ -100,9 +100,6 @@ public class TransferServiceImpl implements TransferService {
             transactionService.generateListResponseFromTransactions(transfers);
     response.setTransfers(transferRsps);
     response.setMessage("User's transfers returned");
-    if (success) {
-      return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    return response;
   }
 }

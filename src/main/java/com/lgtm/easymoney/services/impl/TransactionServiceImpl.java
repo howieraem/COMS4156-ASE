@@ -78,6 +78,9 @@ public class TransactionServiceImpl implements TransactionService {
     if (t.getStatus() == TransactionStatus.TRANS_PENDING) {
       User sender = t.getFrom();
       User receiver = t.getTo();
+      if (sender.getId().equals(receiver.getId())) {
+        return false;
+      }
       if (sender.getBalance().compareTo(t.getAmount()) < 0) {
         // TODO insufficient fund, do nothing
         return false;
