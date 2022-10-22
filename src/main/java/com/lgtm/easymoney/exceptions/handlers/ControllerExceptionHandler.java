@@ -2,7 +2,6 @@ package com.lgtm.easymoney.exceptions.handlers;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.lgtm.easymoney.configs.DbConsts;
-import com.lgtm.easymoney.exceptions.DatabaseFailureException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ErrorRsp;
@@ -10,8 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,27 +29,20 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class ControllerExceptionHandler {
   /** This handles exceptions caused by correct data types but invalid data ranges in body. */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorRsp> handle(MethodArgumentNotValidException ex) {
+  public ResponseEntity<ErrorRsp> handle(final MethodArgumentNotValidException ex) {
     List<String> errorFields = new ArrayList<>();
-    String errorMessage;
-    try {
-      var fieldErrors = Objects.requireNonNull(ex.getBindingResult().getFieldErrors());
-      for (var fieldError : fieldErrors) {
-        errorFields.add(fieldError.getField());
-      }
-      errorMessage = "Invalid input format!";
-    } catch (NullPointerException npe) {
-      // TODO not sure when `fieldErrors` is null
-      errorMessage = "Unknown input error!";
+    var fieldErrors = ex.getBindingResult().getFieldErrors();
+    for (var fieldError : fieldErrors) {
+      errorFields.add(fieldError.getField());
     }
-
+    String errorMessage = "Invalid input format!";
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 
   /** This handles exceptions caused by invalid path variables. */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  public ResponseEntity<ErrorRsp> handle(MethodArgumentTypeMismatchException ex) {
+  public ResponseEntity<ErrorRsp> handle(final MethodArgumentTypeMismatchException ex) {
     List<String> errorFields = new ArrayList<>();
     errorFields.add(ex.getName());
     String errorMessage = ex.getMessage();
@@ -59,29 +52,19 @@ public class ControllerExceptionHandler {
 
   /** This handles exceptions caused by incorrect data types. */
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public ResponseEntity<ErrorRsp> handle(HttpMessageNotReadableException ex) throws IOException {
+  public ResponseEntity<ErrorRsp> handle(
+      final HttpMessageNotReadableException ex) throws IOException {
+    var jsonEx = (JsonParseException) ex.getCause();  // other kinds of causes shouldn't happen
     List<String> errorFields = new ArrayList<>();
-    String errorMessage;
-    var cause = ex.getCause();
-
-    if (cause instanceof JsonParseException) {
-      /* If there are multiple problematic fields,
-      this kind of exception only includes the first one. */
-      JsonParseException jsonEx = (JsonParseException) ex.getCause();
-      errorFields.add(jsonEx.getProcessor().currentName());
-      errorMessage = "JSON parse error!";
-    } else {
-      // TODO not sure about other causes
-      errorMessage = "Unknown http read error!";
-    }
-
+    errorFields.add(jsonEx.getProcessor().currentName());
+    String errorMessage = "JSON parse error!";
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 
   /** This handles when a resource is not found in DB. */
   @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<ErrorRsp> handle(ResourceNotFoundException ex) {
+  public ResponseEntity<ErrorRsp> handle(final ResourceNotFoundException ex) {
     List<String> errorFields = new ArrayList<>();
     errorFields.add(ex.getFieldName());
     String errorMessage = ex.getMessage();
@@ -92,7 +75,7 @@ public class ControllerExceptionHandler {
   /** This handles when a database constraint
    * (e.g., unique) is violated when creating/updating data. */
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<ErrorRsp> handle(DataIntegrityViolationException ex) {
+  public ResponseEntity<ErrorRsp> handle(final DataIntegrityViolationException ex) {
     var cause = (ConstraintViolationException) ex.getCause();
     String constraint = cause.getConstraintName().split("\\.")[1];
     List<String> errorFields = Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint));
@@ -104,7 +87,7 @@ public class ControllerExceptionHandler {
   /** This handles when an update to a resource is invalid 
    * according to business logics. */
   @ExceptionHandler(InvalidUpdateException.class)
-  public ResponseEntity<ErrorRsp> handle(InvalidUpdateException ex) {
+  public ResponseEntity<ErrorRsp> handle(final InvalidUpdateException ex) {
     List<String> errorFields = new ArrayList<>();
     errorFields.add(ex.getFieldName());
     String errorMessage = ex.getMessage();
@@ -112,13 +95,10 @@ public class ControllerExceptionHandler {
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 
-  /** This handles dataabse failure. e.g. saving transaction failed */
-  @ExceptionHandler(DatabaseFailureException.class)
-  public ResponseEntity<ErrorRsp> handle(DatabaseFailureException ex) {
-    List<String> errorFields = new ArrayList<>();
-    errorFields.add(ex.getResourceName());
-    String errorMessage = ex.getMessage();
+  /** This handles database failure. e.g. saving transaction failed */
+  @ExceptionHandler(DataAccessException.class)
+  public ResponseEntity<ErrorRsp> handle(final DataAccessException ex) {
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-            .body(new ErrorRsp(errorFields, errorMessage));
+            .body(new ErrorRsp(new ArrayList<>(), ex.getMessage()));
   }
 }
