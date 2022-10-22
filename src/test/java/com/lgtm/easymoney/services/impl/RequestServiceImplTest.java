@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -65,13 +67,7 @@ public class RequestServiceImplTest {
    * */
   @Before
   public void setUp() {
-    // transferReq
-//    transferReq = new TransferReq();
-//    transferReq.setFromUid(id1);
-//    transferReq.setToUid(id2);
-//    transferReq.setAmount(amount);
-//    transferReq.setCategory(String.valueOf(category));
-//    transferReq.setDescription(description);
+    // requestReq
     requestReq = new RequestReq();
     requestReq.setFromUid(id1);
     requestReq.setToUid(id2);
@@ -99,6 +95,12 @@ public class RequestServiceImplTest {
     transaction.setDescription(description);
     transaction.setStatus(TransactionStatus.TRANS_PENDING);
     transaction.setId(transactionId);
+  }
+
+  @AfterEach
+  public void tearDown() {
+    // reset status to prevent pollution from accept/decline testing
+    transaction.setStatus(TransactionStatus.TRANS_PENDING);
   }
 
   @Test
@@ -142,4 +144,124 @@ public class RequestServiceImplTest {
 
 
   // TODO tests for Accept/Decline
+  @Test
+  public void existsRequestByIdSuccess() {
+    // Arrange
+    Mockito.when(transactionService.existsTransactionById(transactionId)).thenReturn(Boolean.TRUE);
+    Boolean expected = Boolean.TRUE;
+    // Act
+    Boolean returned = requestService.existsRequestById(transactionId);
+    // Assert
+    assertEquals(expected, returned);
+  }
+
+  @Test
+  public void getRequestByIdSuccess() {
+    // Arrange
+    Mockito.when(transactionService.getTransactionById(transactionId)).thenReturn(transaction);
+    // Act
+    Transaction returned = requestService.getRequestById(transactionId);
+    // Assert
+    assertEquals(transaction, returned);
+  }
+
+  @Test
+  public void saveRequestSuccess() {
+    // Arrange
+    Mockito.when(transactionService.saveTransaction(Mockito.any(Transaction.class))).thenReturn(transaction);
+    // Act
+    Transaction returned = requestService.saveRequest(transaction);
+    // Assert
+    assertEquals(transaction, returned);
+  }
+
+  @Test
+  public void canAcceptDeclineRequestSuccess() {
+    // Arrange
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    // Act
+    Boolean returned = requestService.canAcceptDeclineRequest(transactionId, id1, id2);
+    // Assert
+    assertEquals(Boolean.TRUE, returned);
+  }
+
+  @Test
+  public void acceptRequestSuccess() {
+    // Arrange
+    Mockito.when(transactionService.executeTransaction(transaction)).thenReturn(Boolean.TRUE);
+    // Act
+    Boolean returned = requestService.acceptRequest(transaction);
+    // Assert
+    assertEquals(Boolean.TRUE, returned);
+  }
+
+  @Test
+  public void acceptRequestWrapperSuccess() {
+    // wrapper means it's top level
+    // Arrange
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    Mockito.when(requestService.acceptRequest(transaction)).thenReturn(Boolean.TRUE);
+    ResourceCreatedRsp expected = new ResourceCreatedRsp(transactionId);
+    // Act
+    ResourceCreatedRsp returned = requestService.acceptRequest(transactionId, id1, id2);
+    // Assert
+    assertEquals(expected, returned);
+  }
+
+  @Test
+  public void acceptRequestWrapperFailedByCannotAccept() {
+    // Arrange, should fail since transaction ID does not match
+    transaction.setStatus(TransactionStatus.TRANS_COMPLETE);
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    // Act & Assert
+    assertThrows(InvalidUpdateException.class,
+            () -> requestService.acceptRequest(transactionId, id1, id2));
+  }
+
+  @Test
+  public void acceptRequestWrapperFailedByExecution() {
+    // Arrange, should fail due to execution failed
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    Mockito.when(transactionService.executeTransaction(transaction)).thenReturn(Boolean.FALSE);
+    // Act & Assert
+    assertThrows(InvalidUpdateException.class,
+            () -> requestService.acceptRequest(transactionId, id1, id2));
+  }
+
+  @Test
+  public void declineRequestSuccess() {
+    // Arrange
+    Mockito.when(transactionService.saveTransaction(transaction)).thenReturn(transaction);
+    // Act
+    Boolean returned = requestService.declineRequest(transaction);
+    // Assert
+    assertEquals(Boolean.TRUE, returned);
+    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+  }
+
+  @Test
+  public void declineRequestWrapperSuccess() {
+    // wrapper means it's top level
+    // Arrange
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    Mockito.when(transactionService.saveTransaction(transaction)).thenReturn(transaction);
+    ResourceCreatedRsp expected = new ResourceCreatedRsp(transactionId);
+    // Act
+    ResourceCreatedRsp returned = requestService.declineRequest(transactionId, id1, id2);
+    // Assert
+    assertEquals(expected, returned);
+    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+  }
+
+  @Test
+  public void declineRequestWrapperFailedByCannotAccept() {
+    // Arrange, should fail since transaction ID does not match
+//    transaction.setId(9L);
+    transaction.setStatus(TransactionStatus.TRANS_COMPLETE);
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    // Act & Assert
+    assertThrows(InvalidUpdateException.class,
+            () -> requestService.declineRequest(transactionId, id1, id2));
+  }
+
 }
