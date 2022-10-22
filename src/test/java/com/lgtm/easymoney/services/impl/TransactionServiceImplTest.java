@@ -82,6 +82,7 @@ public class TransactionServiceImplTest {
     transaction.setDescription(description);
     transaction.setStatus(TransactionStatus.TRANS_PENDING);
     transaction.setId(transactionId);
+    transaction.setLastUpdateTime(lastUpdateTime);
   }
 
   @Test
@@ -110,7 +111,8 @@ public class TransactionServiceImplTest {
   @Test
   public void getTransactionByIdFailedByNotFound() {
     Mockito.when(transactionRepo.findById(transactionId)).thenReturn(Optional.empty());
-    assertThrows(ResourceNotFoundException.class, () -> transactionService.getTransactionById(transactionId));
+    assertThrows(ResourceNotFoundException.class,
+        () -> transactionService.getTransactionById(transactionId));
   }
 
   @Test
@@ -131,17 +133,169 @@ public class TransactionServiceImplTest {
   public void getAllTransactionsWithUserSuccess() {
     // todo maybe more data for testing? to ensure the list returns more
     Mockito.when(transactionRepo.findByFromOrToAndStatusIn(
-            user1, user1, List.of(TransactionStatus.TRANS_PENDING))).thenReturn(List.of(transaction));
-    List<Transaction> returned = transactionService.
-            getAllTransactionsWithUser(user1, List.of(TransactionStatus.TRANS_PENDING));
+            user1, user1, List.of(TransactionStatus.TRANS_PENDING)))
+        .thenReturn(List.of(transaction));
+    List<Transaction> returned =
+        transactionService.getAllTransactionsWithUser(
+            user1,
+            List.of(TransactionStatus.TRANS_PENDING));
     assertEquals(returned, List.of(transaction));
   }
 
-  // TODO remaining tests
+  @Test
+  public void executeTransactionSuccess() {
+    // Arrange
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    Mockito.when(userService.saveUser(user1)).thenReturn(user1);
+    Mockito.when(userService.saveUser(user2)).thenReturn(user2);
+    Mockito.when(transactionRepo.save(transaction)).thenReturn(transaction);
+    BigDecimal expectedSenderBalance = user1.getBalance().subtract(transaction.getAmount());
+    BigDecimal expectedReceiverBalance = user2.getBalance().add(transaction.getAmount());
+    TransactionStatus expectedStatus = TransactionStatus.TRANS_COMPLETE;
 
+    // Act
+    final boolean returned = transactionService.executeTransaction(transaction);
 
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.TRUE);
+  }
 
+  @Test
+  public void executeTransactionFailedByTransactionNotExists() {
+    // Arrange
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(false);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    BigDecimal expectedSenderBalance = user1.getBalance();
+    BigDecimal expectedReceiverBalance = user2.getBalance();
 
+    // Act
+    boolean returned = transactionService.executeTransaction(transaction);
 
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(returned, Boolean.FALSE);
+  }
 
+  @Test
+  public void executeTransactionFailedByFromUserNotExists() {
+    // Arrange
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(false);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    BigDecimal expectedReceiverBalance = user2.getBalance();
+    TransactionStatus expectedStatus = TransactionStatus.TRANS_PENDING;
+
+    // Act
+    boolean returned = transactionService.executeTransaction(transaction);
+
+    // Assert
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.FALSE);
+  }
+
+  @Test
+  public void executeTransactionFailedByToUserNotExists() {
+    // Arrange
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(false);
+    BigDecimal expectedSenderBalance = user1.getBalance();
+    TransactionStatus expectedStatus = TransactionStatus.TRANS_PENDING;
+
+    // Act
+    boolean returned = transactionService.executeTransaction(transaction);
+
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.FALSE);
+  }
+
+  @Test
+  public void executeTransactionFailedByUnsupportedStatus() {
+    // Arrange
+    transaction.setStatus(TransactionStatus.TRANS_COMPLETE);
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    BigDecimal expectedSenderBalance = user1.getBalance();
+    BigDecimal expectedReceiverBalance = user2.getBalance();
+    TransactionStatus expectedStatus = transaction.getStatus();
+
+    // Act
+    final boolean returned = transactionService.executeTransaction(transaction);
+
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.FALSE);
+  }
+
+  @Test
+  public void executeTransactionFailedByIdenticalSenderReceiver() {
+    // Arrange
+    transaction.setTo(user1);
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    BigDecimal expectedSenderBalance = user1.getBalance();
+    BigDecimal expectedReceiverBalance = user2.getBalance();
+    TransactionStatus expectedStatus = transaction.getStatus();
+
+    // Act
+    final boolean returned = transactionService.executeTransaction(transaction);
+
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.FALSE);
+  }
+
+  @Test
+  public void executeTransactionFailedByInsufficientBalance() {
+    // Arrange
+    transaction.setAmount(new BigDecimal(100));
+    Mockito.when(transactionRepo.existsById(transaction.getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getFrom().getId())).thenReturn(true);
+    Mockito.when(userService.existsById(transaction.getTo().getId())).thenReturn(true);
+    BigDecimal expectedSenderBalance = user1.getBalance();
+    BigDecimal expectedReceiverBalance = user2.getBalance();
+    TransactionStatus expectedStatus = transaction.getStatus();
+
+    // Act
+    final boolean returned = transactionService.executeTransaction(transaction);
+
+    // Assert
+    assertEquals(user1.getBalance(), expectedSenderBalance);
+    assertEquals(user2.getBalance(), expectedReceiverBalance);
+    assertEquals(transaction.getStatus(), expectedStatus);
+    assertEquals(returned, Boolean.FALSE);
+  }
+
+  @Test
+  public void generateResponseFromTransactionSuccess() {
+    TransactionRsp expectedRsp = new TransactionRsp(id1, id2, amount,
+        TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime);
+    TransactionRsp returnedRsp = transactionService.generateResponseFromTransaction(transaction);
+    assertEquals(returnedRsp, expectedRsp);
+  }
+
+  @Test
+  public void generateListResponseFromTransactionsSuccess() {
+    List<TransactionRsp> expectedRsp = List.of(new TransactionRsp(id1, id2, amount,
+        TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime));
+    List<TransactionRsp> returnedRsp =
+        transactionService.generateListResponseFromTransactions(List.of(transaction));
+    assertEquals(returnedRsp, expectedRsp);
+  }
 }
