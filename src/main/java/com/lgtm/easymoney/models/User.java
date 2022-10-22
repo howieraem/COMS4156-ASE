@@ -22,7 +22,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +36,6 @@ import lombok.Setter;
                 name = DbConsts.USER_EMAIL_CONSTRAINT,
                 columnNames = {"email"})
 )
-@AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
