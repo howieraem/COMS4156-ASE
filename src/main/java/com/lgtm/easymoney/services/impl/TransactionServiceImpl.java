@@ -60,6 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
 
   @Override
   public List<Transaction> getAllTransactionsWithUser(User user, List<TransactionStatus> status) {
+    // todo feature missing: query by from, or
     return transactionRepository.findByFromOrToAndStatusIn(user, user, status);
   }
 
