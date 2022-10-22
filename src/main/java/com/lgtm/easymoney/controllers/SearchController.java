@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * search controller.
  */
@@ -25,13 +27,8 @@ public class SearchController {
 
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
-  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") String id) throws Exception {
-    if (!id.isEmpty()){
-      Long uid = Long.parseLong(id);
-      return searchService.searchById(uid);
-    }else{
-      throw new Exception("User ID can't be empty.");
-    }
+  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") @NotNull Long id) throws Exception {
+    return searchService.searchById(id);
   }
 
   @GetMapping("/info/{info}")

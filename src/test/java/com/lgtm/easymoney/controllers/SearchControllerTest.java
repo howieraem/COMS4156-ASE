@@ -1,28 +1,10 @@
 package com.lgtm.easymoney.controllers;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.enums.UserType;
-import com.lgtm.easymoney.exceptions.InvalidUpdateException;
-import com.lgtm.easymoney.models.Account;
-import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
+import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.SearchRsp;
 import com.lgtm.easymoney.services.SearchService;
-import com.lgtm.easymoney.services.UserService;
-import ch.qos.logback.core.subst.Token.Type;
-
-import org.apache.maven.model.Profile;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -169,11 +155,8 @@ public class SearchControllerTest {
         Mockito.doThrow(new NumberFormatException(null))
                 .when(searchService).searchById(null);
 
-        Mockito.doThrow(new NumberFormatException())
-                .when(searchService).searchById(Long.valueOf(0));
-
-        Mockito.doThrow(new NumberFormatException())
-                .when(searchService).searchById(Long.valueOf(-1));
+        Mockito.when(searchService.searchById(Long.valueOf(-1)))
+                .thenThrow(new ResourceNotFoundException("Search", "id", Long.valueOf(-1)));
 
     }
 
