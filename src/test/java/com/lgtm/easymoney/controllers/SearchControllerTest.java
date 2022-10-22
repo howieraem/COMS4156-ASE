@@ -158,6 +158,16 @@ public class SearchControllerTest {
         Mockito.when(searchService.searchById(Long.valueOf(-1)))
                 .thenThrow(new ResourceNotFoundException("Search", "id", Long.valueOf(-1)));
 
+        getSearchById(null).andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.errorFields").value("id")
+        );
+
+        getSearchById(Long.valueOf(-1)).andExpectAll(
+                status().isNotFound(),
+                jsonPath("$.errorFields").value("id")
+        );
+
     }
 
     private ResultActions getSearchById(Long id) throws Exception {
