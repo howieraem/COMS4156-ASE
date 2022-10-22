@@ -88,13 +88,9 @@ public class TransferServiceImpl implements TransferService {
   public TransferRsp getTransfersByUid(Long uid) {
     User user = userService.getUserById(uid);
     List<Transaction> transfers = getTransfersByUser(user);
-    boolean success = !transfers.isEmpty();
-    if (!success) {
-      throw new ResourceNotFoundException("transfers", "uid", String.valueOf(uid));
-    }
     // payload
     TransferRsp response = new TransferRsp();
-    response.setSuccess(success);
+    response.setSuccess(true);
     response.setCurrBalance(user.getBalance());
     List<TransactionRsp> transferRsps =
             transactionService.generateListResponseFromTransactions(transfers);

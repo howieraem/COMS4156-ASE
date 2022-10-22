@@ -145,14 +145,14 @@ public class TransferServiceImplTest {
     assertEquals(returnedRsp, expectedRsp);
   }
 
-  @Test
-  public void getTransfersByUidFailedWithEmptyTransfers() {
-    // Arrange
-    Mockito.when(userService.getUserById(id1)).thenReturn(user1);
-    Mockito.when(transactionService.getAllTransactionsWithUser(any(), any()))
-        .thenReturn(new ArrayList<>());
-
-    // Act & Assert
-    assertThrows(ResourceNotFoundException.class, () -> transferService.getTransfersByUid(id1));
-  }
+//  @Test
+//  public void getTransfersByUidFailedWithEmptyTransfers() {
+//    // Arrange
+//    Mockito.when(userService.getUserById(id1)).thenReturn(user1);
+//    Mockito.when(transactionService.getAllTransactionsWithUser(any(), any()))
+//        .thenReturn(new ArrayList<>());
+//
+//    // Act & Assert
+//    assertThrows(ResourceNotFoundException.class, () -> transferService.getTransfersByUid(id1));
+//  }
 }
