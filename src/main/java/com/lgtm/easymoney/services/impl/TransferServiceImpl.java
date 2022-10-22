@@ -3,7 +3,6 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
-import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
@@ -16,8 +15,6 @@ import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**

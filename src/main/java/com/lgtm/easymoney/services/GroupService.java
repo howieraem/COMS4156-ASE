@@ -29,7 +29,5 @@ public interface GroupService {
 
   void joinGroup(Group group, User user);
 
-
-
   boolean isInGroup(Group group, User user);
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.CreateGroupReq;
+import com.lgtm.easymoney.payload.GroupAdsRsp;
 import com.lgtm.easymoney.payload.GroupRsp;
 import com.lgtm.easymoney.payload.InviteToGroupReq;
 import com.lgtm.easymoney.payload.LeaveGroupReq;
@@ -237,6 +238,20 @@ public class GroupControllerTest {
     );
   }
 
+  @Test
+  public void getGroupAdsSuccess() throws Exception {
+    var ads = "abc";
+    var groupAdsRsp = new GroupAdsRsp(List.of(ads));
+    Mockito.when(groupService.getGroupAds(expectedGid))
+        .thenReturn(groupAdsRsp);
+
+    var resultActions = getGroupAds(expectedGid);
+
+    resultActions.andExpectAll(
+      status().isOk(),
+      jsonPath("$.ads").value(ads));
+  }
+
   private ResultActions postCreate(CreateGroupReq req) throws Exception {
     return mvc.perform(post("/group/create")
         .content(asJsonString(req))
@@ -260,6 +275,10 @@ public class GroupControllerTest {
 
   private ResultActions getGroup(Object id) throws Exception {
     return mvc.perform(get("/group/" + id));
+  }
+
+  private ResultActions getGroupAds(Object id) throws Exception {
+    return mvc.perform(get("/group/" + id + "/business"));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {

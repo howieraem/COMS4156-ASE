@@ -121,8 +121,6 @@ public class GroupServiceImpl implements GroupService {
     groupRepository.save(group);
   }
 
-
-
   @Override
   public boolean isInGroup(Group group, User user) {
     return group.getGroupUsers().contains(user);
