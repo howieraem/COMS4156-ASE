@@ -68,12 +68,7 @@ public class GroupServiceImpl implements GroupService {
         ads.add(u.getBizProfile().getPromotionText());
       }
     }
-    GroupAdsRsp r = new GroupAdsRsp();
-    r.setGid(gid);
-    r.setName(g.getName());
-    r.setDescription(g.getDescription());
-    r.setAds(ads);
-    return r;
+    return new GroupAdsRsp(ads);
   }
 
   @Override

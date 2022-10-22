@@ -12,8 +12,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class GroupAdsRsp {
-  private Long gid;
-  private String name;
-  private String description;
   private List<String> ads;
 }
