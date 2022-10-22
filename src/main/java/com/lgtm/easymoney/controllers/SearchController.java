@@ -25,8 +25,13 @@ public class SearchController {
 
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
-  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") String id) {
-    return searchService.searchById(Long.valueOf(id));
+  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") String id) throws Exception {
+    if (!id.isEmpty()){
+      Long uid = Long.parseLong(id);
+      return searchService.searchById(uid);
+    }else{
+      throw new Exception("User ID can't be empty.");
+    }
   }
 
   @GetMapping("/info/{info}")
