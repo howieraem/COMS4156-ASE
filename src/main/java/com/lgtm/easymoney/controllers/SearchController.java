@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * search controller.
  */
@@ -25,8 +27,8 @@ public class SearchController {
 
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
-  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") String id) {
-    return searchService.searchById(Long.valueOf(id));
+  public ResponseEntity<SearchRsp> searchById(@PathVariable(value = "id") @NotNull Long id) throws Exception {
+    return searchService.searchById(id);
   }
 
   @GetMapping("/info/{info}")
