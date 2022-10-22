@@ -144,10 +144,8 @@ public class RequestServiceImpl implements RequestService {
       // todo write a own exception handler
       throw new InvalidUpdateException("decline request", tid, "requestId", tid);
     }
-    // accept request
-    if (!declineRequest(getRequestById(tid))) {
-      throw new InvalidUpdateException("decline request", tid, "requestId", tid);
-    }
+    // decline request
+    declineRequest(getRequestById(tid));
     // response
     return new ResourceCreatedRsp(tid);
 
