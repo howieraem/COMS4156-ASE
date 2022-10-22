@@ -70,11 +70,6 @@ public class RequestServiceImpl implements RequestService {
   }
 
   @Override
-  public List<Transaction> getAllRequests() {
-    return transactionService.getAllTransactions();
-  }
-
-  @Override
   public Transaction createRequest(User reqBy, User reqTo, BigDecimal amount, String desc,
                                    Category category) {
     // TODO validate input
@@ -136,6 +131,7 @@ public class RequestServiceImpl implements RequestService {
 
   @Override
   public boolean declineRequest(Transaction request) {
+    // todo refactor to return transaction? or false case
     request.setStatus(TransactionStatus.TRANS_DENIED);
     transactionService.saveTransaction(request);
     return true;
@@ -148,10 +144,8 @@ public class RequestServiceImpl implements RequestService {
       // todo write a own exception handler
       throw new InvalidUpdateException("decline request", tid, "requestId", tid);
     }
-    // accept request
-    if (!declineRequest(getRequestById(tid))) {
-      throw new InvalidUpdateException("decline request", tid, "requestId", tid);
-    }
+    // decline request
+    declineRequest(getRequestById(tid));
     // response
     return new ResourceCreatedRsp(tid);
 
