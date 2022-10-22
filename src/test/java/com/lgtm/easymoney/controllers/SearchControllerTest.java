@@ -70,7 +70,7 @@ public class SearchControllerTest {
     public void searchByIdSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchById(uid))
-                .thenReturn(ResponseEntity.of(Optional.of(searchRsp)));
+                .thenReturn(searchRsp);
 
         // Act
         ResultActions returnedResponse = getSearchById(uid);
@@ -91,7 +91,7 @@ public class SearchControllerTest {
     public void searchByNameSuccess() throws Exception {
     // Arrange
     Mockito.when(searchService.searchByInfo(accountName))
-        .thenReturn(ResponseEntity.of(Optional.of(searchRsp)));
+        .thenReturn(searchRsp);
 
     // Act
     ResultActions returnedResponse = getSearchByInfo(accountName);
@@ -112,7 +112,7 @@ public class SearchControllerTest {
     public void searchByEmailSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchByInfo(email))
-                .thenReturn(ResponseEntity.of(Optional.of(searchRsp)));
+                .thenReturn(searchRsp);
 
         // Act
         ResultActions returnedResponse = getSearchByInfo(email);
@@ -133,7 +133,7 @@ public class SearchControllerTest {
     public void searchByPhoneSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchByInfo(phone))
-                .thenReturn(ResponseEntity.of(Optional.of(searchRsp)));
+                .thenReturn(searchRsp);
 
         // Act
         ResultActions returnedResponse = getSearchByInfo(phone);

@@ -58,7 +58,7 @@ public class SearchServiceImpl implements SearchService {
   }
 
   @Override
-  public ResponseEntity<SearchRsp> searchById(Long id) {
+  public SearchRsp searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
     //Compose response
@@ -77,14 +77,11 @@ public class SearchServiceImpl implements SearchService {
     searchRes.setUserProfiles(profileList);
 
     //Issue response
-    if (searchResult) {
-      return ResponseEntity.status(HttpStatus.OK).body(searchRes);
-    }
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(searchRes);
+    return searchRes;
   }
 
   @Override
-  public ResponseEntity<SearchRsp> searchByInfo(String userInfo) {
+  public SearchRsp searchByInfo(String userInfo) {
 
     List<User> userList;
     Set<Long> uids = new HashSet<>();
@@ -117,9 +114,6 @@ public class SearchServiceImpl implements SearchService {
     searchRes.setSuccess(searchResult);
     searchRes.setUserProfiles(profileList);
 
-    if (searchResult) {
-      return ResponseEntity.status(HttpStatus.OK).body(searchRes);
-    }
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(searchRes);
+    return searchRes;
   }
 }
