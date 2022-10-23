@@ -57,57 +57,83 @@ public class FeedServiceImpl implements FeedService {
     this.transactionService = transactionService;
   }
 
+  /**
+   * return's user's Feed: own activity + friends' activity.
+   *
+   * @param u user
+   * @return list of feed activity response.
+   */
   @Override
-  public List<Transaction> getFeedByUser(User u) {
-    // only return 20 latest and valid transaction
-    List<Transaction> res = new ArrayList<>();
+  public List<FeedActivityRsp> getFeedByUser(User u) {
+    List<FeedActivityRsp> res = new ArrayList<>();
     // get user's activity
-    List<Transaction> userActivity = transactionService.getAllTransactionsWithUser(u,
-            List.of(TransactionStatus.TRANS_COMPLETE));
+    List<FeedActivityRsp> userActivity = getUserActivity(u, false);
     res.addAll(userActivity);
-    // get friends' activity
+    // get friends' activity,hide amount
     List<User> friends = friendService.getFriends(u);
     for (User f : friends) {
-      List<Transaction> fs = transactionService
-              .getAllTransactionsWithUser(u, List.of(TransactionStatus.TRANS_COMPLETE));
+      List<FeedActivityRsp> fs = getUserActivity(u, true);
       res.addAll(fs);
     }
-    // remove duplicates, 1->2 and 2->1 are same transaction, only need 1 in user1's feed
+    // remove duplicates, 1->2 and 2->1 are same transaction
     res = res.stream().distinct().collect(Collectors.toList());
     // sort, the latest first
-    Collections.sort(res, Comparator.comparing(Transaction::getLastUpdateTime));
-
+    Collections.sort(res, Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
+    // only return 20 latest and valid transaction
     return res.stream().limit(FEED_SIZE).collect(Collectors.toList());
   }
 
-  @Override
-  public FeedRsp getFeedByUid(Long uid) {
-    List<Transaction> activity = getFeedByUser(userService.getUserById(uid));
-    // map
+  /**
+   * internal, return a specific user's own activities and map to payload response.
+   *
+   * @param u user
+   * @param hideAmount should hide amount or not, privacy
+   * @return list of user's own feed activity response
+   */
+  private List<FeedActivityRsp> getUserActivity(User u, boolean hideAmount) {
+    // get transactions
+    List<Transaction> userActivity = transactionService.getAllTransactionsWithUser(u,
+            List.of(TransactionStatus.TRANS_COMPLETE));
+    // mapping
     List<FeedActivityRsp> activities =
-            activity.stream()
+            userActivity.stream()
                     .map(a -> new FeedActivityRsp(
                             a.getFrom().getId(),
                             a.getTo().getId(),
-                            a.getAmount().toString(),
+                            a.getFrom().getType(),
+                            a.getTo().getType(),
+                            a.getCategory(),
+                            hideAmount ? null : a.getAmount(),
                             a.getDescription(),
                             a.getLastUpdateTime(),
                             null  // placeholder
-                            ))
+                    ))
                     .collect(Collectors.toList());
-    //  todo hide friend's amounts in activities? we value privacy!
+    return activities;
 
+  }
+
+  private List<FeedActivityRsp> setPromoText(List<FeedActivityRsp> activities) {
     // set promo text
     for (FeedActivityRsp a : activities) {
       User from = userService.getUserById(a.getFromUid());
       User to = userService.getUserById(a.getToUid());
-      // get the one that's business
-      User biz = from.getType() == UserType.BUSINESS ? from :
-              (to.getType() == UserType.BUSINESS ? to : null);
-      if (biz != null) {
-        a.setPromoText(biz.getBizProfile().getPromotionText());
+      // get the one that has promo: EXCEPT personal
+      User promo = from.getType() != UserType.PERSONAL ? from :
+              (to.getType() != UserType.PERSONAL ? to : null);
+      if (promo != null) {
+        a.setPromoText(promo.getBizProfile().getPromotionText());
       }
     }
+    return activities;
+  }
+
+  @Override
+  public FeedRsp getFeedByUid(Long uid) {
+    // get user's feed
+    List<FeedActivityRsp> activities = getFeedByUser(userService.getUserById(uid));
+    // set promo text
+    activities = setPromoText(activities);
 
     return new FeedRsp(activities);
 
