@@ -43,4 +43,9 @@ public class Friendship implements Serializable {
 
   @Column(nullable = false)
   private Boolean active = false;
+
+  public String getKeyString() {
+    // this.key.toString() is not very informative
+    return String.format("(%d,%d)", this.key.uid1, this.key.uid2);
+  }
 }

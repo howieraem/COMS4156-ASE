@@ -2,6 +2,7 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
+import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.User;
@@ -15,9 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-// TODO after we have auth, move the inapplicable op checks to a HandlerInterceptor instead
+
+/**
+ * service for friendship.
+ * TODO after we have auth, move the inapplicable op checks to a HandlerInterceptor instead
+ */
 @Service
+@Transactional(rollbackFor = Exception.class)  // required for delete
 public class FriendServiceImpl implements FriendService {
   private final UserService userService;
 
@@ -73,6 +80,11 @@ public class FriendServiceImpl implements FriendService {
     if (fs1 == null) {
       throw new ResourceNotFoundException("Friendship", "uid2", friendshipReq.getUid2());
     }
+    if (fs1.getActive()) {
+      throw new InvalidUpdateException(
+          "Friendship", fs1.getKeyString(), "uid2", friendshipReq.getUid2());
+    }
+
     fs1.setActive(Boolean.TRUE);
     var fs2 = new Friendship();
     fs2.setUser1(acceptor);
@@ -99,6 +111,8 @@ public class FriendServiceImpl implements FriendService {
     if (fs1 == null) {
       throw new ResourceNotFoundException("Friendship", "uid2", friendshipReq.getUid2());
     }
+
+    // Note: can delete friendship not yet accepted
     friendshipRepository.deleteByUser1AndUser2(u1, u2);
     if (getFriendshipRecord(u2, u1) != null) {
       friendshipRepository.deleteByUser1AndUser2(u2, u1);

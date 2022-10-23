@@ -6,6 +6,7 @@ import com.lgtm.easymoney.payload.FriendshipReq;
 import com.lgtm.easymoney.payload.ProfilesRsp;
 import java.util.List;
 
+/** Interface of service for friendship. */
 public interface FriendService {
   Friendship getFriendshipRecord(User u1, User u2);
 
