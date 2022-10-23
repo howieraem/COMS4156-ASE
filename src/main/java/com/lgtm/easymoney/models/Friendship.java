@@ -24,9 +24,6 @@ public class Friendship implements Serializable {
   /**
    * 2 user id forms a composite key for friendship.
    */
-  @AllArgsConstructor
-  @Data
-  @NoArgsConstructor
   @Embeddable
   public static class Key implements Serializable {
     private Long uid1;
@@ -34,7 +31,7 @@ public class Friendship implements Serializable {
   }
 
   @EmbeddedId
-  private Key key;
+  private Key key = new Key();
 
   @ManyToOne
   @MapsId("uid1")

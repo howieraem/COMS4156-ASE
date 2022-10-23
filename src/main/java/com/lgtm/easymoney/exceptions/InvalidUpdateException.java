@@ -4,7 +4,7 @@ import java.io.Serial;
 import lombok.Getter;
 
 /**
- * invalid update of resource exeception.
+ * invalid update of resource exception.
  */
 @Getter
 public class InvalidUpdateException extends RuntimeException {

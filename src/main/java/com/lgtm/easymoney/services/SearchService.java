@@ -1,7 +1,7 @@
 package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.SearchRsp;
+import com.lgtm.easymoney.payload.ProfilesRsp;
 import java.util.List;
 
 
@@ -15,8 +15,8 @@ public interface SearchService {
 
   List<User> getUserByEmailOrPhone(String email, String phone);
 
-  SearchRsp searchById(Long id);
+  ProfilesRsp searchById(Long id);
 
-  SearchRsp searchByInfo(String userInfo);
+  ProfilesRsp searchByInfo(String userInfo);
 
 }
