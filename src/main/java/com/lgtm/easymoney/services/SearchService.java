@@ -2,7 +2,6 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.SearchRsp;
-
 import java.util.List;
 
 

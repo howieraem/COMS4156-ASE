@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services.impl;
 
+
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
@@ -8,13 +9,12 @@ import com.lgtm.easymoney.payload.SearchRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.SearchService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
