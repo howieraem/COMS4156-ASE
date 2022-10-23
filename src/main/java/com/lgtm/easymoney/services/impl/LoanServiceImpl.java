@@ -99,7 +99,7 @@ public class LoanServiceImpl implements LoanService {
     Transaction loan = createLoanRequest(borrower, lender, amount, desc,
         Category.valueOf(category.toUpperCase()));
     // response
-    return loan == null ? new ResourceCreatedRsp(null) : new ResourceCreatedRsp(loan.getId());
+    return new ResourceCreatedRsp(loan.getId());
   }
 
   @Override
@@ -141,13 +141,13 @@ public class LoanServiceImpl implements LoanService {
     User borrower = userService.getUserById(toUid);
     validateLoanUsers(borrower, lender);
     if (!validateLoanRequest(lid, fromUid, toUid)) {
-      throw new InvalidUpdateException("approve loan", lid, "loanId", lid);
+      throw new InvalidUpdateException("loan", lid, "loanId", lid);
     }
     // approve loan and transfer money
     Transaction loan = getLoanById(lid);
     boolean success = approveLoan(loan);
     if (!success) {
-      throw new InvalidUpdateException("approve loan", loan.getId(),
+      throw new InvalidUpdateException("loan", loan.getId(),
           "loan id", loan.getId());
     }
     // create a loan-payback request from lender to borrower, storing loanId as description
@@ -163,14 +163,13 @@ public class LoanServiceImpl implements LoanService {
     return response;
   }
 
-  private boolean declineLoan(Transaction loan) {
+  private Transaction declineLoan(Transaction loan) {
     loan.setStatus(TransactionStatus.LOAN_DECLINED);
-    transactionService.saveTransaction(loan);
-    return true;
+    return transactionService.saveTransaction(loan);
   }
 
   @Override
-  public ResourceCreatedRsp declineLoan(RequestAcceptDeclineReq req) {
+  public LoanRsp declineLoan(RequestAcceptDeclineReq req) {
     // get params
     Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
@@ -180,11 +179,17 @@ public class LoanServiceImpl implements LoanService {
     User borrower = userService.getUserById(toUid);
     validateLoanUsers(borrower, lender);
     if (!validateLoanRequest(lid, fromUid, toUid)) {
-      throw new InvalidUpdateException("decline loan", lid, "loanId", lid);
+      throw new InvalidUpdateException("loan", lid, "loanId", lid);
     }
     // decline loan
-    declineLoan(getLoanById(lid));
+    Transaction loan = declineLoan(getLoanById(lid));
     // response
-    return new ResourceCreatedRsp(lid);
+    LoanRsp response = new LoanRsp();
+    response.setSuccess(true);
+    List<TransactionRsp> transferRsps =
+        transactionService.generateListResponseFromTransactions(List.of(loan));
+    response.setLoans(transferRsps);
+    response.setMessage("Declined loan returned");
+    return response;
   }
 }

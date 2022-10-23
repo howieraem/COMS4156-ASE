@@ -97,7 +97,7 @@ public class RequestServiceImpl implements RequestService {
             req.getDescription(),
             Category.valueOf(req.getCategory().toUpperCase()));
     // response
-    return trans == null ? new ResourceCreatedRsp(null) : new ResourceCreatedRsp(trans.getId());
+    return new ResourceCreatedRsp(trans.getId());
   }
 
   @Override

@@ -15,5 +15,5 @@ public interface LoanService {
 
   LoanRsp approveLoan(RequestAcceptDeclineReq req);
 
-  ResourceCreatedRsp declineLoan(RequestAcceptDeclineReq req);
+  LoanRsp declineLoan(RequestAcceptDeclineReq req);
 }

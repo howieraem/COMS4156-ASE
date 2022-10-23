@@ -75,7 +75,7 @@ public class LoanController {
    */
   @PutMapping("/decline")
   @Operation(summary = "Method for a financial user to decline a loan request")
-  public ResponseEntity<ResourceCreatedRsp> declineLoan(
+  public ResponseEntity<LoanRsp> declineLoan(
       @Valid @RequestBody RequestAcceptDeclineReq req) {
     return new ResponseEntity<>(loanService.declineLoan(req), HttpStatus.OK);
   }
