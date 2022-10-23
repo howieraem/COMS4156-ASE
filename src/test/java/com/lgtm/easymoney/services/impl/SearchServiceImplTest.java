@@ -182,4 +182,19 @@ public class SearchServiceImplTest {
         assertEquals(user1.getPhone(), rsp.getUserProfiles().get(0).getPhone());
     }
 
+    @Test
+    public void searchByInfoSuccessMultipleMatch() {
+        List<User> userList = new ArrayList<>();
+        userList.add(user1);
+        userList.add(user2);
+        String strString = "a";
+        Mockito.when(userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(
+                strString, strString)).thenReturn(userList);
+        Mockito.when(accountRepository.findByAccountNameContainingIgnoreCase(
+                strString)).thenReturn(List.of(account1,account2));
+
+        SearchRsp rsp = searchService.searchByInfo("a");
+        assertEquals(2, rsp.getUserProfiles().size());
+    }
+
 }
