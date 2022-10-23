@@ -54,7 +54,7 @@ public class FriendController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/{uid}/accepted")
+  @GetMapping("/{uid}")
   @Operation(summary = "Method for a user to get all friends accepted.")
   public ResponseEntity<ProfilesRsp> getFriends(@PathVariable(value = "uid") @NotNull Long uid) {
     return new ResponseEntity<>(friendService.getFriends(uid), HttpStatus.OK);
