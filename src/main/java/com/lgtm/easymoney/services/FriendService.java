@@ -20,7 +20,5 @@ public interface FriendService {
 
   ProfilesRsp getFriends(Long uid);  // for external
 
-  List<User> getFriendsPending(User u);  // for internal
-
-  ProfilesRsp getFriendsPending(Long uid);  // for external
+  ProfilesRsp getFriendsPending(Long uid);  // to be accepted by uid, not requested by uid
 }

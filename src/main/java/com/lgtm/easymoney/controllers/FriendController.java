@@ -33,7 +33,8 @@ public class FriendController {
   }
 
   @PostMapping("/add")
-  @Operation(summary = "Method for a user to add a friend (pending acceptance).")
+  @Operation(summary =
+      "Method for a user to add a friend (request a friendship, need acceptance).")
   public ResponseEntity<Void> addFriend(@Valid @RequestBody FriendshipReq req) {
     friendService.addFriend(req);
     return new ResponseEntity<>(null, HttpStatus.CREATED);
@@ -60,7 +61,8 @@ public class FriendController {
   }
 
   @GetMapping("/{uid}/pending")
-  @Operation(summary = "Method for a user to get all friends not yet accepted.")
+  @Operation(summary =
+      "Method for a user to get all friends not yet accepted by this user.")
   public ResponseEntity<ProfilesRsp> getFriendsPending(
       @PathVariable(value = "uid") @NotNull Long uid) {
     return new ResponseEntity<>(friendService.getFriendsPending(uid), HttpStatus.OK);

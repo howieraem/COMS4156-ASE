@@ -152,22 +152,7 @@ public class FriendServiceImpl implements FriendService {
     return new ProfilesRsp(Boolean.TRUE, res);
   }
 
-  @Override
-  public List<User> getFriendsPending(User u) {
-    if (u.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", u.getId(), "uid", "getFriendsPending");
-    }
-
-    List<User> res = new ArrayList<>();
-    for (var fs : friendshipRepository.findByUser2(u)) {
-      if (!fs.getActive()) {
-        res.add(fs.getUser1());
-      }
-    }
-    return res;
-  }
-
+  // to be accepted by uid, not requested by uid
   @Override
   public ProfilesRsp getFriendsPending(Long uid) {
     var u = userService.getUserById(uid);
