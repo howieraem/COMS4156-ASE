@@ -32,8 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * service for friendship.
- * TODO after we have auth, move the inapplicable op checks to a HandlerInterceptor instead
+ * service for Feed.
  */
 @Service
 @Transactional(rollbackFor = Exception.class)  // required for delete
