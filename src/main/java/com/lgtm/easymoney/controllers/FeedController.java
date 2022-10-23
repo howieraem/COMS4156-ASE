@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- *  controller for feed activities
+ *  controller for feed activities.
  */
 @RestController
 @RequestMapping("/feed")

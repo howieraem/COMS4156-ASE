@@ -42,8 +42,16 @@ public class FeedServiceImpl implements FeedService {
   private final FriendService friendService;
   private final TransactionService transactionService;
 
+  /**
+   * feed service for getting user's feed activity.
+   *
+   * @param userService userservice
+   * @param friendService friend service
+   * @param transactionService trans service
+   */
   @Autowired
-  public FeedServiceImpl(UserService userService, FriendService friendService, TransactionService transactionService) {
+  public FeedServiceImpl(UserService userService, FriendService friendService,
+                         TransactionService transactionService) {
     this.userService = userService;
     this.friendService = friendService;
     this.transactionService = transactionService;
@@ -60,9 +68,9 @@ public class FeedServiceImpl implements FeedService {
     // get friends' activity
     List<User> friends = friendService.getFriends(u);
     for (User f : friends) {
-      List<Transaction> fAct = transactionService.
-              getAllTransactionsWithUser(u, List.of(TransactionStatus.TRANS_COMPLETE));
-      res.addAll(fAct);
+      List<Transaction> fs = transactionService
+              .getAllTransactionsWithUser(u, List.of(TransactionStatus.TRANS_COMPLETE));
+      res.addAll(fs);
     }
     // remove duplicates, 1->2 and 2->1 are same transaction, only need 1 in user1's feed
     res = res.stream().distinct().collect(Collectors.toList());
@@ -71,6 +79,7 @@ public class FeedServiceImpl implements FeedService {
 
     return res;
   }
+
   @Override
   public FeedRsp getFeedByUid(Long uid) {
     List<Transaction> activity = getFeedByUser(userService.getUserById(uid));

@@ -15,5 +15,6 @@ import java.util.List;
  */
 public interface FeedService {
   List<Transaction> getFeedByUser(User u);  // internal
+
   FeedRsp getFeedByUid(Long uid); // external
 }
