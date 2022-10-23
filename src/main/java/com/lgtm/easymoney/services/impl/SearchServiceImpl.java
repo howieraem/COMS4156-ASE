@@ -5,7 +5,7 @@ import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.SearchRsp;
+import com.lgtm.easymoney.payload.ProfilesRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.SearchService;
@@ -57,7 +57,7 @@ public class SearchServiceImpl implements SearchService {
   }
 
   @Override
-  public SearchRsp searchById(Long id) {
+  public ProfilesRsp searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
     //Compose response
@@ -72,7 +72,7 @@ public class SearchServiceImpl implements SearchService {
     List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
     boolean searchResult = true;
     profileList.add(res);
-    SearchRsp searchRes = new SearchRsp();
+    ProfilesRsp searchRes = new ProfilesRsp();
     searchRes.setSuccess(searchResult);
     searchRes.setUserProfiles(profileList);
 
@@ -81,7 +81,7 @@ public class SearchServiceImpl implements SearchService {
   }
 
   @Override
-  public SearchRsp searchByInfo(String userInfo) {
+  public ProfilesRsp searchByInfo(String userInfo) {
 
     List<User> userList;
     Set<Long> uids = new HashSet<>();
@@ -110,7 +110,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     //Insert profile list into search response
-    SearchRsp searchRes = new SearchRsp();
+    ProfilesRsp searchRes = new ProfilesRsp();
     searchRes.setSuccess(searchResult);
     searchRes.setUserProfiles(profileList);
 

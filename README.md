@@ -1,6 +1,7 @@
 # COMS W4156 ASE Project
 
 ## Team members
+
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 ## How to build and run locally
@@ -38,6 +39,10 @@ These are all defined in `pom.xml` and downloaded by Maven.
 - Spring validation: Validates data fields in client requests. Mainly used under `src/main/models/*.java`.
 - JPA: Interacts with the database. Mainly used under `src/main/repositories/*.java`.
 - lombok: Simplifies the code by avoiding manually writing getters, setters, etc. Mainly used under `src/main/models/*.java` and `src/main/payload/*.java`.
+
+## Style checker
+
+We follow style rules of Google checks. You may see warnings/errors if you run style checking with other configs.
 
 ## How to deploy
 

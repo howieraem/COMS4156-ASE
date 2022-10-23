@@ -4,7 +4,7 @@ import java.io.Serial;
 import lombok.Getter;
 
 /**
- * invalid update of resource exeception.
+ * invalid update of resource exception.
  */
 @Getter
 public class InvalidUpdateException extends RuntimeException {
@@ -23,7 +23,7 @@ public class InvalidUpdateException extends RuntimeException {
   public InvalidUpdateException(
           String resourceName, Object resourceId,
           String fieldName, Object fieldValue) {
-    super(String.format("Invalid change to %s ID %s with %s: '%s' provided",
+    super(String.format("Invalid change to %s with ID %s given %s: '%s'",
             resourceName, resourceId, fieldName, fieldValue));
     this.fieldName = fieldName;
   }
