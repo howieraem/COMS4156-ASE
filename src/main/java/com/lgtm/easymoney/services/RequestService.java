@@ -22,8 +22,6 @@ public interface RequestService {
 
   List<Transaction> getRequestByUser(User user);
 
-  List<Transaction> getAllRequests();
-
   Transaction createRequest(
           User reqBy, User reqTo, BigDecimal amount, String desc, Category category);
 
