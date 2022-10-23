@@ -2,30 +2,19 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.enums.UserType;
-import com.lgtm.easymoney.exceptions.InapplicableOperationException;
-import com.lgtm.easymoney.exceptions.InvalidUpdateException;
-import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.FeedActivityRsp;
 import com.lgtm.easymoney.payload.FeedRsp;
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
-import com.lgtm.easymoney.repositories.FriendshipRepository;
 import com.lgtm.easymoney.services.FeedService;
 import com.lgtm.easymoney.services.FriendService;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import net.sf.saxon.trans.SymbolicName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +29,7 @@ public class FeedServiceImpl implements FeedService {
   private final UserService userService;
   private final FriendService friendService;
   private final TransactionService transactionService;
-  private final int FEED_SIZE = 20;
+  private final int feedSize = 20;
 
   /**
    * feed service for getting user's feed activity.
@@ -72,7 +61,7 @@ public class FeedServiceImpl implements FeedService {
     // get friends' activity,hide amount
     List<User> friends = friendService.getFriends(u);
     for (User f : friends) {
-      List<FeedActivityRsp> fs = getUserActivity(u, true);
+      List<FeedActivityRsp> fs = getUserActivity(f, true);
       res.addAll(fs);
     }
     // remove duplicates, 1->2 and 2->1 are same transaction
@@ -80,7 +69,7 @@ public class FeedServiceImpl implements FeedService {
     // sort, the latest first
     Collections.sort(res, Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
     // only return 20 latest and valid transaction
-    return res.stream().limit(FEED_SIZE).collect(Collectors.toList());
+    return res.stream().limit(feedSize).collect(Collectors.toList());
   }
 
   /**
