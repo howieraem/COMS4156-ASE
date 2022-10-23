@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.services.impl;
 
+
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
@@ -13,9 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 /**
  * search service implementation. helps find user profiles given info.
@@ -57,11 +57,12 @@ public class SearchServiceImpl implements SearchService {
   }
 
   @Override
-  public ResponseEntity<SearchRsp> searchById(Long id) {
+  public SearchRsp searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
     //Compose response
     ProfileRsp res = new ProfileRsp();
+    res.setUid(user.getId());
     res.setAccountName(user.getAccount().getAccountName());
     res.setEmail(user.getEmail());
     res.setAddress(user.getAddress());
@@ -76,14 +77,11 @@ public class SearchServiceImpl implements SearchService {
     searchRes.setUserProfiles(profileList);
 
     //Issue response
-    if (searchResult) {
-      return ResponseEntity.status(HttpStatus.OK).body(searchRes);
-    }
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(searchRes);
+    return searchRes;
   }
 
   @Override
-  public ResponseEntity<SearchRsp> searchByInfo(String userInfo) {
+  public SearchRsp searchByInfo(String userInfo) {
 
     List<User> userList;
     Set<Long> uids = new HashSet<>();
@@ -116,9 +114,6 @@ public class SearchServiceImpl implements SearchService {
     searchRes.setSuccess(searchResult);
     searchRes.setUserProfiles(profileList);
 
-    if (searchResult) {
-      return ResponseEntity.status(HttpStatus.OK).body(searchRes);
-    }
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(searchRes);
+    return searchRes;
   }
 }
