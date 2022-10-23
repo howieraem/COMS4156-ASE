@@ -3,7 +3,6 @@ package com.lgtm.easymoney.services;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.SearchRsp;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 
 /**
@@ -16,8 +15,8 @@ public interface SearchService {
 
   List<User> getUserByEmailOrPhone(String email, String phone);
 
-  ResponseEntity<SearchRsp> searchById(Long id);
+  SearchRsp searchById(Long id);
 
-  ResponseEntity<SearchRsp> searchByInfo(String userInfo);
+  SearchRsp searchByInfo(String userInfo);
 
 }
