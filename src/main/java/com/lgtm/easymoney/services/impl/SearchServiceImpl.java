@@ -8,14 +8,13 @@ import com.lgtm.easymoney.payload.SearchRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 
 /**
@@ -63,6 +62,7 @@ public class SearchServiceImpl implements SearchService {
     User user = getUserById(id);
     //Compose response
     ProfileRsp res = new ProfileRsp();
+    res.setUid(user.getId());
     res.setAccountName(user.getAccount().getAccountName());
     res.setEmail(user.getEmail());
     res.setAddress(user.getAddress());

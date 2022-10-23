@@ -3,6 +3,7 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.SearchRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.UserService;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +49,7 @@ public class SearchServiceImplTest {
         account1 = new Account();
         user1.setId(id1);
         user1.setEmail("a@a.com");
+        user1.setPhone("1234562211");
         user1.setPassword("a");
         account1.setId(id1);
         account1.setAccountUser(user1);
@@ -57,6 +60,7 @@ public class SearchServiceImplTest {
         account2 = new Account();
         user2.setId(id2);
         user2.setEmail("b@b.com");
+        user1.setPhone("1234562210");
         user2.setPassword("b");
         account2.setId(id2);
         account2.setAccountUser(user2);
@@ -68,6 +72,12 @@ public class SearchServiceImplTest {
 
         Mockito.when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         Mockito.when(userRepository.findById(user2.getId())).thenReturn(Optional.of(user2));
+        Mockito.when(userRepository.existsById(user1.getId())).thenReturn(true);
+        Mockito.when(userRepository.existsById(user2.getId())).thenReturn(true);
+        List<User> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        Mockito.when(userRepository.findAll()).thenReturn(users);
 
         Mockito.when(accountRepository.findById(id1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById(id2)).thenReturn(Optional.of(account2));
@@ -151,6 +161,25 @@ public class SearchServiceImplTest {
         assertEquals(0,returnedUserList.size());
     }
 
+    @Test
+    public void searchByIdSuccess() {
+        SearchRsp rsp = searchService.searchById(id1);
+        assertEquals(id1, rsp.getUserProfiles().get(0).getUid());
+        assertEquals(user1.getEmail(), rsp.getUserProfiles().get(0).getEmail());
+        assertEquals(user1.getAccount().getAccountName(), rsp.getUserProfiles().get(0).getAccountName());
+    }
 
+    @Test
+    public void searchByInfoSuccess() {
+        List<User> userList = new ArrayList<>();
+        userList.add(user1);
+        Mockito.when(userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(
+                user1.getEmail(), user1.getEmail())).thenReturn(userList);
+        SearchRsp rsp = searchService.searchByInfo(user1.getEmail());
+        assertEquals(id1, rsp.getUserProfiles().get(0).getUid());
+        assertEquals(user1.getEmail(), rsp.getUserProfiles().get(0).getEmail());
+        assertEquals(user1.getAccount().getAccountName(), rsp.getUserProfiles().get(0).getAccountName());
+        assertEquals(user1.getPhone(), rsp.getUserProfiles().get(0).getPhone());
+    }
 
 }
