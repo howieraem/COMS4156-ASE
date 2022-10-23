@@ -62,7 +62,7 @@ public class FriendController {
 
   @GetMapping("/{uid}/pending")
   @Operation(summary =
-      "Method for a user to get all friends not yet accepted by this user.")
+      "Method for a user to get other users who sent addFriend and not yet accepted by this user.")
   public ResponseEntity<ProfilesRsp> getFriendsPending(
       @PathVariable(value = "uid") @NotNull Long uid) {
     return new ResponseEntity<>(friendService.getFriendsPending(uid), HttpStatus.OK);

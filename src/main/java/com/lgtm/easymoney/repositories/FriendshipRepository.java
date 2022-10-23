@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * friendship repo schema.
  */
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
-  List<Friendship> findByUser2(User user2);  // useful for finding pending friends
+  List<Friendship> findByUser2(User user2);  // useful for finding friendships not yet accepted
 
   Friendship findByUser1AndUser2(User user1, User user2);
 
