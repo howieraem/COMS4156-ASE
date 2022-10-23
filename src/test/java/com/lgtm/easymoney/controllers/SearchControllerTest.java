@@ -3,7 +3,7 @@ package com.lgtm.easymoney.controllers;
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.SearchRsp;
+import com.lgtm.easymoney.payload.ProfilesRsp;
 import com.lgtm.easymoney.services.SearchService;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,7 +31,7 @@ public class SearchControllerTest {
     private MockMvc mvc;
     @MockBean
     private SearchService searchService;
-    private SearchRsp searchRsp;
+    private ProfilesRsp profilesRsp;
     private ProfileRsp profileRsp;
     private List<ProfileRsp> profileList;
     private Long uid = 1L;
@@ -59,18 +57,18 @@ public class SearchControllerTest {
         profileRsp.setUserType(userType);
 
         //Compose search response
-        searchRsp = new SearchRsp();
-        searchRsp.setSuccess(true);
+        profilesRsp = new ProfilesRsp();
+        profilesRsp.setSuccess(true);
         profileList = new ArrayList<ProfileRsp>();
         profileList.add(profileRsp);
-        searchRsp.setUserProfiles(profileList);
+        profilesRsp.setUserProfiles(profileList);
     }
 
     @Test
     public void searchByIdSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchById(uid))
-                .thenReturn(searchRsp);
+                .thenReturn(profilesRsp);
 
         // Act
         ResultActions returnedResponse = getSearchById(uid);
@@ -91,7 +89,7 @@ public class SearchControllerTest {
     public void searchByNameSuccess() throws Exception {
     // Arrange
     Mockito.when(searchService.searchByInfo(accountName))
-        .thenReturn(searchRsp);
+        .thenReturn(profilesRsp);
 
     // Act
     ResultActions returnedResponse = getSearchByInfo(accountName);
@@ -112,7 +110,7 @@ public class SearchControllerTest {
     public void searchByEmailSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchByInfo(email))
-                .thenReturn(searchRsp);
+                .thenReturn(profilesRsp);
 
         // Act
         ResultActions returnedResponse = getSearchByInfo(email);
@@ -133,7 +131,7 @@ public class SearchControllerTest {
     public void searchByPhoneSuccess() throws Exception {
         // Arrange
         Mockito.when(searchService.searchByInfo(phone))
-                .thenReturn(searchRsp);
+                .thenReturn(profilesRsp);
 
         // Act
         ResultActions returnedResponse = getSearchByInfo(phone);

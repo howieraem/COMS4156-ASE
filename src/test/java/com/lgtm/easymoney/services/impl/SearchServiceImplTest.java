@@ -3,7 +3,7 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.SearchRsp;
+import com.lgtm.easymoney.payload.ProfilesRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.UserService;
@@ -163,7 +163,7 @@ public class SearchServiceImplTest {
 
     @Test
     public void searchByIdSuccess() {
-        SearchRsp rsp = searchService.searchById(id1);
+        ProfilesRsp rsp = searchService.searchById(id1);
         assertEquals(id1, rsp.getUserProfiles().get(0).getUid());
         assertEquals(user1.getEmail(), rsp.getUserProfiles().get(0).getEmail());
         assertEquals(user1.getAccount().getAccountName(), rsp.getUserProfiles().get(0).getAccountName());
@@ -175,7 +175,7 @@ public class SearchServiceImplTest {
         userList.add(user1);
         Mockito.when(userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(
                 user1.getEmail(), user1.getEmail())).thenReturn(userList);
-        SearchRsp rsp = searchService.searchByInfo(user1.getEmail());
+        ProfilesRsp rsp = searchService.searchByInfo(user1.getEmail());
         assertEquals(id1, rsp.getUserProfiles().get(0).getUid());
         assertEquals(user1.getEmail(), rsp.getUserProfiles().get(0).getEmail());
         assertEquals(user1.getAccount().getAccountName(), rsp.getUserProfiles().get(0).getAccountName());
@@ -193,7 +193,7 @@ public class SearchServiceImplTest {
         Mockito.when(accountRepository.findByAccountNameContainingIgnoreCase(
                 strString)).thenReturn(List.of(account1,account2));
 
-        SearchRsp rsp = searchService.searchByInfo("a");
+        ProfilesRsp rsp = searchService.searchByInfo("a");
         assertEquals(2, rsp.getUserProfiles().size());
     }
 

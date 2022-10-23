@@ -51,10 +51,10 @@ public class User implements Serializable {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = true, length = ValidationConsts.PHONE_LEN)
+  @Column(length = ValidationConsts.PHONE_LEN)
   private String phone;
 
-  @Column(nullable = true)
+  @Column
   private String address;
 
   @Enumerated(EnumType.STRING)
