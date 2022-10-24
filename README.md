@@ -12,9 +12,28 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 4. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in `src/main/resources/application.properties`
 5. Run `./mvnw`
 6. Run `java -jar ./target/easymoney-0.0.1-SNAPSHOT.war`
-7. Use Postman or curl to interact
 
-## How to run tests
+
+## How to run system tests with Postman
+
+1. Restart the application, or manually clear all entries in your local database.
+2. Open [Postman web](https://web.postman.co/) and go to your workspace
+3. Select "Collections" on the left, and then click "Import"
+4. Click "Upload files", select [system_tests.postman_collection.json](system_tests.postman_collection.json) in this repository, and click "Import"
+5. Once the collection is imported to your workspace, take a look at the test requests within:
+   - Create different types of users
+   - Deposit money
+   - Create, accept, decline and retrieve money requests
+   - Create a group with different types of users 
+   - Personal users can get a list of ads from the business users within the same group
+   - Get user profiles by id or search text
+   - Add and accept friendship (only available to personal users)
+   - Get personal feed which includes friend activities
+   - Create, accept, decline and retrieve loan requests (a loan request must be from a personal user to a financial user)
+6. Execute the test requests IN ORDER. You should observe that the HTTP status codes will be either 200 or 201, and the response bodies (sometimes empty because our client implementation will check HTTP status code first).
+7. If you'd like to rerun all the test requests, redo step 1.
+
+## How to run unit and integration tests
 
 1. Create a schema named "4156dbtest" in your local MySQL server
 2. Enter the username and the password of your local MySQL server in `src/test/resources/application.properties`
