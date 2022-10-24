@@ -37,6 +37,10 @@ public class FriendServiceImpl implements FriendService {
     this.friendshipRepository = friendshipRepository;
   }
 
+  /**
+   * Check to see if the user is a personal user;
+   * all other types of user are inapplicable for friend service.
+   */
   @Override
   public User checkUserType(User user) {
     if (user.getType() != UserType.PERSONAL) {
@@ -46,11 +50,17 @@ public class FriendServiceImpl implements FriendService {
     return user;
   }
 
+  /**
+   * Retrieve the friendship of two users with their ids.
+   */
   @Override
   public Friendship getFriendshipRecord(User u1, User u2) {
     return friendshipRepository.findByUser1AndUser2(u1, u2);
   }
 
+  /**
+   * Setting an inactive friendship between two users.
+   */
   @Override
   public void addFriend(FriendshipReq friendshipReq) {
     User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
@@ -64,6 +74,10 @@ public class FriendServiceImpl implements FriendService {
     // because we don't want the requester to accept.
   }
 
+  /**
+   * Accepting an existing friendship record;
+   * set it as an active friendship.
+   */
   @Override
   public void acceptFriend(FriendshipReq friendshipReq) {
     User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
@@ -87,6 +101,9 @@ public class FriendServiceImpl implements FriendService {
     friendshipRepository.save(fs2);
   }
 
+  /**
+   * Delete ab existing friendship.
+   */
   @Override
   public void delFriend(FriendshipReq friendshipReq) {
     User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
@@ -104,6 +121,11 @@ public class FriendServiceImpl implements FriendService {
     }
   }
 
+  /**
+   * Get all friends of a user.
+   *
+   * @return A list of users that are friends with the user in the parameter
+   */
   @Override
   public List<User> getFriends(User u) {
     User user = checkUserType(u);
@@ -117,6 +139,11 @@ public class FriendServiceImpl implements FriendService {
     return res;
   }
 
+  /**
+   * Get all friends by id.
+   *
+   * @return A list of user profiles that are friends with the user in the parameter
+   */
   @Override
   public ProfilesRsp getFriends(Long uid) {
     var u = checkUserType(userService.getUserById(uid));
@@ -130,7 +157,10 @@ public class FriendServiceImpl implements FriendService {
     return new ProfilesRsp(Boolean.TRUE, res);
   }
 
-  // to be accepted by uid, not requested by uid
+  /** Get all pending friends by id.
+   * Return: a list of user profiles that
+   * are still pending friends with the user in the parameter
+   */
   @Override
   public ProfilesRsp getFriendsPending(Long uid) {
     var u = checkUserType(userService.getUserById(uid));
