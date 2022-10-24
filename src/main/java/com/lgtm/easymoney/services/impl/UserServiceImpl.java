@@ -19,22 +19,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * user service implementation. restful apis for accessing users.
+ * User service implementation, containing logics of CRUD of users.
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 
+  /**
+   * Constructor of user service.
+   *
+   * @param userRepository JPA repository to perform CRUD in user table
+   */
   @Autowired
   public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
+  /** Whether a user with id exists in the user table. */
   @Override
   public boolean existsById(Long id) {
     return userRepository.existsById(id);
   }
 
+  /** Retrieve the user with id if exists, otherwise throws a ResourceNotFound exception. */
   @Override
   public User getUserById(Long id) {
     var userWrapper = userRepository.findById(id);
@@ -44,11 +51,13 @@ public class UserServiceImpl implements UserService {
     return userWrapper.get();
   }
 
+  /** Save the user to the user table, which may be invoked by create or update. */
   @Override
   public User saveUser(User user) {
     return userRepository.save(user);
   }
 
+  /** Get all users in the user table (for internal use only). */
   @Override
   public List<User> getAllUsers() {
     return userRepository.findAll();
@@ -94,6 +103,10 @@ public class UserServiceImpl implements UserService {
     return user;
   }
 
+  /**
+   * Deposit the specified amount of money to the user's balance
+   * (assume money is deducted from the registered bank account).
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public boolean makeDeposit(User user, BigDecimal amount) {
@@ -104,6 +117,7 @@ public class UserServiceImpl implements UserService {
     return true;
   }
 
+  /** Deposit money to the user's balance given info in the request payload. */
   @Override
   public BalanceRsp makeDeposit(BalanceReq req) {
     // get params
@@ -116,6 +130,11 @@ public class UserServiceImpl implements UserService {
     return new BalanceRsp(user.getBalance());
   }
 
+  /**
+   * Withdraw the specified amount of money from the user's balance.
+   * (assume money is added to the registered bank account).
+   * Throw InvalidUpdateException if not enough balance.
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public boolean makeWithdraw(User user, BigDecimal amount) {
@@ -130,6 +149,7 @@ public class UserServiceImpl implements UserService {
     return true;
   }
 
+  /** Withdraw money from the user's balance given info in the request payload. */
   @Override
   public BalanceRsp makeWithdraw(BalanceReq req) {
     // get params
