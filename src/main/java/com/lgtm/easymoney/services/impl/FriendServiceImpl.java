@@ -38,26 +38,27 @@ public class FriendServiceImpl implements FriendService {
   }
 
   @Override
+  public User checkUserType(User user) {
+    if (user.getType() != UserType.PERSONAL) {
+      throw new InapplicableOperationException(
+              "User", user.getId(), "uid1", "addFriend");
+    }
+    return user;
+  }
+
+  @Override
   public Friendship getFriendshipRecord(User u1, User u2) {
     return friendshipRepository.findByUser1AndUser2(u1, u2);
   }
 
   @Override
   public void addFriend(FriendshipReq friendshipReq) {
-    User requester = userService.getUserById(friendshipReq.getUid1());
-    if (requester.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid1(), "uid1", "addFriend");
-    }
-    User acceptor = userService.getUserById(friendshipReq.getUid2());
-    if (acceptor.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid2(), "uid2", "addFriend");
-    }
+    User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
+    User u2 = checkUserType(userService.getUserById(friendshipReq.getUid2()));
 
     var fs1 = new Friendship();
-    fs1.setUser1(requester);
-    fs1.setUser2(acceptor);
+    fs1.setUser1(u1);
+    fs1.setUser2(u2);
     friendshipRepository.save(fs1);
     // The other friendship direction can NOT be saved at this stage
     // because we don't want the requester to accept.
@@ -65,18 +66,10 @@ public class FriendServiceImpl implements FriendService {
 
   @Override
   public void acceptFriend(FriendshipReq friendshipReq) {
-    User acceptor = userService.getUserById(friendshipReq.getUid1());
-    if (acceptor.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid1(), "uid1", "acceptFriend");
-    }
-    User requester = userService.getUserById(friendshipReq.getUid2());
-    if (requester.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid2(), "uid2", "acceptFriend");
-    }
+    User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
+    User u2 = checkUserType(userService.getUserById(friendshipReq.getUid2()));
 
-    var fs1 = getFriendshipRecord(requester, acceptor);
+    var fs1 = getFriendshipRecord(u1, u2);
     if (fs1 == null) {
       throw new ResourceNotFoundException("Friendship", "uid2", friendshipReq.getUid2());
     }
@@ -87,8 +80,8 @@ public class FriendServiceImpl implements FriendService {
 
     fs1.setActive(Boolean.TRUE);
     var fs2 = new Friendship();
-    fs2.setUser1(acceptor);
-    fs2.setUser2(requester);
+    fs2.setUser1(u1);
+    fs2.setUser2(u2);
     fs2.setActive(Boolean.TRUE);
     friendshipRepository.save(fs1);
     friendshipRepository.save(fs2);
@@ -96,16 +89,8 @@ public class FriendServiceImpl implements FriendService {
 
   @Override
   public void delFriend(FriendshipReq friendshipReq) {
-    User u1 = userService.getUserById(friendshipReq.getUid1());
-    if (u1.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid1(), "uid1", "delFriend");
-    }
-    User u2 = userService.getUserById(friendshipReq.getUid2());
-    if (u2.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", friendshipReq.getUid2(), "uid2", "delFriend");
-    }
+    User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
+    User u2 = checkUserType(userService.getUserById(friendshipReq.getUid2()));
 
     var fs1 = getFriendshipRecord(u1, u2);
     if (fs1 == null) {
@@ -121,13 +106,10 @@ public class FriendServiceImpl implements FriendService {
 
   @Override
   public List<User> getFriends(User u) {
-    if (u.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", u.getId(), "uid", "getFriends");
-    }
+    User user = checkUserType(u);
 
     List<User> res = new ArrayList<>();
-    for (var fs : u.getFriendships()) {
+    for (var fs : user.getFriendships()) {
       if (fs.getActive()) {
         res.add(fs.getUser2());
       }
@@ -137,11 +119,7 @@ public class FriendServiceImpl implements FriendService {
 
   @Override
   public ProfilesRsp getFriends(Long uid) {
-    var u = userService.getUserById(uid);
-    if (u.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", u.getId(), "uid", "getFriends");
-    }
+    var u = checkUserType(userService.getUserById(uid));
 
     List<ProfileRsp> res = new ArrayList<>();
     for (var fs : u.getFriendships()) {
@@ -155,11 +133,7 @@ public class FriendServiceImpl implements FriendService {
   // to be accepted by uid, not requested by uid
   @Override
   public ProfilesRsp getFriendsPending(Long uid) {
-    var u = userService.getUserById(uid);
-    if (u.getType() != UserType.PERSONAL) {
-      throw new InapplicableOperationException(
-          "User", u.getId(), "uid", "getFriendsPending");
-    }
+    var u = checkUserType(userService.getUserById(uid));
 
     List<ProfileRsp> res = new ArrayList<>();
     for (var fs : friendshipRepository.findByUser2(u)) {

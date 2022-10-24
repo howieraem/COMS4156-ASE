@@ -10,6 +10,8 @@ import java.util.List;
 public interface FriendService {
   Friendship getFriendshipRecord(User u1, User u2);
 
+  User checkUserType(User user);
+
   void addFriend(FriendshipReq friendshipReq);
 
   void acceptFriend(FriendshipReq friendshipReq);
