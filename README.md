@@ -62,6 +62,8 @@ These are all defined in `pom.xml` and downloaded by Maven.
 ## Style checker
 
 We follow style rules of Google checks. You may see warnings/errors if you run style checking with other configs.
+Below is the screenshot for checking entire project using `checkstyle` plugin from intellij, no errors occured.
+![img.png](img.png)
 
 ## How to deploy
 
