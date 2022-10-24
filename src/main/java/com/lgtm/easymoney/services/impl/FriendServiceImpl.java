@@ -69,7 +69,7 @@ public class FriendServiceImpl implements FriendService {
     User u1 = checkUserType(userService.getUserById(friendshipReq.getUid1()));
     User u2 = checkUserType(userService.getUserById(friendshipReq.getUid2()));
 
-    var fs1 = getFriendshipRecord(u1, u2);
+    var fs1 = getFriendshipRecord(u2, u1);
     if (fs1 == null) {
       throw new ResourceNotFoundException("Friendship", "uid2", friendshipReq.getUid2());
     }
