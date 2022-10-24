@@ -87,7 +87,7 @@ public class User implements Serializable {
   private BizProfile bizProfile;
 
   /**
-   * set user type, either personal, businesss, or financial.
+   * set user type, either personal, business, or financial.
    *
    * @param userTypeStr user type, can be one of three types.
    */

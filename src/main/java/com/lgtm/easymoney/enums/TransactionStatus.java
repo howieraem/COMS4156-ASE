@@ -10,5 +10,8 @@ public enum TransactionStatus {
     TRANS_COMPLETE,
     TRANS_DENIED,
     TRANS_FAILED,
+    LOAN_PENDING,
+    LOAN_APPROVED,
+    LOAN_DECLINED,
     SELF_COMPLETE
 }
