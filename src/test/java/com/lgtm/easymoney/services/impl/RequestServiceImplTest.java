@@ -168,7 +168,9 @@ public class RequestServiceImplTest {
   @Test
   public void saveRequestSuccess() {
     // Arrange
-    Mockito.when(transactionService.saveTransaction(Mockito.any(Transaction.class))).thenReturn(transaction);
+    Mockito.when(transactionService
+            .saveTransaction(Mockito.any(Transaction.class)))
+            .thenReturn(transaction);
     // Act
     Transaction returned = requestService.saveRequest(transaction);
     // Assert
@@ -256,7 +258,6 @@ public class RequestServiceImplTest {
   @Test
   public void declineRequestWrapperFailedByCannotAccept() {
     // Arrange, should fail since transaction ID does not match
-//    transaction.setId(9L);
     transaction.setStatus(TransactionStatus.TRANS_COMPLETE);
     Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
     // Act & Assert
