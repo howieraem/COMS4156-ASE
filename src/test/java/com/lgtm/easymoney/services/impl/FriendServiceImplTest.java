@@ -34,7 +34,6 @@ import org.springframework.test.util.ReflectionTestUtils;
  * Friend Service Test.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(FriendController.class)
 public class FriendServiceImplTest {
   @InjectMocks
   private FriendServiceImpl friendService;
