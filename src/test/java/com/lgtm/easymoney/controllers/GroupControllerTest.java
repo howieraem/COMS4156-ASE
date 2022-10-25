@@ -1,5 +1,11 @@
 package com.lgtm.easymoney.controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
@@ -11,6 +17,8 @@ import com.lgtm.easymoney.payload.InviteToGroupReq;
 import com.lgtm.easymoney.payload.LeaveGroupReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.services.GroupService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,15 +31,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/**
+ * Unit tests for group controller.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest(GroupController.class)
 public class GroupControllerTest {
@@ -63,6 +65,7 @@ public class GroupControllerTest {
 
   private Long uid2 = 2L;
 
+  /** Establish request payloads for further testing. */
   @Before
   public void setUp() {
     createGroupReq = new CreateGroupReq();
@@ -113,7 +116,8 @@ public class GroupControllerTest {
 
   @Test
   public void createGroupFailedByUidsContainingNull() throws Exception {
-    // `createGroupReq.setUids(List.of(uid1, null))` throws exception immediately and can't simulate user input
+    // `createGroupReq.setUids(List.of(uid1, null))` throws exception immediately
+    // and can't simulate user input, so raw JSON is used here.
     var resultActions = mvc.perform(post("/group/create")
         .content(String.format("{\"name\": \"%s\", \"uids\": [%d, null]", groupName, uid1))
         .contentType(MediaType.APPLICATION_JSON)
@@ -248,8 +252,8 @@ public class GroupControllerTest {
     var resultActions = getGroupAds(expectedGid);
 
     resultActions.andExpectAll(
-      status().isOk(),
-      jsonPath("$.ads").value(ads));
+        status().isOk(),
+        jsonPath("$.ads").value(ads));
   }
 
   private ResultActions postCreate(CreateGroupReq req) throws Exception {
