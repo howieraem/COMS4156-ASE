@@ -71,7 +71,7 @@ public class LoanController {
    * Decline a loan request.
    *
    * @param req request payload, contains loan id, lender id, borrower id
-   * @return response entity of declined loan id
+   * @return response entity of declined loan
    */
   @PutMapping("/decline")
   @Operation(summary = "Method for a financial user to decline a loan request")
