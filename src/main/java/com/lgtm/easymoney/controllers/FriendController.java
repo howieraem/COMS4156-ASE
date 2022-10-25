@@ -32,6 +32,11 @@ public class FriendController {
     this.friendService = friendService;
   }
 
+  /*
+   * Method for a user to add a friend (request a friendship, need acceptance)
+   * @param req Friendship request that contains two user ids
+   * @return 201 Created; A friendship is created
+   */
   @PostMapping("/add")
   @Operation(summary =
       "Method for a user to add a friend (request a friendship, need acceptance).")
@@ -40,6 +45,11 @@ public class FriendController {
     return new ResponseEntity<>(null, HttpStatus.CREATED);
   }
 
+  /*
+   * Method for a user to accept a friendship
+   * @param req Friendship request that contains two user ids
+   * @return 200 OK status; friend request accepted; the active field of friendship is true
+   */
   @PutMapping("/accept")
   @Operation(summary = "Method for a user to accept a friendship.")
   public ResponseEntity<Void> acceptFriend(@Valid @RequestBody FriendshipReq req) {
@@ -47,6 +57,11 @@ public class FriendController {
     return ResponseEntity.ok().build();
   }
 
+  /*
+   * Method for a user to delete a friend
+   * @param req Friendship request that contains two user ids
+   * @return 200 OK
+   */
   @DeleteMapping("/delete")
   @Operation(summary = "Method for a user to delete a friend.")
   public ResponseEntity<Void> delFriend(@Valid @RequestBody FriendshipReq req) {
@@ -54,12 +69,22 @@ public class FriendController {
     return ResponseEntity.ok().build();
   }
 
+  /*
+   * Method for a user to get all friends accepted
+   * @param uid One user id
+   * @return A list of user profiles of the user's accepted friends
+   */
   @GetMapping("/{uid}")
   @Operation(summary = "Method for a user to get all friends accepted.")
   public ResponseEntity<ProfilesRsp> getFriends(@PathVariable(value = "uid") @NotNull Long uid) {
     return new ResponseEntity<>(friendService.getFriends(uid), HttpStatus.OK);
   }
 
+  /*
+   * Method for a user to get other users who sent addFriend and not yet accepted by this user
+   * @param uid One user id
+   * @return A list of user profiles of the user's pending friends
+   */
   @GetMapping("/{uid}/pending")
   @Operation(summary =
       "Method for a user to get other users who sent addFriend and not yet accepted by this user.")
