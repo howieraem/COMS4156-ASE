@@ -30,6 +30,12 @@ public class TransferController {
     this.transferService = transferService;
   }
 
+  /**
+   * Create a money transfer from one user to another.
+   *
+   * @param req transfer request
+   * @return response entity with created transfer id
+   */
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money transfer to another user.")
   public ResponseEntity<ResourceCreatedRsp> transfer(@Valid @RequestBody TransferReq req) {
@@ -37,10 +43,10 @@ public class TransferController {
   }
 
   /**
-   * get all transfers by user.
+   * Get all transfers corresponding to a specific user.
    *
    * @param uid user's id
-   * @return list all transfers invovling the user
+   * @return response entity with list of transfers
    */
   @GetMapping("/{uid}")
   @Operation(summary = "Method for a user to get"

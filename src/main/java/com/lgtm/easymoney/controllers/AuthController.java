@@ -29,8 +29,8 @@ public class AuthController {
   /**
    * handle register requests.
    *
-   * @param registerReq reg request with user's info.
-   * @return response entity of the new user's ID if succeeded or error information if failed
+   * @param registerReq reg request with new user's info.
+   * @return response entity of the new user's id if succeeded, or error information if failed
    */
   @PostMapping("/register")
   @Operation(summary = "Method for new user registration.")

@@ -34,6 +34,7 @@ public class GroupController {
     this.groupService = groupService;
   }
 
+  /** Create a new group. */
   @PostMapping("/create")
   @Operation(summary = "Method for new group creation.")
   public ResponseEntity<ResourceCreatedRsp> createGroup(
@@ -41,6 +42,7 @@ public class GroupController {
     return new ResponseEntity<>(groupService.createGroup(createGroupReq), HttpStatus.CREATED);
   }
 
+  /** Invite a user to a group by a group member. */
   @PutMapping("/invite")
   @Operation(summary = "Method for a user to invite another user to a group.")
   public ResponseEntity<Void> inviteToGroup(@Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
@@ -48,6 +50,7 @@ public class GroupController {
     return ResponseEntity.ok().build();
   }
 
+  /** Let a user leave a group. */
   @PutMapping("/leave")
   @Operation(summary = "Method for a user to leave a group.")
   public ResponseEntity<Void> leaveGroup(@Valid @RequestBody LeaveGroupReq leaveGroupReq) {
@@ -55,6 +58,7 @@ public class GroupController {
     return ResponseEntity.ok().build();
   }
 
+  /** Get a group's name, description and member user ids. */
   @GetMapping("/{id}")
   @Operation(summary =
       "Method to get a group's name, description and the list of user IDs, by a group ID.")
@@ -62,6 +66,7 @@ public class GroupController {
     return new ResponseEntity<>(groupService.getGroupProfile(id), HttpStatus.OK);
   }
 
+  /** Get a list of ads from the business users in a group. */
   @GetMapping("/{id}/business")
   @Operation(summary =
           "Method to get a group's ads(texts from business profiles"

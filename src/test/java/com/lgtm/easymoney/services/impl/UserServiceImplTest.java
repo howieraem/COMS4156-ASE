@@ -1,5 +1,11 @@
 package com.lgtm.easymoney.services.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
@@ -7,24 +13,23 @@ import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.repositories.UserRepository;
-
-import static org.junit.Assert.*;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.BDDMockito;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
+/**
+ * Unit tests for user service implementation.
+ */
 @RunWith(SpringRunner.class)
 public class UserServiceImplTest {
   @InjectMocks
@@ -42,6 +47,7 @@ public class UserServiceImplTest {
 
   private Long nonExistId = 3L;
 
+  /** Establish users for further testing. */
   @Before
   public void setUp() {
     User user1 = new User();

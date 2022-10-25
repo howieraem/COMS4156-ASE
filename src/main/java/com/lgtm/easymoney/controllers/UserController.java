@@ -26,6 +26,10 @@ public class UserController {
     this.userService = userService;
   }
 
+  /**
+   * Let a user deposit money to the balance (assume money
+   * deducted from the bank account registered).
+   */
   @PutMapping("/deposit")
   @Operation(summary = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
@@ -33,6 +37,10 @@ public class UserController {
     return new ResponseEntity<>(userService.makeDeposit(req), HttpStatus.OK);
   }
 
+  /**
+   * Let a user withdraw money from the balance (assume money
+   * added to the bank account registered).
+   */
   @PutMapping("/withdraw")
   @Operation(summary = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")

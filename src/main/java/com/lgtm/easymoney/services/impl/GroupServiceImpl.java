@@ -23,19 +23,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * group service implementation for accessing groups DB.
+ * Group service implementation for CRUD of groups.
  */
 @Service
 public class GroupServiceImpl implements GroupService {
   private final GroupRepository groupRepository;
   private final UserService userService;
 
+  /**
+   * Constructor of group service.
+   *
+   * @param groupRepository JPA repository to perform CRUD in group table
+   * @param userService User service to perform user CRUD
+   */
   @Autowired
   public GroupServiceImpl(GroupRepository groupRepository, UserService userService) {
     this.groupRepository = groupRepository;
     this.userService = userService;
   }
 
+  /**
+   * Retrieve the group from group table given the group's id if exists,
+   * or throw ResourceNotFound exception if not found.
+   */
   @Override
   public Group getGroupById(Long gid) {
     var groupWrapper = groupRepository.findById(gid);
@@ -45,6 +55,7 @@ public class GroupServiceImpl implements GroupService {
     return groupWrapper.get();
   }
 
+  /** Retrieve the group's name, description and member user ids given the group's id. */
   @Override
   public GroupRsp getGroupProfile(Long gid) {
     Group g = getGroupById(gid);
@@ -58,6 +69,7 @@ public class GroupServiceImpl implements GroupService {
     return r;
   }
 
+  /** Get a list of ads from the business users in a group given the group's id. */
   @Override
   public GroupAdsRsp getGroupAds(Long gid) {
     Group g = getGroupById(gid);
@@ -71,6 +83,7 @@ public class GroupServiceImpl implements GroupService {
     return new GroupAdsRsp(ads);
   }
 
+  /** Create a group of users (maybe of different types) given info in the request payload. */
   @Override
   public ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq) {
     Set<User> users = new HashSet<>();
@@ -85,6 +98,11 @@ public class GroupServiceImpl implements GroupService {
     return new ResourceCreatedRsp(group.getId());
   }
 
+  /**
+   * Invite a non-member user to an existing group by a member user,
+   * given info in the request payload. Throw InvalidUpdateException
+   * if inviter is not a member of the group.
+   */
   @Override
   public void inviteToGroup(InviteToGroupReq inviteToGroupReq) {
     Group g = getGroupById(inviteToGroupReq.getGid());
@@ -96,6 +114,10 @@ public class GroupServiceImpl implements GroupService {
     joinGroup(g, invitee);
   }
 
+  /**
+   * A member user of a group leaves that group,
+   * given info in the request payload.
+   */
   @Override
   public void leaveGroup(LeaveGroupReq leaveGroupReq) {
     Group g = getGroupById(leaveGroupReq.getGid());
@@ -103,6 +125,7 @@ public class GroupServiceImpl implements GroupService {
     leaveGroup(g, u);
   }
 
+  /** A user leaves a group. Throw InvalidUpdateException if the user is not a group member. */
   @Override
   public void leaveGroup(Group group, User user) {
     if (!isInGroup(group, user)) {
@@ -112,6 +135,7 @@ public class GroupServiceImpl implements GroupService {
     groupRepository.save(group);
   }
 
+  /** Add a user to a group. Throw InvalidUpdateException if the user is already a group member. */
   @Override
   public void joinGroup(Group group, User user) {
     if (isInGroup(group, user)) {
@@ -121,6 +145,7 @@ public class GroupServiceImpl implements GroupService {
     groupRepository.save(group);
   }
 
+  /** Return whether a user is a member of a group. */
   @Override
   public boolean isInGroup(Group group, User user) {
     return group.getGroupUsers().contains(user);

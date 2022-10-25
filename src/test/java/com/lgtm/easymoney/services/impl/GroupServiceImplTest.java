@@ -1,5 +1,8 @@
 package com.lgtm.easymoney.services.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.BizProfile;
@@ -11,13 +14,11 @@ import com.lgtm.easymoney.payload.InviteToGroupReq;
 import com.lgtm.easymoney.payload.LeaveGroupReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.GroupRepository;
-
+import com.lgtm.easymoney.services.UserService;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import com.lgtm.easymoney.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,9 +28,9 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-
+/**
+ * Unit tests for group service implementation.
+ */
 @RunWith(SpringRunner.class)
 public class GroupServiceImplTest {
   @InjectMocks
@@ -59,6 +60,7 @@ public class GroupServiceImplTest {
   private User user2;
   private Set<User> users;
 
+  /** Establish users, group and request payloads for further testing. */
   @Before
   public void setUp() {
     createGroupReq = new CreateGroupReq();

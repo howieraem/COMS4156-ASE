@@ -31,6 +31,16 @@ public class TransferServiceImpl implements TransferService {
     this.userService = userService;
   }
 
+  /**
+   * Create a Transaction object and save it to database.
+   *
+   * @param fromUser the user that money is transferred from
+   * @param toUser the user that money is transferred to
+   * @param amount the amount of money transferred
+   * @param category the category that the money is used for
+   * @param desc description of the money transfer
+   * @return the created Transaction object
+   */
   private Transaction createTransaction(
           User fromUser,
           User toUser,
@@ -47,10 +57,19 @@ public class TransferServiceImpl implements TransferService {
     return transactionService.saveTransaction(transaction);
   }
 
+  /**
+   * Execute the transfer transaction.
+   */
   private boolean makeTransfer(Transaction transaction) {
     return transactionService.executeTransaction(transaction);
   }
 
+  /**
+   * Make a transfer.
+   *
+   * @param req transfer request
+   * @return resource created response containing created transfer id
+   */
   @Override
   public ResourceCreatedRsp makeTransfer(TransferReq req) {
     // get params
@@ -81,11 +100,20 @@ public class TransferServiceImpl implements TransferService {
     return new ResourceCreatedRsp(transaction.getId());
   }
 
+  /**
+   * Get the list of transfer transactions by user object.
+   */
   private List<Transaction> getTransfersByUser(User user) {
     List<TransactionStatus> status = List.of(TransactionStatus.TRANS_COMPLETE);
     return transactionService.getAllTransactionsWithUser(user, status);
   }
 
+  /**
+   * Get the transfer transactions by user id.
+   *
+   * @param uid user id
+   * @return transfer response
+   */
   @Override
   public TransferRsp getTransfersByUid(Long uid) {
     User user = userService.getUserById(uid);

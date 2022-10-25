@@ -21,6 +21,7 @@ public class TransactionServiceImpl implements TransactionService {
   private final UserService userService;
   private final TransactionRepository transactionRepository;
 
+  // initialize service with dependent UserService and repository.
   @Autowired
   public TransactionServiceImpl(
           UserService userService, TransactionRepository transactionRepository) {
@@ -28,19 +29,37 @@ public class TransactionServiceImpl implements TransactionService {
     this.transactionRepository = transactionRepository;
   }
 
+  /**
+   * check if a transaction exists or not.
+   *
+   * @param t transaction
+   * @return boolean, exists or not
+   */
   @Override
   public boolean transactionExists(Transaction t) {
     return t.getId() != null && transactionRepository.existsById(t.getId());
   }
 
+  /**
+   * check if a transaction exists or not given id.
+   *
+   * @param id Long
+   * @return boolean, exists or not
+   */
   @Override
   public boolean existsTransactionById(Long id) {
     return transactionRepository.existsById(id);
   }
 
+  /**
+   * get a transaction by id.
+   *
+   * @param id transaction id
+   * @return transaction
+   */
   @Override
   public Transaction getTransactionById(Long id) {
-    // TODO wtf is this deprecated
+    // wrapper to handle corner case
     var transWrapper = transactionRepository.findById(id);
     if (transWrapper.isEmpty()) {
       throw new ResourceNotFoundException("Transaction", "id", id);
@@ -48,22 +67,51 @@ public class TransactionServiceImpl implements TransactionService {
     return transWrapper.get();
   }
 
+  /**
+   * save a transaction to DB.
+   *
+   * @param t transaction
+   * @return transaction that was successfully written
+   */
   @Override
   public Transaction saveTransaction(Transaction t) {
     return transactionRepository.save(t);
   }
 
+  /**
+   * get all transactions in the DB.
+   *
+   * @return list of transactions
+   */
   @Override
   public List<Transaction> getAllTransactions() {
     return transactionRepository.findAll();
   }
 
+  /**
+   * find transactions that involve a user with specified status.
+   * This is useful when e.g. I want to find all failed transactions sent by me.
+   *
+   *
+   * @param user   user to be searched
+   * @param status list of status that I want to include
+   * @return list of qualified transactions
+   */
   @Override
   public List<Transaction> getAllTransactionsWithUser(User user, List<TransactionStatus> status) {
     // todo feature missing: query by from, or
     return transactionRepository.findByFromOrToAndStatusIn(user, user, status);
   }
 
+  /**
+   * execute transaction.
+   * A transaction means some money goes from A to B. This function
+   * does validation work, and execute the transaction and update
+   * related tables.
+   *
+   * @param t transaction
+   * @return boolean indicating if execution is successful
+   */
   @Override
   public boolean executeTransaction(Transaction t) {
     if (!transactionExists(t)
@@ -96,6 +144,12 @@ public class TransactionServiceImpl implements TransactionService {
 
   }
 
+  /**
+   * EXTERNAL generate response from a specific transaction.
+   *
+   * @param t transaction
+   * @return payload with transaction detail
+   */
   @Override
   public TransactionRsp generateResponseFromTransaction(Transaction t) {
     TransactionRsp r = new TransactionRsp();
@@ -109,6 +163,12 @@ public class TransactionServiceImpl implements TransactionService {
     return r;
   }
 
+  /**
+   * generate list of responses payload for transactions.
+   *
+   * @param l list of transactions.
+   * @return list of transaction responses.
+   */
   @Override
   public List<TransactionRsp> generateListResponseFromTransactions(List<Transaction> l) {
     List<TransactionRsp> res = new ArrayList<>();

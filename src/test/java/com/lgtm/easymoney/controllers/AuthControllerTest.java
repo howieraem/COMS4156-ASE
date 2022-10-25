@@ -21,7 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-
+/**
+ * Unit tests for auth controller.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest(AuthController.class)
 public class AuthControllerTest {
@@ -33,6 +35,7 @@ public class AuthControllerTest {
 
   private static RegisterReq req;
 
+  /** Establish a test request payload. */
   @Before
   public void setup() {
     req = new RegisterReq();
@@ -44,7 +47,8 @@ public class AuthControllerTest {
     req.setRoutingNumber("123456789");
 
     // Assume userService.saveUser() always succeeds
-    Mockito.when(userService.saveUser(Mockito.any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    Mockito.when(userService.saveUser(Mockito.any(User.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
   }
 
   @Test
@@ -57,22 +61,22 @@ public class AuthControllerTest {
     // email is null
     req.setEmail(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("email"));
+        .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email is empty
     req.setEmail("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("email"));
+        .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email doesn't contain '@'
     req.setEmail("a");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("email"));
+        .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email contains more than 1 '@'
     req.setEmail("a@b.com@.com");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("email"));
+        .andExpect(jsonPath("$.errorFields").value("email"));
   }
 
   @Test
@@ -80,12 +84,12 @@ public class AuthControllerTest {
     // password is null
     req.setPassword(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("password"));
+        .andExpect(jsonPath("$.errorFields").value("password"));
 
     // password is empty
     req.setPassword("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("password"));
+        .andExpect(jsonPath("$.errorFields").value("password"));
   }
 
   @Test
@@ -93,17 +97,17 @@ public class AuthControllerTest {
     // user type is null
     req.setUserType(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("userType"));
+        .andExpect(jsonPath("$.errorFields").value("userType"));
 
     // user type is empty
     req.setUserType("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("userType"));
+        .andExpect(jsonPath("$.errorFields").value("userType"));
 
     // user type is not in enum
     req.setUserType("abc");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("userType"));
+        .andExpect(jsonPath("$.errorFields").value("userType"));
   }
 
   @Test
@@ -111,22 +115,22 @@ public class AuthControllerTest {
     // phone is not null but empty
     req.setPhone("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("phone"));
+        .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone contains non-numeric characters
     req.setPhone("abc");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("phone"));
+        .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone is too short
     req.setPhone("000");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("phone"));
+        .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone is too long
     req.setPhone("00000000000");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("phone"));
+        .andExpect(jsonPath("$.errorFields").value("phone"));
   }
 
   @Test
@@ -134,12 +138,12 @@ public class AuthControllerTest {
     // account name is null
     req.setAccountName(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountName"));
+        .andExpect(jsonPath("$.errorFields").value("accountName"));
 
     // account name is empty
     req.setAccountName("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountName"));
+        .andExpect(jsonPath("$.errorFields").value("accountName"));
   }
 
   @Test
@@ -147,22 +151,22 @@ public class AuthControllerTest {
     // account number is null
     req.setAccountNumber(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountNumber"));
+        .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number is empty
     req.setAccountNumber("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountNumber"));
+        .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number contains non-numeric characters
     req.setAccountNumber("abc");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountNumber"));
+        .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number is too long
     req.setAccountNumber("12321371892473218947122");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("accountNumber"));
+        .andExpect(jsonPath("$.errorFields").value("accountNumber"));
   }
 
   @Test
@@ -170,37 +174,37 @@ public class AuthControllerTest {
     // routing number is null
     req.setRoutingNumber(null);
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+        .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is empty
     req.setRoutingNumber("");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+        .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number contains non-numeric characters
     req.setRoutingNumber("abc");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+        .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is too short
     req.setRoutingNumber("12321");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+        .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is too long
     req.setRoutingNumber("12321371892473218947122");
     postRegister(req).andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+        .andExpect(jsonPath("$.errorFields").value("routingNumber"));
   }
 
-  public ResultActions postRegister(RegisterReq req) throws Exception {
+  private ResultActions postRegister(RegisterReq req) throws Exception {
     return mvc.perform(post("/user/register")
-            .content(asJsonString(req))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON));
+        .content(asJsonString(req))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
   }
 
-  public static String asJsonString(final Object obj) throws JsonProcessingException {
+  private static String asJsonString(final Object obj) throws JsonProcessingException {
     return new ObjectMapper().writeValueAsString(obj);
   }
 }

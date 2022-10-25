@@ -27,11 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class RequestController {
   private final RequestService requestService;
 
+  // initialize constructor with requestService.
   @Autowired
   public RequestController(RequestService requestService) {
     this.requestService = requestService;
   }
 
+  /**
+   * create a new money request between two users.
+   *
+   * @param req request payload
+   * @return response with request id
+   */
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money request to another user.")
   public ResponseEntity<ResourceCreatedRsp> createRequest(@Valid @RequestBody RequestReq req) {

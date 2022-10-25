@@ -1,5 +1,9 @@
 package com.lgtm.easymoney.integrations;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+
 import com.lgtm.easymoney.configs.DbConsts;
 import com.lgtm.easymoney.controllers.AuthController;
 import com.lgtm.easymoney.controllers.GroupController;
@@ -23,10 +27,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
 
+/**
+ * Integration test for database integrity constraints (primary key, unique key, etc.)
+ * as mocking is trivial.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DataIntegrityTest {
@@ -52,6 +57,7 @@ public class DataIntegrityTest {
 
   private static boolean setupDone = false;
 
+  /** Establish user, group and request payloads for further testing. */
   @Before
   public void setup() {
     if (setupDone) {
@@ -94,7 +100,7 @@ public class DataIntegrityTest {
 
   @Test
   public void shouldThrowExceptionWhenSavingUserWithExistingEmail() {
-    var constraint = DbConsts.USER_EMAIL_CONSTRAINT;
+    final var constraint = DbConsts.USER_EMAIL_CONSTRAINT;
     registerReq.setEmail(user.getEmail());
 
     var ex = assertThrows(DataIntegrityViolationException.class, () -> {
@@ -111,7 +117,7 @@ public class DataIntegrityTest {
 
   @Test
   public void shouldThrowExceptionWhenSavingUserWithExistingAccount() {
-    var constraint = DbConsts.ACCOUNT_NUMBERS_CONSTRAINT;
+    final var constraint = DbConsts.ACCOUNT_NUMBERS_CONSTRAINT;
     registerReq.setAccountNumber(user.getAccount().getAccountNumber());
 
     var ex = assertThrows(DataIntegrityViolationException.class, () -> {
@@ -128,7 +134,7 @@ public class DataIntegrityTest {
 
   @Test
   public void shouldThrowExceptionWhenSavingGroupWithExistingName() {
-    var constraint = DbConsts.GROUP_NAME_CONSTRAINT;
+    final var constraint = DbConsts.GROUP_NAME_CONSTRAINT;
     createGroupReq.setName(group.getName());
 
     var ex = assertThrows(DataIntegrityViolationException.class, () -> {
