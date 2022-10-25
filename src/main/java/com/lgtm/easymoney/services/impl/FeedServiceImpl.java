@@ -102,6 +102,12 @@ public class FeedServiceImpl implements FeedService {
 
   }
 
+  /**
+   * INTERNAL helper method to set promotion text.
+   *
+   * @param activities list of users' activity
+   * @return list of activity
+   */
   private List<FeedActivityRsp> setPromoText(List<FeedActivityRsp> activities) {
     // set promo text
     for (FeedActivityRsp a : activities) {
@@ -117,6 +123,12 @@ public class FeedServiceImpl implements FeedService {
     return activities;
   }
 
+  /**
+   * EXTERNAL get user's feed with uid.
+   *
+   * @param uid user's uid
+   * @return response containing list of user's feed activity
+   */
   @Override
   public FeedRsp getFeedByUid(Long uid) {
     // get user's feed
