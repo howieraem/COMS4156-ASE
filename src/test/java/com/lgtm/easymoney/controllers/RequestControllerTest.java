@@ -1,5 +1,13 @@
 package com.lgtm.easymoney.controllers;
 
+
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.enums.Category;
@@ -29,9 +37,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test for TransferController.
@@ -190,7 +195,8 @@ public class RequestControllerTest {
     req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
-    Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid)).thenReturn(resourceCreatedRsp);
+    Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
+            .thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse =
@@ -214,7 +220,8 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
-            .thenThrow(new InvalidUpdateException("request cannot be accepted.", requestId, "request", requestId));
+            .thenThrow(new InvalidUpdateException("request cannot be accepted.",
+                            requestId, "request", requestId));
     // Act
     ResultActions returnedResponse =
             mvc.perform(put("/request/accept")
@@ -282,9 +289,12 @@ public class RequestControllerTest {
     req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
-    Mockito.when(requestService.canAcceptDeclineRequest(requestId, fromUid, toUid)).thenReturn(Boolean.TRUE);
-    Mockito.when(requestService.declineRequest(Mockito.any(Transaction.class))).thenReturn(Boolean.TRUE);
-    Mockito.when(requestService.declineRequest(requestId, fromUid, toUid)).thenReturn(resourceCreatedRsp);
+    Mockito.when(requestService
+            .canAcceptDeclineRequest(requestId, fromUid, toUid)).thenReturn(Boolean.TRUE);
+    Mockito.when(requestService
+            .declineRequest(Mockito.any(Transaction.class))).thenReturn(Boolean.TRUE);
+    Mockito.when(requestService
+            .declineRequest(requestId, fromUid, toUid)).thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse =
@@ -308,7 +318,12 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.declineRequest(requestId, fromUid, toUid))
-            .thenThrow(new InvalidUpdateException("request cannot be declined.", requestId, "request", requestId));
+            .thenThrow(
+                    new InvalidUpdateException(
+                            "request cannot be declined.",
+                            requestId,
+                            "request",
+                            requestId));
     // Act
     ResultActions returnedResponse =
             mvc.perform(put("/request/decline")

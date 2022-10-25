@@ -29,12 +29,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
   final FeedService feedService;
 
+  // initialize controller with feed service
   @Autowired
   public FeedController(FeedService feedService) {
     this.feedService = feedService;
   }
 
 
+  /**
+   * get user's feed activity(user's own activity + friends' activities).
+   *
+   * @param uid user's uid
+   * @return response with a list of user's activity
+   */
   @GetMapping("/{uid}")
   @Operation(summary = "Method for getting users' feed activity")
   public ResponseEntity<FeedRsp> getFeedByUid(@PathVariable(value = "uid") @NotNull Long uid) {

@@ -43,6 +43,9 @@ public class LoanServiceImpl implements LoanService {
     this.requestService = requestService;
   }
 
+  /**
+   * Verify that the borrower is personal user and the lender is financial user.
+   */
   private void validateLoanUsers(User borrower, User lender) {
     if (!lender.getType().equals(UserType.FINANCIAL)) {
       throw new InapplicableOperationException("user", lender.getId(), "toUid", "requestLoan");
@@ -52,6 +55,16 @@ public class LoanServiceImpl implements LoanService {
     }
   }
 
+  /**
+   * Create a loan transaction object and save it to database.
+   *
+   * @param reqBy the user that borrows the loan
+   * @param reqTo the user that lends the loan
+   * @param amount the amount of loan
+   * @param desc description
+   * @param category the category that the loan is used for
+   * @return the created transaction object
+   */
   private Transaction createLoanRequest(User reqBy, User reqTo, BigDecimal amount, String desc,
       Category category) {
     Transaction trans = new Transaction();
@@ -66,6 +79,9 @@ public class LoanServiceImpl implements LoanService {
     return transactionService.saveTransaction(trans);
   }
 
+  /**
+   * Get list of loans by user.
+   */
   private List<Transaction> getLoansByUser(User user) {
     List<TransactionStatus> status = List.of(
         TransactionStatus.LOAN_PENDING,
@@ -74,10 +90,16 @@ public class LoanServiceImpl implements LoanService {
     return transactionService.getAllTransactionsWithUser(user, status);
   }
 
+  /**
+   * Get loan by loan id from database.
+   */
   private Transaction getLoanById(Long id) {
     return transactionService.getTransactionById(id);
   }
 
+  /**
+   * Verify that the loan request has valid lender, borrower, and LOAN_PENDING status.
+   */
   private boolean validateLoanRequest(Long lid, Long fromUid, Long toUid) {
     Transaction t = getLoanById(lid);
     return t.getFrom().getId().equals(fromUid)
@@ -85,6 +107,12 @@ public class LoanServiceImpl implements LoanService {
         && t.getStatus() == TransactionStatus.LOAN_PENDING;
   }
 
+  /**
+   * Create a loan request.
+   *
+   * @param req loan request
+   * @return resource created response containing created loan id
+   */
   @Override
   public ResourceCreatedRsp requestLoan(RequestReq req) {
     // get params
@@ -102,6 +130,12 @@ public class LoanServiceImpl implements LoanService {
     return new ResourceCreatedRsp(loan.getId());
   }
 
+  /**
+   * Get all loans corresponding to a specific user.
+   *
+   * @param uid user id
+   * @return loan response
+   */
   @Override
   public LoanRsp getLoansByUid(Long uid) {
     User user = userService.getUserById(uid);
@@ -116,6 +150,10 @@ public class LoanServiceImpl implements LoanService {
     return response;
   }
 
+  /**
+   * Execute the loan transaction and update the status of approved line loan transaction in
+   * database.
+   */
   private boolean approveLoan(Transaction loan) {
     loan.setStatus(TransactionStatus.TRANS_PENDING);
     transactionService.saveTransaction(loan);
@@ -130,6 +168,12 @@ public class LoanServiceImpl implements LoanService {
     return success;
   }
 
+  /**
+   * Approve a loan request.
+   *
+   * @param req request payload, contains loan id, lender id, borrower id
+   * @return loan response
+   */
   @Override
   public LoanRsp approveLoan(RequestAcceptDeclineReq req) {
     // get params
@@ -163,11 +207,20 @@ public class LoanServiceImpl implements LoanService {
     return response;
   }
 
+  /**
+   * Update the status of decline loan transaction in database.
+   */
   private Transaction declineLoan(Transaction loan) {
     loan.setStatus(TransactionStatus.LOAN_DECLINED);
     return transactionService.saveTransaction(loan);
   }
 
+  /**
+   * Decline a loan request.
+   *
+   * @param req request payload, contains loan id, lender id, borrower id
+   * @return loan response
+   */
   @Override
   public LoanRsp declineLoan(RequestAcceptDeclineReq req) {
     // get params

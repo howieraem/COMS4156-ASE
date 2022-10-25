@@ -28,27 +28,53 @@ public class RequestServiceImpl implements RequestService {
   private final TransactionService transactionService;
   private final UserService userService;
 
+  // initialize service with dependent services:
+  // userService, transactionService
   @Autowired
   public RequestServiceImpl(TransactionService transactionService, UserService userService) {
     this.transactionService = transactionService;
     this.userService = userService;
   }
 
+  /**
+   * checks if a request exists given id.
+   *
+   * @param id request id
+   * @return boolean
+   */
   @Override
   public boolean existsRequestById(Long id) {
     return transactionService.existsTransactionById(id);
   }
 
+  /**
+   * get request(transaction) by rid.
+   *
+   * @param id request id
+   * @return Transaction
+   */
   @Override
   public Transaction getRequestById(Long id) {
     return transactionService.getTransactionById(id);
   }
 
+  /**
+   * save a request to DB.
+   *
+   * @param trans transaction
+   * @return saved transaction
+   */
   @Override
   public Transaction saveRequest(Transaction trans) {
     return transactionService.saveTransaction(trans);
   }
 
+  /**
+   * get list of requests that are either sent/received by user.
+   *
+   * @param user user
+   * @return list of transactions
+   */
   @Override
   public List<Transaction> getRequestByUser(User user) {
     List<TransactionStatus> status =
@@ -56,6 +82,12 @@ public class RequestServiceImpl implements RequestService {
     return transactionService.getAllTransactionsWithUser(user, status);
   }
 
+  /**
+   * EXTERNAL generate a response payload of user's requests given id.
+   *
+   * @param uid user's uid
+   * @return response payload with list of transactions
+   */
   @Override
   public RequestRsp getRequestsByUid(Long uid) {
     User user = userService.getUserById(uid);
@@ -69,6 +101,16 @@ public class RequestServiceImpl implements RequestService {
     return res;
   }
 
+  /**
+   * create a transation representing a request with details.
+   *
+   * @param reqBy user who sent req
+   * @param reqTo user the req is targeting
+   * @param amount amount of money
+   * @param desc a short description of the req
+   * @param category category of the expense
+   * @return transaction
+   */
   @Override
   public Transaction createRequest(User reqBy, User reqTo, BigDecimal amount, String desc,
                                    Category category) {
@@ -87,6 +129,12 @@ public class RequestServiceImpl implements RequestService {
     return transactionService.saveTransaction(trans);
   }
 
+  /**
+   * EXTERNAL create a request.
+   *
+   * @param req request payload
+   * @return payload with id of request created.
+   */
   @Override
   public ResourceCreatedRsp createRequest(RequestReq req) {
     // create a request
@@ -100,6 +148,16 @@ public class RequestServiceImpl implements RequestService {
     return new ResourceCreatedRsp(trans.getId());
   }
 
+  /**
+   * check if an accept is valid to be accepted/declined.
+   * NOTE that transactions that are already completed/denied
+   * cannot be modified.
+   *
+   * @param tid transaction id
+   * @param fuid from user uid
+   * @param tuid to user uid
+   * @return boolean, can accept/decline or not
+   */
   @Override
   public boolean canAcceptDeclineRequest(Long tid, Long fuid, Long tuid) {
     Transaction t = getRequestById(tid);
@@ -108,11 +166,26 @@ public class RequestServiceImpl implements RequestService {
             && t.getStatus() == TransactionStatus.TRANS_PENDING;
   }
 
+  /**
+   * accept request by changing the status to be COMPLETED.
+   *
+   * @param request transaction to be completed
+   * @return boolean, successful or not
+   */
   @Override
   public boolean acceptRequest(Transaction request) {
     return transactionService.executeTransaction(request);
   }
 
+  /**
+   * EXTERNAL accept a request given request id, from user id
+   * and to user id.
+   *
+   * @param tid transaction id
+   * @param fuid from user id
+   * @param tuid to user id
+   * @return payload containing id of request accepted
+   */
   @Override
   public ResourceCreatedRsp acceptRequest(Long tid, Long fuid, Long tuid) {
     // verify
@@ -129,6 +202,12 @@ public class RequestServiceImpl implements RequestService {
 
   }
 
+  /**
+   * INTERNAL decline a request by marking its status as DENIED.
+   *
+   * @param request request/transaction to be declined
+   * @return TRUE, susccessfully declined
+   */
   @Override
   public boolean declineRequest(Transaction request) {
     // todo refactor to return transaction? or false case
@@ -137,6 +216,15 @@ public class RequestServiceImpl implements RequestService {
     return true;
   }
 
+  /**
+   * EXTERNAL decline a request given request id, from user id
+   * and to user id.
+   *
+   * @param tid transaction id
+   * @param fuid from user id
+   * @param tuid to user id
+   * @return payload containing id of request declined.
+   */
   @Override
   public ResourceCreatedRsp declineRequest(Long tid, Long fuid, Long tuid) {
     // verify
