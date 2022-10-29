@@ -26,6 +26,12 @@ public class SearchController {
     this.searchService = searchService;
   }
 
+  /**
+   * Method to retrieve the public profile of a user by user ID.
+   * Param: id User ID
+   * Return: A user profile response that match the ID
+   * Throws: Exception
+   */
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
   public ResponseEntity<ProfilesRsp> searchById(@PathVariable(value = "id")
@@ -33,6 +39,11 @@ public class SearchController {
     return new ResponseEntity<>(searchService.searchById(id), HttpStatus.OK);
   }
 
+  /**
+   * Method to retrieve a list of public profiles of users matched by search info.
+   * Param: info Email, phone number, or account name of a user
+   * Return: A list of user profiles that match the search string
+   */
   @GetMapping("/info/{info}")
   @Operation(summary =
       "Method to retrieve a list of public profiles of users matched by search info.")

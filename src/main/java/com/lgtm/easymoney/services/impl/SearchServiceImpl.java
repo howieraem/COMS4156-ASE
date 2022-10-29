@@ -31,6 +31,11 @@ public class SearchServiceImpl implements SearchService {
     this.accountRepository = accountRepository;
   }
 
+  /**
+   * Retrieve a user by id.
+   * Param: id
+   * Return: A user
+   */
   @Override
   public User getUserById(Long id) {
     var userWrapper = userRepository.findById(id);
@@ -41,6 +46,11 @@ public class SearchServiceImpl implements SearchService {
     return userWrapper.get();
   }
 
+  /**
+   * Retrieve users by account name.
+   * Param: accountName
+   * Return: A list of users whose account names match the search string
+   */
   @Override
   public List<User> getUserByName(String accountName) {
     var accountWrapper = accountRepository.findByAccountNameContainingIgnoreCase(accountName);
@@ -51,11 +61,22 @@ public class SearchServiceImpl implements SearchService {
     return userList;
   }
 
+  /**
+   * Retrieve users by phone or email.
+   * Param: email
+   * Param: phone
+   * Return: A list of users whose phone or email match the search string
+   */
   @Override
   public List<User> getUserByEmailOrPhone(String email, String phone) {
     return userRepository.findByEmailContainingIgnoreCaseOrPhoneContaining(email, phone);
   }
 
+  /**
+   * Using geUserById to generate a search response for the controller.
+   * Param: id
+   * Return: Search response
+   */
   @Override
   public ProfilesRsp searchById(Long id) {
     //Getting user by id
@@ -80,6 +101,12 @@ public class SearchServiceImpl implements SearchService {
     return searchRes;
   }
 
+  /**
+   * Using getUserByName and getUserByEmailOrPhone
+   * to generate a search response for the controller.
+   * Param: userInfo
+   * Return: Search response
+   */
   @Override
   public ProfilesRsp searchByInfo(String userInfo) {
 
