@@ -77,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\",\n    \"accountName\" : \"test\",\n    \"accountNumber\" : \"1311110\",\n    \"routingNumber\" : \"917354521\",\n    \"userType\" : \"business\",\n    \"bizPromotionText\": \"columbia's takin all my cash.\"\n}",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\",\n    \"accountName\" : \"test\",\n    \"accountNumber\" : \"1311110\",\n    \"routingNumber\" : \"917354521\",\n    \"userType\" : \"business\",\n    \"bizPromotionText\": \"Free goods!\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -269,7 +269,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"fuck this shit\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -340,7 +340,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"fuck this shit\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
