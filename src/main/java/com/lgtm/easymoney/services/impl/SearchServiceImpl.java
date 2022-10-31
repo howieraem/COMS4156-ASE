@@ -116,6 +116,10 @@ public class SearchServiceImpl implements SearchService {
     userList = getUserByEmailOrPhone(userInfo, userInfo);
     userList.addAll(getUserByName(userInfo));
 
+    if(userList.isEmpty()){
+      throw new ResourceNotFoundException("User", "Email or Phone or Account Name", userInfo);
+    }
+
     //Successful search
     boolean searchResult = true;
 
