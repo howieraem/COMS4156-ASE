@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProfilesRsp {
-  boolean success;
   private List<ProfileRsp> userProfiles;
 }

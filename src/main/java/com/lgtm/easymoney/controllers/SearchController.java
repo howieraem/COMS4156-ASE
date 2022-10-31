@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
 
+import com.lgtm.easymoney.payload.ProfileRsp;
 import com.lgtm.easymoney.payload.ProfilesRsp;
 import com.lgtm.easymoney.services.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public class SearchController {
    */
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
-  public ResponseEntity<ProfilesRsp> searchById(@PathVariable(value = "id")
+  public ResponseEntity<ProfileRsp> searchById(@PathVariable(value = "id")
                                                 @NotNull Long id) throws Exception {
     return new ResponseEntity<>(searchService.searchById(id), HttpStatus.OK);
   }
