@@ -61,7 +61,6 @@ public class SearchControllerTest {
 
     //Compose search response
     profilesRsp = new ProfilesRsp();
-    profilesRsp.setSuccess(true);
     profileList = new ArrayList<ProfileRsp>();
     profileList.add(profileRsp);
     profilesRsp.setUserProfiles(profileList);
@@ -71,7 +70,7 @@ public class SearchControllerTest {
   public void searchByIdSuccess() throws Exception {
     // Arrange
     Mockito.when(searchService.searchById(uid))
-            .thenReturn(profilesRsp);
+            .thenReturn(profileRsp);
 
     // Act
     ResultActions returnedResponse = getSearchById(uid);
@@ -79,13 +78,12 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
-            jsonPath("$.userProfiles[0].uid").value(uid),
-            jsonPath("$.userProfiles[0].accountName").value(accountName),
-            jsonPath("$.userProfiles[0].address").value(address),
-            jsonPath("$.userProfiles[0].email").value(email),
-            jsonPath("$.userProfiles[0].phone").value(phone),
-            jsonPath("$.userProfiles[0].userType").value(String.valueOf(userType)));
+            jsonPath("$.uid").value(uid),
+            jsonPath("$.accountName").value(accountName),
+            jsonPath("$.address").value(address),
+            jsonPath("$.email").value(email),
+            jsonPath("$.phone").value(phone),
+            jsonPath("$.userType").value(String.valueOf(userType)));
   }
 
   @Test
@@ -100,7 +98,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),
@@ -121,7 +118,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),
@@ -142,7 +138,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),

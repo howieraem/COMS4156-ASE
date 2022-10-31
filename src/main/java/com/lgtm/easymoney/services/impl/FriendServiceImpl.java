@@ -154,7 +154,7 @@ public class FriendServiceImpl implements FriendService {
         res.add(new ProfileRsp(fs.getUser2()));
       }
     }
-    return new ProfilesRsp(Boolean.TRUE, res);
+    return new ProfilesRsp(res);
   }
 
   /** Get all pending friends by id.
@@ -171,6 +171,6 @@ public class FriendServiceImpl implements FriendService {
         res.add(new ProfileRsp(fs.getUser1()));
       }
     }
-    return new ProfilesRsp(Boolean.TRUE, res);
+    return new ProfilesRsp(res);
   }
 }

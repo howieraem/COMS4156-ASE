@@ -71,7 +71,7 @@ public class FriendControllerTest {
     // profilesrsp
     List<ProfileRsp> res = new ArrayList<>();
     res.add(profileRsp);
-    profilesRsp = new ProfilesRsp(Boolean.TRUE, res);
+    profilesRsp = new ProfilesRsp(res);
   }
 
   @Test
@@ -128,7 +128,6 @@ public class FriendControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid2));
   }
 
@@ -155,7 +154,6 @@ public class FriendControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid2));
   }
 

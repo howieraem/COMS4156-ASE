@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.ProfileRsp;
 import com.lgtm.easymoney.payload.ProfilesRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
@@ -172,12 +173,12 @@ public class SearchServiceImplTest {
 
   @Test
   public void searchByIdSuccess() {
-    ProfilesRsp rsp = searchService.searchById(id1);
-    assertEquals(id1, rsp.getUserProfiles().get(0).getUid());
+    ProfileRsp rsp = searchService.searchById(id1);
+    assertEquals(id1, rsp.getUid());
     assertEquals(user1.getEmail(),
-            rsp.getUserProfiles().get(0).getEmail());
+            rsp.getEmail());
     assertEquals(user1.getAccount().getAccountName(),
-            rsp.getUserProfiles().get(0).getAccountName());
+            rsp.getAccountName());
   }
 
   @Test
