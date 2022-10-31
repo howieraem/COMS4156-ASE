@@ -65,6 +65,8 @@ We follow style rules of Google checks. You may see warnings/errors if you run s
 Below is the screenshot for checking entire project using `checkstyle` plugin from intellij, no errors occured.
 ![img.png](img.png)
 
-## How to deploy
+## Deployment
 
-(TODO)
+Our service is hosted on <http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/>.
+
+This repo also includes a [collection of Postman test requests for the deployed service](remote_server_system_tests.postman_collection.json). You can import it to your Postman workspace by following steps 2-4 of [the instructions above](#how-to-run-multi-client-system-tests-with-postman), but keep in mind that these are just API invocation examples. Before sending requests to the remote server, many of the request parameters need to be modified as the remote database may already contain relevant records.
