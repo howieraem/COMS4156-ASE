@@ -7,6 +7,7 @@ import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * user service interface. restful api for accessing users.
@@ -30,6 +31,5 @@ public interface UserService {
 
   boolean makeWithdraw(User user, BigDecimal amount);
 
-  
-
+  public UserDetails loadUserById(Long id);
 }

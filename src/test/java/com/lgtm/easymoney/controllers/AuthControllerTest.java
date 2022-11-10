@@ -198,7 +198,7 @@ public class AuthControllerTest {
   }
 
   private ResultActions postRegister(RegisterReq req) throws Exception {
-    return mvc.perform(post("/user/register")
+    return mvc.perform(post("/auth/register")
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));

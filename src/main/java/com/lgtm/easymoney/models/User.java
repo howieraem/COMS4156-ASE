@@ -68,6 +68,9 @@ public class User implements Serializable {
   @JoinColumn(name = "aid", referencedColumnName = "id")
   private Account account;
 
+  @OneToOne(mappedBy = "bizUser", cascade = CascadeType.ALL)
+  private BizProfile bizProfile;
+
   @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<Friendship> friendships;
 
@@ -82,9 +85,6 @@ public class User implements Serializable {
   private Set<Transaction> transactionsSent;
   @OneToMany(mappedBy = "to", fetch = FetchType.LAZY)
   private Set<Transaction> transactionsReceived;
-
-  @OneToOne(mappedBy = "bizUser", optional = true, cascade = CascadeType.ALL)
-  private BizProfile bizProfile;
 
   /**
    * set user type, either personal, business, or financial.

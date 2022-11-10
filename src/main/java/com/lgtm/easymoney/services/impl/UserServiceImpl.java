@@ -11,10 +11,14 @@ import com.lgtm.easymoney.payload.BalanceRsp;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
+import com.lgtm.easymoney.security.CustomUserDetails;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
  * User service implementation, containing logics of CRUD of users.
  */
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
   private final UserRepository userRepository;
 
   /**
    * Constructor of user service.
    *
-   * @param userRepository JPA repository to perform CRUD in user table
+   * @param userRepository JPA repository to perform CRUD in user table.
    */
   @Autowired
   public UserServiceImpl(UserRepository userRepository) {
@@ -44,11 +48,8 @@ public class UserServiceImpl implements UserService {
   /** Retrieve the user with id if exists, otherwise throws a ResourceNotFound exception. */
   @Override
   public User getUserById(Long id) {
-    var userWrapper = userRepository.findById(id);
-    if (userWrapper.isEmpty()) {
-      throw new ResourceNotFoundException("User", "id", id);
-    }
-    return userWrapper.get();
+    return userRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
   }
 
   /** Save the user to the user table, which may be invoked by create or update. */
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
   public User buildUser(RegisterReq registerReq) {
     var user = new User();
     user.setEmail(registerReq.getEmail());
-    user.setPassword(registerReq.getPassword());  // TODO spring security password encoding
+    user.setPassword(registerReq.getPassword());
     user.setTypeByStr(registerReq.getUserType());
     user.setPhone(registerReq.getPhone());
     user.setAddress(registerReq.getAddress());
@@ -162,5 +163,17 @@ public class UserServiceImpl implements UserService {
     return new BalanceRsp(user.getBalance());
   }
 
+  @Override
+  @Transactional
+  public UserDetails loadUserById(Long id) {
+    return new CustomUserDetails(getUserById(id));
+  }
 
+  @Override
+  @Transactional
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    var usr = userRepository.findByEmail(email);
+    return usr.map(CustomUserDetails::new)
+        .orElseThrow(() -> new UsernameNotFoundException(email));
+  }
 }
