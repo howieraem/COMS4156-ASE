@@ -96,45 +96,6 @@ public class UserServiceImplTest {
   }
 
   @Test
-  public void shouldCreateUser() {
-    // Register req payload passed to UserService has been validated
-    RegisterReq req = new RegisterReq();
-    req.setEmail("c@c.com");
-    req.setPassword("c");
-    req.setUserType("BUSINESS");
-    req.setPhone("1234567890");
-    req.setAddress("2960 Broadway");
-    req.setAccountName("c");
-    req.setAccountNumber("789");
-    req.setRoutingNumber("123456789");
-    req.setBizPromotionText("hello");
-
-    var user = userService.buildUser(req);
-    assertEquals(user.getEmail(), req.getEmail());
-    assertEquals(user.getPassword(), req.getPassword());
-    assertEquals(user.getType(), UserType.valueOf(req.getUserType()));
-    assertEquals(user.getPhone(), req.getPhone());
-    assertEquals(user.getAddress(), req.getAddress());
-    var account = user.getAccount();
-    assertEquals(account.getAccountName(), req.getAccountName());
-    assertEquals(account.getAccountNumber(), req.getAccountNumber());
-    assertEquals(account.getRoutingNumber(), req.getRoutingNumber());
-    var bisProfile = user.getBizProfile();
-    assertEquals(bisProfile.getPromotionText(), req.getBizPromotionText());
-
-    Long expectedId = 3L;
-
-    // Assume userRepository.save() always succeeds
-    Mockito.doAnswer(invocation -> {
-      ReflectionTestUtils.setField((User) invocation.getArgument(0), "id", expectedId);
-      return invocation.getArgument(0);
-    }).when(userRepository).save(Mockito.any(User.class));
-
-    var rsp = userService.createUser(req);
-    assertEquals(rsp.getId(), expectedId);
-  }
-
-  @Test
   public void shouldSaveUser() {
     User user = new User();
     user.setEmail("c@c.com");

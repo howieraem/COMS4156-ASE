@@ -65,46 +65,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   }
 
   /**
-   * create a user.
-   *
-   * @param registerReq request of register info
-   * @return uid if createed successfully.
-   */
-  @Override
-  public ResourceCreatedRsp createUser(RegisterReq registerReq) {
-    return new ResourceCreatedRsp(saveUser(buildUser(registerReq)).getId());
-  }
-
-  /**
-   * build user given register request.
-   *
-   * @param registerReq request.
-   * @return user
-   */
-  public User buildUser(RegisterReq registerReq) {
-    var user = new User();
-    user.setEmail(registerReq.getEmail());
-    user.setPassword(registerReq.getPassword());
-    user.setTypeByStr(registerReq.getUserType());
-    user.setPhone(registerReq.getPhone());
-    user.setAddress(registerReq.getAddress());
-
-    var account = new Account();
-    account.setAccountName(registerReq.getAccountName());
-    account.setAccountNumber(registerReq.getAccountNumber());
-    account.setRoutingNumber(registerReq.getRoutingNumber());
-    user.setAccount(account);
-
-    if (user.getType() != UserType.PERSONAL) {
-      BizProfile bizProfile = new BizProfile();
-      bizProfile.setPromotionText(registerReq.getBizPromotionText());
-      user.setBizProfile(bizProfile);
-      bizProfile.setBizUser(user);
-    }
-    return user;
-  }
-
-  /**
    * Deposit the specified amount of money to the user's balance
    * (assume money is deducted from the registered bank account).
    */

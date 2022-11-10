@@ -21,8 +21,6 @@ public interface UserService {
 
   List<User> getAllUsers();
 
-  ResourceCreatedRsp createUser(RegisterReq registerReq);
-
   boolean makeDeposit(User user, BigDecimal amount);
 
   BalanceRsp makeDeposit(BalanceReq req);
