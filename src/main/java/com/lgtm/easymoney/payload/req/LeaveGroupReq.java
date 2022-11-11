@@ -9,8 +9,5 @@ import lombok.Data;
 @Data
 public class LeaveGroupReq {
   @NotNull
-  private Long uid;
-
-  @NotNull
   private Long gid;
 }

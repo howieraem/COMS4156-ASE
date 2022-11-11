@@ -5,7 +5,7 @@ import com.lgtm.easymoney.configs.DbConsts;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidTokenRequestException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
-import com.lgtm.easymoney.exceptions.OtherValidationException;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.rsp.ErrorRsp;
 import java.io.IOException;
@@ -46,11 +46,11 @@ public class ControllerExceptionHandler {
             .body(new ErrorRsp(errorFields, errorMessage));
   }
 
-  /** This handles exceptions caused by advanced validation scenarios. */
-  @ExceptionHandler(OtherValidationException.class)
-  public ResponseEntity<ErrorRsp> handle(final OtherValidationException ex) {
+  /** This handles exceptions caused by unauthorized client operations. */
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorRsp> handle(final UnauthorizedException ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body(new ErrorRsp(ex.getFieldNames(), ex.getMessage()));
+        .body(new ErrorRsp(List.of(tokenRequestHeader), ex.getMessage()));
   }
 
   /** This handles exceptions caused by invalid path variables. */

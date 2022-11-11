@@ -17,17 +17,13 @@ public interface GroupService {
 
   ResourceCreatedRsp createGroup(User creator, CreateGroupReq createGroupReq);
 
-  void inviteToGroup(InviteToGroupReq inviteToGroupReq);
+  void inviteToGroup(User inviter, InviteToGroupReq inviteToGroupReq);
 
-  void leaveGroup(LeaveGroupReq leaveGroupReq);
+  void leaveGroup(User user, LeaveGroupReq leaveGroupReq);
 
-  void leaveGroup(Group group, User user);
+  GroupRsp getGroupProfile(User user, Long gid);
 
-  GroupRsp getGroupProfile(Long gid);
-
-  GroupAdsRsp getGroupAds(Long gid);
-
-  void joinGroup(Group group, User user);
+  GroupAdsRsp getGroupAds(User user, Long gid);
 
   boolean isInGroup(Group group, User user);
 }

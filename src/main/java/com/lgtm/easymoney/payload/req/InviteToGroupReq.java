@@ -12,8 +12,5 @@ public class InviteToGroupReq {
   private Long gid;
 
   @NotNull
-  private Long inviterId;
-
-  @NotNull
   private Long inviteeId;
 }

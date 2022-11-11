@@ -9,6 +9,7 @@ import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
 import java.util.List;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -95,7 +96,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     var usr = userRepository.findByEmail(email);
-    return usr.map(UserPrincipal::new)
-        .orElseThrow(() -> new UsernameNotFoundException(email));
+    if (usr == null) {
+      throw new UsernameNotFoundException(email);
+    }
+    Hibernate.initialize(usr.getFriendships());
+    Hibernate.initialize(usr.getGroups());
+    return new UserPrincipal(usr);
   }
 }
