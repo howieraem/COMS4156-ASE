@@ -1,13 +1,9 @@
 package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * user service interface. restful api for accessing users.

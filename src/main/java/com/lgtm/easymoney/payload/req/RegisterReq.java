@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.req;
 
 import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;

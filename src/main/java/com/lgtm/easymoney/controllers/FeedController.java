@@ -1,6 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.FeedRsp;
+import com.lgtm.easymoney.payload.rsp.FeedRsp;
 import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.FeedService;

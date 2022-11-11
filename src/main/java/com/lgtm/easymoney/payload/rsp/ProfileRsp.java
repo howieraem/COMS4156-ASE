@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.rsp;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.models.User;

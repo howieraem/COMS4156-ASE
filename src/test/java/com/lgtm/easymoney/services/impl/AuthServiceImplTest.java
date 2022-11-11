@@ -3,7 +3,7 @@ package com.lgtm.easymoney.services.impl;
 import static org.junit.Assert.assertEquals;
 
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.req.BalanceReq;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;

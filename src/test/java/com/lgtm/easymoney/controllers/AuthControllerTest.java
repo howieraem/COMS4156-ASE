@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.services.UserService;
 import org.junit.Before;
 import org.junit.Test;

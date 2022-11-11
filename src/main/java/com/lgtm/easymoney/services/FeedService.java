@@ -1,14 +1,8 @@
 package com.lgtm.easymoney.services;
 
-import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
-import com.lgtm.easymoney.payload.FeedActivityRsp;
-import com.lgtm.easymoney.payload.FeedRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import java.math.BigDecimal;
+import com.lgtm.easymoney.payload.rsp.FeedActivityRsp;
+import com.lgtm.easymoney.payload.rsp.FeedRsp;
 import java.util.List;
 
 /**

@@ -10,13 +10,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.services.GroupService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -42,6 +44,9 @@ public class GroupControllerTest {
 
   @MockBean
   private GroupService groupService;
+
+  @MockBean
+  private UserServiceImpl userService;
 
   private CreateGroupReq createGroupReq;
 
@@ -93,7 +98,7 @@ public class GroupControllerTest {
 
   @Test
   public void createGroupSuccess() throws Exception {
-    Mockito.when(groupService.createGroup(createGroupReq))
+    Mockito.when(groupService.createGroup(Mockito.any(User.class), createGroupReq))
         .thenReturn(createdRsp);
 
     var resultActions = postCreate(createGroupReq);

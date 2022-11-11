@@ -11,10 +11,11 @@ import com.lgtm.easymoney.exceptions.handlers.ControllerExceptionHandler;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.repositories.GroupRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
+import com.lgtm.easymoney.security.UserPrincipal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -51,6 +52,7 @@ public class DataIntegrityTest {
   private GroupRepository groupRepository;
 
   private static User user;
+  private static UserPrincipal principal;
   private static Group group;
   private static RegisterReq registerReq;
   private static CreateGroupReq createGroupReq;
@@ -74,6 +76,8 @@ public class DataIntegrityTest {
     a1.setRoutingNumber("123456789");
     user.setAccount(a1);
     user = userRepository.saveAndFlush(user);
+
+    principal = new UserPrincipal(user);
 
     Set<User> users = new HashSet<>();
     users.add(user);
@@ -138,7 +142,7 @@ public class DataIntegrityTest {
     createGroupReq.setName(group.getName());
 
     var ex = assertThrows(DataIntegrityViolationException.class, () -> {
-      groupController.createGroup(createGroupReq);
+      groupController.createGroup(principal, createGroupReq);
     });
 
     var rsp = controllerExceptionHandler.handle(ex);

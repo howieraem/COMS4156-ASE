@@ -4,8 +4,8 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.FeedActivityRsp;
-import com.lgtm.easymoney.payload.FeedRsp;
+import com.lgtm.easymoney.payload.rsp.FeedActivityRsp;
+import com.lgtm.easymoney.payload.rsp.FeedRsp;
 import com.lgtm.easymoney.services.FeedService;
 import com.lgtm.easymoney.services.FriendService;
 import com.lgtm.easymoney.services.TransactionService;
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**

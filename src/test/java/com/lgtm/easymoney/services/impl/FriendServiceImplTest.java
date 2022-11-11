@@ -5,16 +5,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import com.lgtm.easymoney.controllers.FriendController;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.req.FriendshipReq;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.repositories.FriendshipRepository;
 import com.lgtm.easymoney.services.UserService;
 import java.util.List;
@@ -25,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 

@@ -2,12 +2,12 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 
 /**
  * group service.
@@ -15,7 +15,7 @@ import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 public interface GroupService {
   Group getGroupById(Long gid);
 
-  ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq);
+  ResourceCreatedRsp createGroup(User creator, CreateGroupReq createGroupReq);
 
   void inviteToGroup(InviteToGroupReq inviteToGroupReq);
 

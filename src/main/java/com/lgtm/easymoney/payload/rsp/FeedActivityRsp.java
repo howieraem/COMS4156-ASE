@@ -1,7 +1,6 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.rsp;
 
 import com.lgtm.easymoney.enums.Category;
-import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.enums.UserType;
 import java.math.BigDecimal;
 import java.util.Date;

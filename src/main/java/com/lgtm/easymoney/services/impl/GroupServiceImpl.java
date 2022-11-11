@@ -2,15 +2,16 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
+import com.lgtm.easymoney.exceptions.OtherValidationException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.GroupRepository;
 import com.lgtm.easymoney.services.GroupService;
 import com.lgtm.easymoney.services.UserService;
@@ -85,11 +86,21 @@ public class GroupServiceImpl implements GroupService {
 
   /** Create a group of users (maybe of different types) given info in the request payload. */
   @Override
-  public ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq) {
+  public ResourceCreatedRsp createGroup(User creator, CreateGroupReq createGroupReq) {
     Set<User> users = new HashSet<>();
+    boolean valid = false;
     for (Long uid : createGroupReq.getUids()) {
       users.add(userService.getUserById(uid));
+      if (!valid && uid.equals(creator.getId())) {
+        valid = true;
+      }
     }
+
+    if (!valid) {
+      throw new OtherValidationException(
+          "Group creator is not in uids!", List.of("uids"));
+    }
+
     Group group = new Group();
     group.setGroupUsers(users);
     group.setName(createGroupReq.getName());

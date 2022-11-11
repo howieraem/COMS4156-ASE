@@ -6,12 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.repositories.UserRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;

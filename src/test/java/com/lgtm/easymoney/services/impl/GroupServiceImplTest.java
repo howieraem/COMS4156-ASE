@@ -8,11 +8,11 @@ import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.GroupRepository;
 import com.lgtm.easymoney.services.UserService;
 import java.util.HashSet;
@@ -131,7 +131,7 @@ public class GroupServiceImplTest {
       return invocation.getArgument(0);
     }).when(groupRepository).save(Mockito.any(Group.class));
 
-    var rsp = groupService.createGroup(createGroupReq);
+    var rsp = groupService.createGroup(user1, createGroupReq);
 
     assertEquals(rsp, createdRsp);
   }

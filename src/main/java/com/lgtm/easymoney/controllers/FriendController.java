@@ -1,7 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.req.FriendshipReq;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.services.FriendService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;

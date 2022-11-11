@@ -1,11 +1,10 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransferReq;
-import com.lgtm.easymoney.payload.TransferRsp;
+import com.lgtm.easymoney.payload.req.TransferReq;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransferRsp;
 import com.lgtm.easymoney.services.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

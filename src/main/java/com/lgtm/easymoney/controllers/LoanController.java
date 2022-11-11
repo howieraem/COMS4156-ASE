@@ -1,9 +1,9 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.LoanRsp;
-import com.lgtm.easymoney.payload.RequestAcceptDeclineReq;
-import com.lgtm.easymoney.payload.RequestReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.RequestAcceptDeclineReq;
+import com.lgtm.easymoney.payload.req.RequestReq;
+import com.lgtm.easymoney.payload.rsp.LoanRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.services.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;

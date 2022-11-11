@@ -4,7 +4,7 @@ package com.lgtm.easymoney.services;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.TransactionRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
 import java.util.List;
 
 /**

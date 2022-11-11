@@ -3,7 +3,7 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
