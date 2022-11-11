@@ -53,7 +53,6 @@ public class UserControllerTest {
     Mockito.when(userService.getUserById(uid)).thenReturn(user);
 
     req = new BalanceReq();
-    req.setUid(uid);
   }
 
   @Test
@@ -110,7 +109,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.errorFields").value("amount"));
 
     req.setAmount(new BigDecimal(2000));
-    Mockito.when(userService.makeWithdraw(req))
+    Mockito.when(userService.makeWithdraw(user, req.getAmount()))
         .thenThrow(new InvalidUpdateException("User", user.getId(), "amount", req.getAmount()));
     putWithdraw(req).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("amount"));

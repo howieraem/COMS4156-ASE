@@ -17,5 +17,5 @@ import java.util.List;
 public interface FeedService {
   List<FeedActivityRsp> getFeedByUser(User u);  // internal
 
-  FeedRsp getFeedByUid(Long uid); // external
+  FeedRsp getFeed(User u); // external
 }

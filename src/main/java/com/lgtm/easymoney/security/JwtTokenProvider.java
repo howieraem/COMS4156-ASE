@@ -26,10 +26,10 @@ public class JwtTokenProvider {
    * Generates a token from a principal object. Embed the refresh token in the jwt
    * so that a new jwt can be created
    */
-  public String generateTokenFromUserId(Long userId) {
+  public String generateToken(String email) {
     Instant expiryDate = Instant.now().plusMillis(jwtExpirationInMs);
     return Jwts.builder()
-        .setSubject(Long.toString(userId))
+        .setSubject(email)
         .setIssuedAt(new Date())
         .setExpiration(Date.from(expiryDate))
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -39,13 +39,13 @@ public class JwtTokenProvider {
   /**
    * Returns the user id encapsulated within the token.
    */
-  public Long getUserIdFromJwt(String token) {
+  public String getUsernameFromJwt(String token) {
     Claims claims = Jwts.parser()
         .setSigningKey(jwtSecret)
         .parseClaimsJws(token)
         .getBody();
 
-    return Long.parseLong(claims.getSubject());
+    return claims.getSubject();
   }
 
   /**

@@ -47,15 +47,19 @@ public class UserServiceImplTest {
 
   private Long nonExistId = 3L;
 
+  private User user1;
+
+  private User user2;
+
   /** Establish users for further testing. */
   @Before
   public void setUp() {
-    User user1 = new User();
+    user1 = new User();
     user1.setId(uid1);
     user1.setEmail(email1);
     user1.setPassword(pwd1);
 
-    User user2 = new User();
+    user2 = new User();
     user2.setId(uid2);
     user2.setEmail(email2);
     user2.setPassword(pwd2);
@@ -123,29 +127,24 @@ public class UserServiceImplTest {
 
   @Test
   public void shouldDepositSuccessfully() {
-    BalanceReq req = new BalanceReq();
-    req.setUid(1L);
-    req.setAmount(new BigDecimal(100));
-    var rsp = userService.makeDeposit(req);
+    var amount = new BigDecimal(100);
+    var rsp = userService.makeDeposit(user1, amount);
     assertNotNull(rsp);
-    assertEquals(rsp.getCurrBalance(), req.getAmount());
+    assertEquals(rsp.getCurrBalance(), amount);
   }
 
   @Test
   public void shouldWithdrawSuccessfully() {
-    BalanceReq req = new BalanceReq();
-    req.setUid(2L);
-    req.setAmount(new BigDecimal(100));
-    var rsp = userService.makeWithdraw(req);
+    var amount = new BigDecimal(100);
+    user1.setBalance(amount);
+    var rsp = userService.makeWithdraw(user1, amount);
     assertNotNull(rsp);
     assertEquals(rsp.getCurrBalance(), BigDecimal.ZERO);
   }
 
   @Test
   public void shouldNotWithdrawIfAmountExceedsBalance() {
-    BalanceReq req = new BalanceReq();
-    req.setUid(1L);
-    req.setAmount(new BigDecimal(100));
-    assertThrows(InvalidUpdateException.class, () -> userService.makeWithdraw(req));
+    var amount = new BigDecimal(100);
+    assertThrows(InvalidUpdateException.class, () -> userService.makeWithdraw(user1, amount));
   }
 }

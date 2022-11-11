@@ -91,14 +91,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     return new BalanceRsp(user.getBalance());
   }
 
-  @Override
   @Transactional
-  public UserDetails loadUserById(Long id) {
-    return new UserPrincipal(getUserById(id));
-  }
-
   @Override
-  @Transactional
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     var usr = userRepository.findByEmail(email);
     return usr.map(UserPrincipal::new)

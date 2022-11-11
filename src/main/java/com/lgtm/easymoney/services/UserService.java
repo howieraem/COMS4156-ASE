@@ -24,6 +24,4 @@ public interface UserService {
   BalanceRsp makeDeposit(User user, BigDecimal amount);
 
   BalanceRsp makeWithdraw(User user, BigDecimal amount);
-
-  UserDetails loadUserById(Long id);
 }

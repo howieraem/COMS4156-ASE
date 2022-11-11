@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FriendServiceImpl implements FriendService {
   private final UserService userService;
 
-  @Autowired
   private final FriendshipRepository friendshipRepository;
 
   @Autowired

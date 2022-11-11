@@ -7,8 +7,8 @@ import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.LoginReq;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.security.JwtTokenProvider;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.AuthService;
 import com.lgtm.easymoney.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +83,6 @@ public class AuthServiceImpl implements AuthService {
     );
     SecurityContextHolder.getContext().setAuthentication(authentication);
     UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
-    return jwtTokenProvider.generateTokenFromUserId(userDetails.getId());
+    return jwtTokenProvider.generateToken(userDetails.getUsername());
   }
 }
