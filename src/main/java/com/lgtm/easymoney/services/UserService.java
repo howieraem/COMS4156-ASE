@@ -21,13 +21,9 @@ public interface UserService {
 
   List<User> getAllUsers();
 
-  boolean makeDeposit(User user, BigDecimal amount);
+  BalanceRsp makeDeposit(User user, BigDecimal amount);
 
-  BalanceRsp makeDeposit(BalanceReq req);
+  BalanceRsp makeWithdraw(User user, BigDecimal amount);
 
-  BalanceRsp makeWithdraw(BalanceReq req);
-
-  boolean makeWithdraw(User user, BigDecimal amount);
-
-  public UserDetails loadUserById(Long id);
+  UserDetails loadUserById(Long id);
 }

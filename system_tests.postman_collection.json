@@ -178,10 +178,16 @@
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"uid\" : \"3\",\n    \"amount\" : \"200\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -197,6 +203,40 @@
 					"path": [
 						"user",
 						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdraw user 1 200",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/withdraw",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"withdraw"
 					]
 				}
 			},

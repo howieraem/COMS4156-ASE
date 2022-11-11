@@ -1,21 +1,17 @@
 package com.lgtm.easymoney.security;
 
+import com.lgtm.easymoney.exceptions.InvalidTokenRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+/** Generates jwt given user info and expiration time. */
 @Component
 public class JwtTokenProvider {
-  private static final String AUTHORITIES_CLAIM = "authorities";
   private final String jwtSecret;
   private final long jwtExpirationInMs;
 
@@ -73,27 +69,18 @@ public class JwtTokenProvider {
   }
 
   /**
-   * Return the jwt authorities claim encapsulated within the token.
+   * Validates if a token satisfies the following properties.
+   * - Signature is not malformed
+   * - Token hasn't expired
+   * - Token is supported
    */
-  public List<GrantedAuthority> getAuthoritiesFromJwt(String token) {
-    Claims claims = Jwts.parser()
-        .setSigningKey(jwtSecret)
-        .parseClaimsJws(token)
-        .getBody();
-    return Arrays.stream(claims.get(AUTHORITIES_CLAIM).toString().split(","))
-        .map(SimpleGrantedAuthority::new)
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Private helper method to extract user authorities.
-   */
-  private String getUserAuthorities(CustomUserDetails customUserDetails) {
-    return customUserDetails
-        .getAuthorities()
-        .stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(","));
+  public boolean validateToken(String authToken) {
+    try {
+      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+    } catch (RuntimeException ex) {
+      throw new InvalidTokenRequestException("Malformed, expired or unsupported token", authToken);
+    }
+    return true;
   }
 
 }

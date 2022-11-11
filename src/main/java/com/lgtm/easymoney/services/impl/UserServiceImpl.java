@@ -1,17 +1,11 @@
 package com.lgtm.easymoney.services.impl;
 
-import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.models.Account;
-import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
 import com.lgtm.easymoney.payload.BalanceRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
-import com.lgtm.easymoney.security.CustomUserDetails;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
 import java.util.List;
@@ -70,24 +64,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public boolean makeDeposit(User user, BigDecimal amount) {
+  public BalanceRsp makeDeposit(User user, BigDecimal amount) {
     var balance = user.getBalance();
     balance = balance.add(amount);
     user.setBalance(balance);
     saveUser(user);
-    return true;
-  }
-
-  /** Deposit money to the user's balance given info in the request payload. */
-  @Override
-  public BalanceRsp makeDeposit(BalanceReq req) {
-    // get params
-    Long uid = req.getUid();
-    BigDecimal amount = req.getAmount();
-    // make a deposit
-    User user = getUserById(uid);
-    makeDeposit(user, amount);
-    // payload
     return new BalanceRsp(user.getBalance());
   }
 
@@ -98,7 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public boolean makeWithdraw(User user, BigDecimal amount) {
+  public BalanceRsp makeWithdraw(User user, BigDecimal amount) {
     var balance = user.getBalance();
     if (balance.compareTo(amount) < 0) {
       // Not enough balance
@@ -107,33 +88,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     balance = balance.subtract(amount);
     user.setBalance(balance);
     saveUser(user);
-    return true;
-  }
-
-  /** Withdraw money from the user's balance given info in the request payload. */
-  @Override
-  public BalanceRsp makeWithdraw(BalanceReq req) {
-    // get params
-    Long uid = req.getUid();
-    BigDecimal amount = req.getAmount();
-    // make a withdraw
-    User user = getUserById(uid);
-    makeWithdraw(user, amount);
-    // payload
     return new BalanceRsp(user.getBalance());
   }
 
   @Override
   @Transactional
   public UserDetails loadUserById(Long id) {
-    return new CustomUserDetails(getUserById(id));
+    return new UserPrincipal(getUserById(id));
   }
 
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     var usr = userRepository.findByEmail(email);
-    return usr.map(CustomUserDetails::new)
+    return usr.map(UserPrincipal::new)
         .orElseThrow(() -> new UsernameNotFoundException(email));
   }
 }

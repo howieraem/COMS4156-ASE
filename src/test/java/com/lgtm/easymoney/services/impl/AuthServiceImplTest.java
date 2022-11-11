@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.services.impl;
 
-import com.lgtm.easymoney.enums.UserType;
+import static org.junit.Assert.assertEquals;
+
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.services.UserService;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit tests for auth service implementation.

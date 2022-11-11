@@ -8,17 +8,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class CustomUserDetails extends User implements UserDetails {
-  public CustomUserDetails(final User user) {
-    setId(user.getId());
-    setEmail(user.getEmail());
-    setPassword(user.getPassword());
-    setPhone(user.getPhone());
-    setAddress(user.getAddress());
-    setType(user.getType());
-    setBalance(user.getBalance());
-    setAccount(user.getAccount());
-    setBizProfile(user.getBizProfile());
+/** A wrapper of the User class to retrieve user details with a jwt. */
+public class UserPrincipal implements UserDetails {
+  private final User user;
+
+  /** Construct user details by copying attributes of an existing user. */
+  public UserPrincipal(final User user) {
+    this.user = user;
+  }
+
+  public Long getId() {
+    return user.getId();
+  }
+
+  public User get() {
+    return user;
   }
 
   @Override
@@ -28,12 +32,12 @@ public class CustomUserDetails extends User implements UserDetails {
 
   @Override
   public String getPassword() {
-    return super.getPassword();
+    return user.getPassword();
   }
 
   @Override
   public String getUsername() {
-    return super.getEmail();
+    return user.getEmail();
   }
 
   @Override
@@ -69,7 +73,7 @@ public class CustomUserDetails extends User implements UserDetails {
     if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    CustomUserDetails that = (CustomUserDetails) obj;
+    UserPrincipal that = (UserPrincipal) obj;
     return Objects.equals(getId(), that.getId());
   }
 }

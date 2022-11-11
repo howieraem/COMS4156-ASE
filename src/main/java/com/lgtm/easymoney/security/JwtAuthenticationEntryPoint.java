@@ -10,6 +10,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+/** Configure the actions whenever an unauthenticated client tries to access private resources. */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

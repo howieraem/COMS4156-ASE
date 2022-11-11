@@ -7,7 +7,7 @@ import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.LoginReq;
 import com.lgtm.easymoney.payload.RegisterReq;
 import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.security.CustomUserDetails;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.AuthService;
 import com.lgtm.easymoney.services.UserService;
@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/** Implementation of auth service. */
 @Service
 public class AuthServiceImpl implements AuthService {
   private final UserService userService;
@@ -29,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
   private final PasswordEncoder passwordEncoder;
 
+  /** Constructor of auth service. */
   @Autowired
   public AuthServiceImpl(
       UserService userService,
@@ -80,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         )
     );
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+    UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
     return jwtTokenProvider.generateTokenFromUserId(userDetails.getId());
   }
 }
