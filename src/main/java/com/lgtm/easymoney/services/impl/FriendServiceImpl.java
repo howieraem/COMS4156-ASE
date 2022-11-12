@@ -1,7 +1,5 @@
 package com.lgtm.easymoney.services.impl;
 
-import static com.lgtm.easymoney.configs.DbConsts.FRIENDSHIP_PRIMARY_CONSTRAINT;
-
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;

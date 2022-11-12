@@ -4,7 +4,6 @@ import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 
 /**
