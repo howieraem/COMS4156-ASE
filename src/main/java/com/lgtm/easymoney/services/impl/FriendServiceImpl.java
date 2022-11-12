@@ -135,7 +135,6 @@ public class FriendServiceImpl implements FriendService {
     if (fs2 != null) {
       friendshipRepository.delete(fs2);
     }
-    System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
   }
 
   /**
