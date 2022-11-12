@@ -72,7 +72,7 @@ public class User implements Serializable {
   @OneToOne(mappedBy = "bizUser", cascade = CascadeType.ALL)
   private BizProfile bizProfile;
 
-  @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user1", fetch = FetchType.LAZY)
   private Set<Friendship> friendships;
 
   @ManyToMany(mappedBy = "groupUsers", fetch = FetchType.LAZY)
