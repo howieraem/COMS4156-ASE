@@ -1,11 +1,13 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
@@ -38,23 +40,29 @@ public class GroupController {
   @PostMapping("/create")
   @Operation(summary = "Method for new group creation.")
   public ResponseEntity<ResourceCreatedRsp> createGroup(
+      @CurrentUser UserPrincipal principal,
       @Valid @RequestBody CreateGroupReq createGroupReq) {
-    return new ResponseEntity<>(groupService.createGroup(createGroupReq), HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        groupService.createGroup(principal.get(), createGroupReq), HttpStatus.CREATED);
   }
 
   /** Invite a user to a group by a group member. */
   @PutMapping("/invite")
   @Operation(summary = "Method for a user to invite another user to a group.")
-  public ResponseEntity<Void> inviteToGroup(@Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
-    groupService.inviteToGroup(inviteToGroupReq);
+  public ResponseEntity<Void> inviteToGroup(
+      @CurrentUser UserPrincipal principal,
+      @Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
+    groupService.inviteToGroup(principal.get(), inviteToGroupReq);
     return ResponseEntity.ok().build();
   }
 
   /** Let a user leave a group. */
   @PutMapping("/leave")
   @Operation(summary = "Method for a user to leave a group.")
-  public ResponseEntity<Void> leaveGroup(@Valid @RequestBody LeaveGroupReq leaveGroupReq) {
-    groupService.leaveGroup(leaveGroupReq);
+  public ResponseEntity<Void> leaveGroup(
+      @CurrentUser UserPrincipal principal,
+      @Valid @RequestBody LeaveGroupReq leaveGroupReq) {
+    groupService.leaveGroup(principal.get(), leaveGroupReq);
     return ResponseEntity.ok().build();
   }
 
@@ -62,8 +70,11 @@ public class GroupController {
   @GetMapping("/{id}")
   @Operation(summary =
       "Method to get a group's name, description and the list of user IDs, by a group ID.")
-  public ResponseEntity<GroupRsp> getGroup(@PathVariable(value = "id") @NotNull Long id) {
-    return new ResponseEntity<>(groupService.getGroupProfile(id), HttpStatus.OK);
+  public ResponseEntity<GroupRsp> getGroup(
+      @CurrentUser UserPrincipal principal,
+      @PathVariable(value = "id") @NotNull Long id) {
+    return new ResponseEntity<>(
+        groupService.getGroupProfile(principal.get(), id), HttpStatus.OK);
   }
 
   /** Get a list of ads from the business users in a group. */
@@ -71,7 +82,10 @@ public class GroupController {
   @Operation(summary =
           "Method to get a group's ads(texts from business profiles"
                   + "), description and the list of user IDs, by a group ID.")
-  public ResponseEntity<GroupAdsRsp> getGroupAds(@PathVariable(value = "id") @NotNull Long id) {
-    return new ResponseEntity<>(groupService.getGroupAds(id), HttpStatus.OK);
+  public ResponseEntity<GroupAdsRsp> getGroupAds(
+      @CurrentUser UserPrincipal principal,
+      @PathVariable(value = "id") @NotNull Long id) {
+    return new ResponseEntity<>(
+        groupService.getGroupAds(principal.get(), id), HttpStatus.OK);
   }
 }

@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.rsp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

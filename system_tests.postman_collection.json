@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b4512586-4ef9-46dc-85f2-c209399b563f",
-		"name": "4156 EasyMoney LGTM",
+		"_postman_id": "10175852-3c84-41e0-899e-93dc8e4871c9",
+		"name": "4156 EasyMoney LGTM Local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24027110"
 	},
@@ -21,14 +21,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user1 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -49,13 +77,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -77,13 +105,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -105,13 +133,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -133,13 +161,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -150,10 +178,16 @@
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"uid\" : \"3\",\n    \"amount\" : \"200\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -169,6 +203,40 @@
 					"path": [
 						"user",
 						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdraw user 1 200",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/withdraw",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"withdraw"
 					]
 				}
 			},
@@ -348,7 +416,7 @@
 					"query": [
 						{
 							"key": "",
-							"value": null,
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -504,7 +572,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uids\": [1, 2],\n    \"name\": \"Test Group\",\n    \"description\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -527,7 +595,7 @@
 			"response": []
 		},
 		{
-			"name": "search users",
+			"name": "search users by id",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -541,6 +609,106 @@
 						"search",
 						"info",
 						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users by account name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/22",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users by phone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/22",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users by email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/222@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"222@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users partial match",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/22",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search failed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/222@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"222@gmail.com"
 					]
 				}
 			},
@@ -612,7 +780,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"

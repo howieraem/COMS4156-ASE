@@ -1,8 +1,8 @@
 package com.lgtm.easymoney.controllers;
 
 
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.services.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.constraints.NotNull;

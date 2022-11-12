@@ -2,8 +2,8 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.req.FriendshipReq;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import java.util.List;
 
 /** Interface of service for friendship. */

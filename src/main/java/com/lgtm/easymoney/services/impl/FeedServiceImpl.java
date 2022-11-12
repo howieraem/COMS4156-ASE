@@ -4,27 +4,24 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.FeedActivityRsp;
-import com.lgtm.easymoney.payload.FeedRsp;
+import com.lgtm.easymoney.payload.rsp.FeedActivityRsp;
+import com.lgtm.easymoney.payload.rsp.FeedRsp;
 import com.lgtm.easymoney.services.FeedService;
 import com.lgtm.easymoney.services.FriendService;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * service for Feed.
  */
 @Service
-@Transactional(rollbackFor = Exception.class)  // required for delete
 public class FeedServiceImpl implements FeedService {
   private final UserService userService;
   private final FriendService friendService;
@@ -54,10 +51,9 @@ public class FeedServiceImpl implements FeedService {
    */
   @Override
   public List<FeedActivityRsp> getFeedByUser(User u) {
-    List<FeedActivityRsp> res = new ArrayList<>();
     // get user's activity
     List<FeedActivityRsp> userActivity = getUserActivity(u, false);
-    res.addAll(userActivity);
+    List<FeedActivityRsp> res = new ArrayList<>(userActivity);
     // get friends' activity,hide amount
     List<User> friends = friendService.getFriends(u);
     for (User f : friends) {
@@ -67,7 +63,7 @@ public class FeedServiceImpl implements FeedService {
     // remove duplicates, 1->2 and 2->1 are same transaction
     res = res.stream().distinct().collect(Collectors.toList());
     // sort, the latest first
-    Collections.sort(res, Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
+    res.sort(Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
     // only return 20 latest and valid transaction
     return res.stream().limit(feedSize).collect(Collectors.toList());
   }
@@ -84,21 +80,19 @@ public class FeedServiceImpl implements FeedService {
     List<Transaction> userActivity = transactionService.getAllTransactionsWithUser(u,
             List.of(TransactionStatus.TRANS_COMPLETE));
     // mapping
-    List<FeedActivityRsp> activities =
-            userActivity.stream()
-                    .map(a -> new FeedActivityRsp(
-                            a.getFrom().getId(),
-                            a.getTo().getId(),
-                            a.getFrom().getType(),
-                            a.getTo().getType(),
-                            a.getCategory(),
-                            hideAmount ? null : a.getAmount(),
-                            a.getDescription(),
-                            a.getLastUpdateTime(),
-                            null  // placeholder
-                    ))
-                    .collect(Collectors.toList());
-    return activities;
+    return userActivity.stream()
+            .map(a -> new FeedActivityRsp(
+                    a.getFrom().getId(),
+                    a.getTo().getId(),
+                    a.getFrom().getType(),
+                    a.getTo().getType(),
+                    a.getCategory(),
+                    hideAmount ? null : a.getAmount(),
+                    a.getDescription(),
+                    a.getLastUpdateTime(),
+                    null  // placeholder
+            ))
+            .collect(Collectors.toList());
 
   }
 
@@ -126,13 +120,13 @@ public class FeedServiceImpl implements FeedService {
   /**
    * EXTERNAL get user's feed with uid.
    *
-   * @param uid user's uid
+   * @param user current user
    * @return response containing list of user's feed activity
    */
   @Override
-  public FeedRsp getFeedByUid(Long uid) {
+  public FeedRsp getFeed(User user) {
     // get user's feed
-    List<FeedActivityRsp> activities = getFeedByUser(userService.getUserById(uid));
+    List<FeedActivityRsp> activities = getFeedByUser(user);
     // set promo text
     activities = setPromoText(activities);
 

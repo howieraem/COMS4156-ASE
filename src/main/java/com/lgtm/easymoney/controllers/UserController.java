@@ -1,7 +1,9 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.req.BalanceReq;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
@@ -33,8 +35,11 @@ public class UserController {
   @PutMapping("/deposit")
   @Operation(summary = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
-  public ResponseEntity<BalanceRsp> deposit(@Valid @RequestBody BalanceReq req) {
-    return new ResponseEntity<>(userService.makeDeposit(req), HttpStatus.OK);
+  public ResponseEntity<BalanceRsp> deposit(
+      @CurrentUser UserPrincipal principal,
+      @Valid @RequestBody BalanceReq req) {
+    return new ResponseEntity<>(
+        userService.makeDeposit(principal.get(), req.getAmount()), HttpStatus.OK);
   }
 
   /**
@@ -44,8 +49,11 @@ public class UserController {
   @PutMapping("/withdraw")
   @Operation(summary = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")
-  public ResponseEntity<BalanceRsp> withdraw(@Valid @RequestBody BalanceReq req) {
-    return new ResponseEntity<>(userService.makeWithdraw(req), HttpStatus.OK);
+  public ResponseEntity<BalanceRsp> withdraw(
+      @CurrentUser UserPrincipal principal,
+      @Valid @RequestBody BalanceReq req) {
+    return new ResponseEntity<>(
+        userService.makeWithdraw(principal.get(), req.getAmount()), HttpStatus.OK);
   }
 
 }

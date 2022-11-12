@@ -5,6 +5,7 @@ import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,6 +69,9 @@ public class User implements Serializable {
   @JoinColumn(name = "aid", referencedColumnName = "id")
   private Account account;
 
+  @OneToOne(mappedBy = "bizUser", cascade = CascadeType.ALL)
+  private BizProfile bizProfile;
+
   @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<Friendship> friendships;
 
@@ -83,9 +87,6 @@ public class User implements Serializable {
   @OneToMany(mappedBy = "to", fetch = FetchType.LAZY)
   private Set<Transaction> transactionsReceived;
 
-  @OneToOne(mappedBy = "bizUser", optional = true, cascade = CascadeType.ALL)
-  private BizProfile bizProfile;
-
   /**
    * set user type, either personal, business, or financial.
    *
@@ -93,5 +94,22 @@ public class User implements Serializable {
    */
   public void setTypeByStr(final String userTypeStr) {
     type = UserType.valueOf(userTypeStr.toUpperCase());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    User that = (User) obj;
+    return Objects.equals(id, that.getId());
   }
 }

@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.services.SearchService;
 import java.util.ArrayList;
 import java.util.List;

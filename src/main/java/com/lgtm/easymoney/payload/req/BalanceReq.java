@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.req;
 
 import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
@@ -11,9 +11,6 @@ import lombok.Data;
  */
 @Data
 public class BalanceReq {
-  @NotNull
-  private Long uid;
-
   @NotNull
   @Digits(integer = 100, fraction = 2)
   @DecimalMin(value = "0.0", inclusive = false)

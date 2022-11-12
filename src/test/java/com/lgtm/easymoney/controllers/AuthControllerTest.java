@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -198,7 +198,7 @@ public class AuthControllerTest {
   }
 
   private ResultActions postRegister(RegisterReq req) throws Exception {
-    return mvc.perform(post("/user/register")
+    return mvc.perform(post("/auth/register")
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));

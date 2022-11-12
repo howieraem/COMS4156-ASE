@@ -1,8 +1,9 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.RegisterReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.services.UserService;
+import com.lgtm.easymoney.payload.req.LoginReq;
+import com.lgtm.easymoney.payload.req.RegisterReq;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +18,36 @@ import org.springframework.web.bind.annotation.RestController;
  * controller for authentication.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class AuthController {
-  private final UserService userService;
+  private final AuthService authService;
 
   @Autowired
-  public AuthController(UserService userService) {
-    this.userService = userService;
+  public AuthController(AuthService authService) {
+    this.authService = authService;
   }
 
   /**
    * handle register requests.
    *
-   * @param registerReq reg request with new user's info.
+   * @param registerReq register request with new user's info.
    * @return response entity of the new user's id if succeeded, or error information if failed
    */
   @PostMapping("/register")
   @Operation(summary = "Method for new user registration.")
   public ResponseEntity<ResourceCreatedRsp> register(@Valid @RequestBody RegisterReq registerReq) {
-    return new ResponseEntity<>(userService.createUser(registerReq), HttpStatus.CREATED);
+    return new ResponseEntity<>(authService.register(registerReq), HttpStatus.CREATED);
   }
 
-  // TODO login
+  /**
+   * handle login requests.
+   *
+   * @param loginReq login request with email and password
+   * @return JWT
+   */
+  @PostMapping("/login")
+  @Operation(summary = "Method for user login.")
+  public ResponseEntity<String> login(@Valid @RequestBody LoginReq loginReq) {
+    return ResponseEntity.ok(authService.login(loginReq));
+  }
 }

@@ -6,9 +6,9 @@ import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Friendship;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.req.FriendshipReq;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.repositories.FriendshipRepository;
 import com.lgtm.easymoney.services.FriendService;
 import com.lgtm.easymoney.services.UserService;
@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FriendServiceImpl implements FriendService {
   private final UserService userService;
 
-  @Autowired
   private final FriendshipRepository friendshipRepository;
 
   @Autowired

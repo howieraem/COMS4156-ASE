@@ -3,12 +3,11 @@ package com.lgtm.easymoney.services;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.RequestReq;
-import com.lgtm.easymoney.payload.RequestRsp;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.RequestReq;
+import com.lgtm.easymoney.payload.rsp.RequestRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 /**
  * request service interface.

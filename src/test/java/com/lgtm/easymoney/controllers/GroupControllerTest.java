@@ -10,13 +10,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.services.GroupService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -42,6 +44,9 @@ public class GroupControllerTest {
 
   @MockBean
   private GroupService groupService;
+
+  @MockBean
+  private UserServiceImpl userService;
 
   private CreateGroupReq createGroupReq;
 
@@ -77,12 +82,10 @@ public class GroupControllerTest {
 
     inviteToGroupReq = new InviteToGroupReq();
     inviteToGroupReq.setGid(expectedGid);
-    inviteToGroupReq.setInviterId(uid1);
     inviteToGroupReq.setInviteeId(uid2);
 
     leaveGroupReq = new LeaveGroupReq();
     leaveGroupReq.setGid(expectedGid);
-    leaveGroupReq.setUid(uid1);
 
     groupRsp = new GroupRsp();
     groupRsp.setGid(expectedGid);
@@ -93,7 +96,7 @@ public class GroupControllerTest {
 
   @Test
   public void createGroupSuccess() throws Exception {
-    Mockito.when(groupService.createGroup(createGroupReq))
+    Mockito.when(groupService.createGroup(Mockito.any(User.class), createGroupReq))
         .thenReturn(createdRsp);
 
     var resultActions = postCreate(createGroupReq);
@@ -144,16 +147,16 @@ public class GroupControllerTest {
   @Test
   public void inviteSuccess() throws Exception {
     putInvite(inviteToGroupReq).andExpect(status().isOk());
-    Mockito.verify(groupService, Mockito.times(1)).inviteToGroup(inviteToGroupReq);
+    Mockito.verify(groupService, Mockito.times(1))
+        .inviteToGroup(Mockito.any(User.class), inviteToGroupReq);
   }
 
   @Test
   public void inviteFailedByNonMember() throws Exception {
-    inviteToGroupReq.setInviterId(uid2);  // inviter not in group
     inviteToGroupReq.setInviteeId(3L);
     Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "inviterId", uid2))
         .when(groupService)
-        .inviteToGroup(inviteToGroupReq);
+        .inviteToGroup(Mockito.any(User.class), inviteToGroupReq);
 
     var resultActions = putInvite(inviteToGroupReq);
 
@@ -165,11 +168,10 @@ public class GroupControllerTest {
 
   @Test
   public void inviteFailedByExistingMember() throws Exception {
-    inviteToGroupReq.setInviterId(uid1);
     inviteToGroupReq.setInviteeId(uid1);  // invitee already in group
     Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "inviteeId", uid2))
         .when(groupService)
-        .inviteToGroup(inviteToGroupReq);
+        .inviteToGroup(Mockito.any(User.class), inviteToGroupReq);
 
     var resultActions = putInvite(inviteToGroupReq);
 
@@ -182,15 +184,15 @@ public class GroupControllerTest {
   @Test
   public void leaveSuccess() throws Exception {
     putLeave(leaveGroupReq).andExpect(status().isOk());
-    Mockito.verify(groupService, Mockito.times(1)).leaveGroup(leaveGroupReq);
+    Mockito.verify(groupService, Mockito.times(1))
+        .leaveGroup(Mockito.any(User.class), leaveGroupReq);
   }
 
   @Test
   public void leaveFailedByNonMember() throws Exception {
-    leaveGroupReq.setUid(uid2);  // user not in group can't leave
     Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "uid", uid2))
         .when(groupService)
-        .leaveGroup(leaveGroupReq);
+        .leaveGroup(Mockito.any(User.class), leaveGroupReq);
 
     var resultActions = putLeave(leaveGroupReq);
 
@@ -202,7 +204,7 @@ public class GroupControllerTest {
 
   @Test
   public void getGroupSuccess() throws Exception {
-    Mockito.when(groupService.getGroupProfile(expectedGid))
+    Mockito.when(groupService.getGroupProfile(Mockito.any(User.class), expectedGid))
         .thenReturn(groupRsp);
 
     var resultActions = getGroup(expectedGid);
@@ -218,7 +220,7 @@ public class GroupControllerTest {
   @Test
   public void getNonExistentGroupFail() throws Exception {
     Long someId = 2L;
-    Mockito.when(groupService.getGroupProfile(someId))
+    Mockito.when(groupService.getGroupProfile(Mockito.any(User.class), someId))
         .thenThrow(new ResourceNotFoundException("Group", "id", someId));
 
     var resultActions = getGroup(someId);
@@ -246,7 +248,7 @@ public class GroupControllerTest {
   public void getGroupAdsSuccess() throws Exception {
     var ads = "abc";
     var groupAdsRsp = new GroupAdsRsp(List.of(ads));
-    Mockito.when(groupService.getGroupAds(expectedGid))
+    Mockito.when(groupService.getGroupAds(Mockito.any(User.class), expectedGid))
         .thenReturn(groupAdsRsp);
 
     var resultActions = getGroupAds(expectedGid);

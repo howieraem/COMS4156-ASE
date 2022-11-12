@@ -460,6 +460,38 @@
 			"response": []
 		},
 		{
+			"name": "make a  transfer from 2 to 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fromUid\": 2,\n    \"toUid\": 3,\n    \"amount\": \"199.0\",\n    \"category\": \"FOOD\",\n    \"description\": \"this is a transfer involving business!!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/transfer/create",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"transfer",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "create group with personal user 1, business user 3",
 			"request": {
 				"method": "POST",
@@ -572,7 +604,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uids\": [1, 2],\n    \"name\": \"Test Group\",\n    \"description\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -599,7 +631,103 @@
 			"response": []
 		},
 		{
-			"name": "search users",
+			"name": "search users by name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users phone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users partial match",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search failed",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -696,7 +824,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"

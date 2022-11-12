@@ -1,4 +1,4 @@
-package com.lgtm.easymoney.payload;
+package com.lgtm.easymoney.payload.req;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -8,9 +8,6 @@ import lombok.Data;
  */
 @Data
 public class LeaveGroupReq {
-  @NotNull
-  private Long uid;
-
   @NotNull
   private Long gid;
 }

@@ -1,9 +1,8 @@
 package com.lgtm.easymoney.services;
 
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransferReq;
-import com.lgtm.easymoney.payload.TransferRsp;
-import org.springframework.http.ResponseEntity;
+import com.lgtm.easymoney.payload.req.TransferReq;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransferRsp;
 
 /**
  * transfer service interface.

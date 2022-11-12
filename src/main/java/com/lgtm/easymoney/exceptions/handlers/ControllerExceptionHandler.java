@@ -3,14 +3,17 @@ package com.lgtm.easymoney.exceptions.handlers;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.lgtm.easymoney.configs.DbConsts;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
+import com.lgtm.easymoney.exceptions.InvalidTokenRequestException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.ErrorRsp;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
+import com.lgtm.easymoney.payload.rsp.ErrorRsp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
+  @Value("${app.jwt.header}")
+  private String tokenRequestHeader;
+
   /** This handles exceptions caused by correct data types but invalid data ranges in body. */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorRsp> handle(final MethodArgumentNotValidException ex) {
@@ -38,6 +44,13 @@ public class ControllerExceptionHandler {
     String errorMessage = "Invalid input format!";
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorRsp(errorFields, errorMessage));
+  }
+
+  /** This handles exceptions caused by unauthorized client operations. */
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorRsp> handle(final UnauthorizedException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorRsp(List.of(tokenRequestHeader), ex.getMessage()));
   }
 
   /** This handles exceptions caused by invalid path variables. */
@@ -109,6 +122,15 @@ public class ControllerExceptionHandler {
     errorFields.add(ex.getFieldName());
     String errorMessage = ex.getMessage();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorRsp(errorFields, errorMessage));
+  }
+
+  /** This handles when client requests with an invalid jwt. */
+  @ExceptionHandler(InvalidTokenRequestException.class)
+  public ResponseEntity<ErrorRsp> handle(final InvalidTokenRequestException ex) {
+    List<String> errorFields = List.of(tokenRequestHeader);
+    String errorMessage = ex.getMessage();
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(new ErrorRsp(errorFields, errorMessage));
   }
 }

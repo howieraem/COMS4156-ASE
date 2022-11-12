@@ -8,9 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
+import com.lgtm.easymoney.payload.req.BalanceReq;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
 import org.junit.Before;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -53,7 +50,6 @@ public class UserControllerTest {
     Mockito.when(userService.getUserById(uid)).thenReturn(user);
 
     req = new BalanceReq();
-    req.setUid(uid);
   }
 
   @Test
@@ -110,7 +106,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.errorFields").value("amount"));
 
     req.setAmount(new BigDecimal(2000));
-    Mockito.when(userService.makeWithdraw(req))
+    Mockito.when(userService.makeWithdraw(user, req.getAmount()))
         .thenThrow(new InvalidUpdateException("User", user.getId(), "amount", req.getAmount()));
     putWithdraw(req).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("amount"));

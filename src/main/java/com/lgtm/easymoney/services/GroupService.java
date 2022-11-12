@@ -2,12 +2,12 @@ package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 
 /**
  * group service.
@@ -15,19 +15,15 @@ import com.lgtm.easymoney.payload.ResourceCreatedRsp;
 public interface GroupService {
   Group getGroupById(Long gid);
 
-  ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq);
+  ResourceCreatedRsp createGroup(User creator, CreateGroupReq createGroupReq);
 
-  void inviteToGroup(InviteToGroupReq inviteToGroupReq);
+  void inviteToGroup(User inviter, InviteToGroupReq inviteToGroupReq);
 
-  void leaveGroup(LeaveGroupReq leaveGroupReq);
+  void leaveGroup(User user, LeaveGroupReq leaveGroupReq);
 
-  void leaveGroup(Group group, User user);
+  GroupRsp getGroupProfile(User user, Long gid);
 
-  GroupRsp getGroupProfile(Long gid);
-
-  GroupAdsRsp getGroupAds(Long gid);
-
-  void joinGroup(Group group, User user);
+  GroupAdsRsp getGroupAds(User user, Long gid);
 
   boolean isInGroup(Group group, User user);
 }
