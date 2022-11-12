@@ -651,7 +651,7 @@
 			"response": []
 		},
 		{
-			"name": "search users by id",
+			"name": "search users by digits",
 			"request": {
 				"method": "GET",
 				"header": [],

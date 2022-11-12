@@ -35,8 +35,7 @@ public class SearchController {
    */
   @GetMapping("/id/{id}")
   @Operation(summary = "Method to retrieve the public profile of a user by user ID.")
-  public ResponseEntity<ProfileRsp> searchById(@PathVariable(value = "id")
-                                                @NotNull Long id) throws Exception {
+  public ResponseEntity<ProfileRsp> searchById(@PathVariable(value = "id") @NotNull Long id) {
     return new ResponseEntity<>(searchService.searchById(id), HttpStatus.OK);
   }
 
