@@ -23,7 +23,6 @@ public class LoanRsp {
       param: from uid, to uid, loan id
       return: loan
   */
-  private Boolean success;
   private String message;
   private List<TransactionRsp> loans;
 }

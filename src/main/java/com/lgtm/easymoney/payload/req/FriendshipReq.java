@@ -7,10 +7,7 @@ import lombok.Data;
 @Data
 public class FriendshipReq {
   @NotNull
-  private Long uid1;
+  private Long uid;
 
-  @NotNull
-  private Long uid2;
-
-  private String message;
+  private String note;  // like alias
 }

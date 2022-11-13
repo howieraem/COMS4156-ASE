@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /** Security configurations of Spring MVC. */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @EnableGlobalMethodSecurity(
     securedEnabled = true,
     jsr250Enabled = true,
@@ -100,6 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/**/*.css",
             "/**/*.js").permitAll()
         .antMatchers("/auth/**").permitAll()
+        .antMatchers("/search/**").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

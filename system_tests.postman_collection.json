@@ -63,6 +63,62 @@
 			"response": []
 		},
 		{
+			"name": "user2 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user3 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "create user 2 personal",
 			"request": {
 				"method": "POST",
@@ -595,7 +651,7 @@
 			"response": []
 		},
 		{
-			"name": "search users by id",
+			"name": "search users by digits",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -777,7 +833,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -788,14 +850,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/feed/1",
+					"raw": "localhost:8080/feed",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"feed",
-						"1"
+						"feed"
 					]
 				}
 			},
