@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
 import com.lgtm.easymoney.payload.req.BalanceReq;
+import com.lgtm.easymoney.payload.req.BizProfileReq;
 import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
@@ -56,4 +57,14 @@ public class UserController {
         userService.makeWithdraw(principal.get(), req.getAmount()), HttpStatus.OK);
   }
 
+  /**
+   * Let a non-personal user update the business profile.
+   */
+  @PutMapping("/biz")
+  @Operation(summary = "Method for a non-personal user to update the business profile.")
+  public ResponseEntity<Void> updateBiz(@CurrentUser UserPrincipal principal,
+                                        @Valid @RequestBody BizProfileReq req) {
+    userService.updateBizProfile(principal.get(), req);
+    return ResponseEntity.ok().build();
+  }
 }

@@ -2,7 +2,6 @@ package com.lgtm.easymoney.services.impl;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.models.Account;
-import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.LoginReq;
 import com.lgtm.easymoney.payload.req.RegisterReq;
@@ -65,11 +64,9 @@ public class AuthServiceImpl implements AuthService {
     user.setAccount(account);
 
     if (user.getType() != UserType.PERSONAL) {
-      BizProfile bizProfile = new BizProfile();
-      bizProfile.setPromotionText(registerReq.getBizPromotionText());
-      user.setBizProfile(bizProfile);
-      bizProfile.setBizUser(user);
+      user.setBizPromotionText(registerReq.getBizPromotionText());
     }
+
     return new ResourceCreatedRsp(userService.saveUser(user).getId());
   }
 

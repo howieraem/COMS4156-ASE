@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.models.BizProfile;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.CreateGroupReq;
@@ -86,10 +85,7 @@ public class GroupServiceImplTest {
     user1 = new User();
     user1.setId(uid1);
     user1.setTypeByStr("business");
-    var bizProfile = new BizProfile();
-    bizProfile.setBizUser(user1);
-    bizProfile.setPromotionText("abc");
-    user1.setBizProfile(bizProfile);
+    user1.setBizPromotionText("abc");
 
     users = new HashSet<>();
     users.add(user1);

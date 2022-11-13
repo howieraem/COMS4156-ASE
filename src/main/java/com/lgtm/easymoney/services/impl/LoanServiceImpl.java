@@ -48,10 +48,10 @@ public class LoanServiceImpl implements LoanService {
    */
   private void validateLoanUsers(User borrower, User lender) {
     if (!lender.getType().equals(UserType.FINANCIAL)) {
-      throw new InapplicableOperationException("user", lender.getId(), "toUid", "requestLoan");
+      throw new InapplicableOperationException("user", lender.getId(), "toUid", "loan");
     }
     if (!borrower.getType().equals(UserType.PERSONAL)) {
-      throw new InapplicableOperationException("user", borrower.getId(), "fromUid", "requestLoan");
+      throw new InapplicableOperationException("user", borrower.getId(), "fromUid", "loan");
     }
   }
 

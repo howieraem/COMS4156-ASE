@@ -24,7 +24,7 @@ public interface RequestService {
   Transaction createRequest(
           User reqBy, User reqTo, BigDecimal amount, String desc, Category category);
 
-  ResourceCreatedRsp createRequest(RequestReq req);
+  ResourceCreatedRsp createRequest(User requester, RequestReq req);
 
   boolean canAcceptDeclineRequest(Long tid, Long fuid, Long tuid);
 
@@ -36,5 +36,5 @@ public interface RequestService {
 
   ResourceCreatedRsp declineRequest(Long tid, Long fuid, Long tuid);
 
-  RequestRsp getRequestsByUid(Long uid);
+  RequestRsp getRequests(User user);
 }

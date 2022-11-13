@@ -81,12 +81,11 @@ public class RequestServiceImpl implements RequestService {
   /**
    * EXTERNAL generate a response payload of user's requests given id.
    *
-   * @param uid user's uid
+   * @param user current logged-in user
    * @return response payload with list of transactions
    */
   @Override
-  public RequestRsp getRequestsByUid(Long uid) {
-    User user = userService.getUserById(uid);
+  public RequestRsp getRequests(User user) {
     RequestRsp res = new RequestRsp();
     List<Transaction> listTrans = getRequestByUser(user);
     res.setSuccess(listTrans != null);
@@ -128,14 +127,15 @@ public class RequestServiceImpl implements RequestService {
   /**
    * EXTERNAL create a request.
    *
+   * @param requester current logged-in user
    * @param req request payload
    * @return payload with id of request created.
    */
   @Override
-  public ResourceCreatedRsp createRequest(RequestReq req) {
+  public ResourceCreatedRsp createRequest(User requester, RequestReq req) {
     // create a request
     Transaction trans = createRequest(
-            userService.getUserById(req.getFromUid()),
+            requester,
             userService.getUserById(req.getToUid()),
             req.getAmount(),
             req.getDescription(),

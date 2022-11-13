@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -65,26 +64,26 @@ public class User implements Serializable {
   @Column(nullable = false)
   private BigDecimal balance = BigDecimal.ZERO;
 
+  @Column
+  private String bizPromotionText;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "aid", referencedColumnName = "id")
   private Account account;
 
-  @OneToOne(mappedBy = "bizUser", cascade = CascadeType.ALL)
-  private BizProfile bizProfile;
-
-  @OneToMany(mappedBy = "user1", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user1")
   private Set<Friendship> friendships;
 
-  @ManyToMany(mappedBy = "groupUsers", fetch = FetchType.LAZY)
+  @ManyToMany(mappedBy = "groupUsers")
   private Set<Group> groups;
 
   /**
    * transfer: sender is transaction.from, receiver is transaction.to
    * request: requestor is transaction.to, approver is transaction.from
    */
-  @OneToMany(mappedBy = "from", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "from")
   private Set<Transaction> transactionsSent;
-  @OneToMany(mappedBy = "to", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "to")
   private Set<Transaction> transactionsReceived;
 
   /**
