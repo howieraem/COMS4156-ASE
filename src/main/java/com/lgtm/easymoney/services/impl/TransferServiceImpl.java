@@ -67,20 +67,19 @@ public class TransferServiceImpl implements TransferService {
   /**
    * Make a transfer.
    *
-   * @param req transfer request
-   * @return resource created response containing created transfer id
+   * @param fromUser current logged-in user.
+   * @param req transfer request.
+   * @return resource created response containing created transfer id.
    */
   @Override
-  public ResourceCreatedRsp makeTransfer(TransferReq req) {
+  public ResourceCreatedRsp makeTransfer(User fromUser, TransferReq req) {
     // get params
-    Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
     BigDecimal amount = req.getAmount();
     String category = req.getCategory();
     String desc = req.getDescription();
     // account validation is currently eliminated because account is guaranteed to exist
     // make a transfer
-    User fromUser = userService.getUserById(fromUid);
     User toUser = userService.getUserById(toUid);
     Transaction transaction =
             createTransaction(
@@ -101,23 +100,15 @@ public class TransferServiceImpl implements TransferService {
   }
 
   /**
-   * Get the list of transfer transactions by user object.
-   */
-  private List<Transaction> getTransfersByUser(User user) {
-    List<TransactionStatus> status = List.of(TransactionStatus.TRANS_COMPLETE);
-    return transactionService.getAllTransactionsWithUser(user, status);
-  }
-
-  /**
    * Get the transfer transactions by user id.
    *
-   * @param uid user id
+   * @param user current logged-in user
    * @return transfer response
    */
   @Override
-  public TransferRsp getTransfersByUid(Long uid) {
-    User user = userService.getUserById(uid);
-    List<Transaction> transfers = getTransfersByUser(user);
+  public TransferRsp getTransfers(User user) {
+    List<TransactionStatus> status = List.of(TransactionStatus.TRANS_COMPLETE);
+    List<Transaction> transfers = transactionService.getAllTransactionsWithUser(user, status);
     // payload
     TransferRsp response = new TransferRsp();
     response.setSuccess(true);

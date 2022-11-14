@@ -84,7 +84,7 @@ public class GroupServiceImpl implements GroupService {
     List<String> ads = new ArrayList<>();
     for (User u : users) {
       if (u.getType().equals(UserType.BUSINESS)) {
-        ads.add(u.getBizProfile().getPromotionText());
+        ads.add(u.getBizPromotionText());
       }
     }
     return new GroupAdsRsp(ads);

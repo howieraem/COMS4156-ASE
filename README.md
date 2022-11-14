@@ -1,5 +1,7 @@
 # COMS W4156 ASE Project
 
+Client repository: https://github.com/rl3250/f22_4156_client
+
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan

@@ -1,8 +1,11 @@
 package com.lgtm.easymoney.services.impl;
 
+import com.lgtm.easymoney.enums.UserType;
+import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.BizProfileReq;
 import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.security.UserPrincipal;
@@ -92,6 +95,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     return new BalanceRsp(user.getBalance());
   }
 
+  /**
+   * Load current logged-in user from email extracted from jwt.
+   *
+   * @param email user's email.
+   * @return details of the logged-in principal.
+   * @throws UsernameNotFoundException if email doesn't exist.
+   */
   @Transactional
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -99,8 +109,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     if (usr == null) {
       throw new UsernameNotFoundException(email);
     }
+    Hibernate.initialize(usr.getAccount());
     Hibernate.initialize(usr.getFriendships());
     Hibernate.initialize(usr.getGroups());
+    Hibernate.initialize(usr.getTransactionsSent());
+    Hibernate.initialize(usr.getTransactionsReceived());
     return new UserPrincipal(usr);
+  }
+
+  /**
+   * Update business profile for non-personal users.
+   *
+   * @param user current logged-in user
+   * @param req payload containing new info
+   */
+  @Transactional
+  @Override
+  public void updateBizProfile(User user, BizProfileReq req) {
+    if (user.getType() == UserType.PERSONAL) {
+      throw new InapplicableOperationException(
+          "user", user.getId(), "Authorization", "updateBizProfile");
+    }
+    user.setBizPromotionText(req.getPromotionText());
+    saveUser(user);
   }
 }

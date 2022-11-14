@@ -111,7 +111,7 @@ public class FeedServiceImpl implements FeedService {
       User promo = from.getType() != UserType.PERSONAL ? from :
               (to.getType() != UserType.PERSONAL ? to : null);
       if (promo != null) {
-        a.setPromoText(promo.getBizProfile().getPromotionText());
+        a.setPromoText(promo.getBizPromotionText());
       }
     }
     return activities;

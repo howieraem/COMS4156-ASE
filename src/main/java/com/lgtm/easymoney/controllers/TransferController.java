@@ -3,6 +3,8 @@ package com.lgtm.easymoney.controllers;
 import com.lgtm.easymoney.payload.req.TransferReq;
 import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.payload.rsp.TransferRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
@@ -37,22 +39,25 @@ public class TransferController {
    */
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money transfer to another user.")
-  public ResponseEntity<ResourceCreatedRsp> transfer(@Valid @RequestBody TransferReq req) {
-    return new ResponseEntity<>(transferService.makeTransfer(req), HttpStatus.CREATED);
+  public ResponseEntity<ResourceCreatedRsp> transfer(
+      @CurrentUser UserPrincipal principal,
+      @Valid @RequestBody TransferReq req) {
+    return new ResponseEntity<>(
+        transferService.makeTransfer(principal.get(), req), HttpStatus.CREATED);
   }
 
   /**
    * Get all transfers corresponding to a specific user.
    *
-   * @param uid user's id
+   * @param principal current logged-in user
    * @return response entity with list of transfers
    */
-  @GetMapping("/{uid}")
+  @GetMapping
   @Operation(summary = "Method for a user to get"
           + " all money transfers (incl. completed money requests).")
-  public ResponseEntity<TransferRsp> getTransfers(@PathVariable(value = "uid") Long uid) {
+  public ResponseEntity<TransferRsp> getTransfers(@CurrentUser UserPrincipal principal) {
     // get all the transfers (both from and to) corresponding to the user with given uid
-    // TODO: isFromOtTo may be added to param as filter
-    return new ResponseEntity<>(transferService.getTransfersByUid(uid), HttpStatus.OK);
+    // TODO: isFromOrTo may be added to param as filter
+    return new ResponseEntity<>(transferService.getTransfers(principal.get()), HttpStatus.OK);
   }
 }

@@ -17,8 +17,8 @@ public class InapplicableOperationException extends RuntimeException {
   /**
    * Constructor of inapplicable operation exception.
    *
-   * @param resourceName resource name, i.e.user
-   * @param resourceId resource id, i.e uid
+   * @param resourceName resource name, i.e. user
+   * @param resourceId resource id, i.e. uid
    * @param fieldName field name (of request)
    * @param operationName operation/method name
    */
