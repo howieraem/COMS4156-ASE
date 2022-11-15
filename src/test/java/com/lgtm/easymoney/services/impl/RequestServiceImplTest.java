@@ -108,7 +108,7 @@ public class RequestServiceImplTest {
     ResourceCreatedRsp expectedRsp = new ResourceCreatedRsp(transactionId);
 
     // Act
-    ResourceCreatedRsp returnedRsp = requestService.createRequest(requestReq);
+    ResourceCreatedRsp returnedRsp = requestService.createRequest(user1, requestReq);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);
@@ -132,7 +132,7 @@ public class RequestServiceImplTest {
     expectedRsp.setMessage(message);
 
     // Act
-    RequestRsp returnedRsp = requestService.getRequestsByUid(id1);
+    RequestRsp returnedRsp = requestService.getRequests(user1);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);

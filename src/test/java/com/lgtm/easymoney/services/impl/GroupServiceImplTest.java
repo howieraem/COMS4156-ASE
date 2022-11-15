@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.CreateGroupReq;
@@ -101,6 +102,7 @@ public class GroupServiceImplTest {
     group.setGroupUsers(users);
     Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
     user1.setGroups(Set.of(group));
+    user2.setGroups(Set.of());
   }
 
   @Test
@@ -171,9 +173,21 @@ public class GroupServiceImplTest {
   }
 
   @Test
+  public void getGroupFailedWithNonMember() {
+    assertThrows(UnauthorizedException.class,
+        () -> groupService.getGroupProfile(user2, expectedGid));
+  }
+
+  @Test
   public void testGetGroupAds() {
     var rsp = groupService.getGroupAds(user1, expectedGid);
 
-    assertEquals(rsp.getAds(), List.of(user1.getBizProfile().getPromotionText()));
+    assertEquals(rsp.getAds(), List.of(user1.getBizPromotionText()));
+  }
+
+  @Test
+  public void getGroupAdsFailedWithNonMember() {
+    assertThrows(UnauthorizedException.class,
+        () -> groupService.getGroupAds(user2, expectedGid));
   }
 }

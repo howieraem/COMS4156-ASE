@@ -98,7 +98,7 @@ public class TransferServiceImplTest {
     ResourceCreatedRsp expectedRsp = new ResourceCreatedRsp(transactionId);
 
     // Act
-    ResourceCreatedRsp returnedRsp = transferService.makeTransfer(transferReq);
+    ResourceCreatedRsp returnedRsp = transferService.makeTransfer(user1, transferReq);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);
@@ -115,7 +115,8 @@ public class TransferServiceImplTest {
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(transaction);
 
     // Act & Assert
-    assertThrows(InvalidUpdateException.class, () -> transferService.makeTransfer(transferReq));
+    assertThrows(InvalidUpdateException.class,
+        () -> transferService.makeTransfer(user1, transferReq));
     assertEquals(transaction.getStatus(), TransactionStatus.TRANS_FAILED);
   }
 
@@ -137,7 +138,7 @@ public class TransferServiceImplTest {
     expectedRsp.setMessage(message);
 
     // Act
-    TransferRsp returnedRsp = transferService.getTransfersByUid(id1);
+    TransferRsp returnedRsp = transferService.getTransfers(user1);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);

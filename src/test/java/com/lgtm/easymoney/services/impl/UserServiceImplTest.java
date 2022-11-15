@@ -6,10 +6,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.BizProfileReq;
 import com.lgtm.easymoney.repositories.UserRepository;
+import com.lgtm.easymoney.security.UserPrincipal;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -46,6 +50,8 @@ public class UserServiceImplTest {
 
   private User user1;
 
+  private UserPrincipal principal1;
+
   private User user2;
 
   /** Establish users for further testing. */
@@ -55,6 +61,8 @@ public class UserServiceImplTest {
     user1.setId(uid1);
     user1.setEmail(email1);
     user1.setPassword(pwd1);
+    user1.setTypeByStr("BUSINESS");
+    principal1 = new UserPrincipal(user1);
 
     user2 = new User();
     user2.setId(uid2);
@@ -62,10 +70,12 @@ public class UserServiceImplTest {
     user2.setPassword(pwd2);
     user2.setBalance(new BigDecimal(100));
 
-    Mockito.when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
-    Mockito.when(userRepository.existsById(user1.getId())).thenReturn(true);
-    Mockito.when(userRepository.findById(user2.getId())).thenReturn(Optional.of(user2));
-    Mockito.when(userRepository.existsById(user2.getId())).thenReturn(true);
+    Mockito.when(userRepository.findById(uid1)).thenReturn(Optional.of(user1));
+    Mockito.when(userRepository.findByEmail(email1)).thenReturn(user1);
+    Mockito.when(userRepository.existsById(uid1)).thenReturn(true);
+    Mockito.when(userRepository.findById(uid2)).thenReturn(Optional.of(user2));
+    Mockito.when(userRepository.findByEmail(email2)).thenReturn(user2);
+    Mockito.when(userRepository.existsById(uid2)).thenReturn(true);
     Mockito.when(userRepository.existsById(nonExistId)).thenReturn(false);
 
     List<User> users = new ArrayList<>();
@@ -143,5 +153,49 @@ public class UserServiceImplTest {
   public void shouldNotWithdrawIfAmountExceedsBalance() {
     var amount = new BigDecimal(100);
     assertThrows(InvalidUpdateException.class, () -> userService.makeWithdraw(user1, amount));
+  }
+
+  @Test
+  public void testLoadPrincipal() {
+    // Act
+    var p = userService.loadUserByUsername(email1);
+
+    // Assert
+    assertEquals(p, principal1);
+  }
+
+  @Test
+  public void loadPrincipalFailedWithNonexistentEmail() {
+    // Arrange
+    var email = "c@c.com";
+    Mockito.when(userRepository.findByEmail(email)).thenReturn(null);
+
+    // Act & Assert
+    assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(email));
+  }
+
+  @Test
+  public void testUpdateBizPromotion() {
+    // Arrange
+    BizProfileReq req = new BizProfileReq();
+    req.setPromotionText("abc");
+
+    // Act
+    userService.updateBizProfile(user1, req);
+
+    // Assert
+    Mockito.verify(userRepository, Mockito.times(1)).save(user1);
+  }
+
+  @Test
+  public void updateBizPromotionFailedByUserType() {
+    // Arrange
+    user1.setTypeByStr("PERSONAL");
+    BizProfileReq req = new BizProfileReq();
+    req.setPromotionText("abc");
+
+    // Act & Assert
+    assertThrows(InapplicableOperationException.class,
+        () -> userService.updateBizProfile(user1, req));
   }
 }

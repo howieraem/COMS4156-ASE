@@ -3,7 +3,6 @@ package com.lgtm.easymoney.services.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
@@ -24,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -49,7 +49,8 @@ public class FriendServiceImplTest {
   private User user2;
   private Long uid2 = 2L;
   private Account account2 = new Account();
-  Friendship friendship1;
+  private String note = "test friend";
+  private Friendship friendship1;
 
   /**
    * Setup.
@@ -72,10 +73,9 @@ public class FriendServiceImplTest {
     Mockito.when(userService.getUserById(user1.getId())).thenReturn(user1);
     Mockito.when(userService.getUserById(user2.getId())).thenReturn(user2);
 
-    friendship1 = new Friendship(new Friendship.Key(), user1, user2, true);
+    friendship1 = new Friendship(new Friendship.Key(), user1, user2, true, note);
     friendshipReq = new FriendshipReq();
-    friendshipReq.setUid1(uid1);
-    friendshipReq.setUid2(uid2);
+    friendshipReq.setUid(uid2);
   }
 
   @Test
@@ -99,7 +99,7 @@ public class FriendServiceImplTest {
     }).when(friendshipRepository).save(Mockito.any(Friendship.class));
 
     //Act
-    friendService.addFriend(friendshipReq);
+    friendService.addFriend(user1, friendshipReq);
     Friendship friendship = friendshipRepository.save(friendship1);
 
     //Assert
@@ -113,7 +113,7 @@ public class FriendServiceImplTest {
 
     //Assert
     assertThrows(InapplicableOperationException.class,
-            () -> friendService.addFriend(friendshipReq));
+            () -> friendService.addFriend(user1, friendshipReq));
   }
 
   @Test
@@ -123,7 +123,17 @@ public class FriendServiceImplTest {
 
     //Assert
     assertThrows(InapplicableOperationException.class,
-            () -> friendService.addFriend(friendshipReq));
+            () -> friendService.addFriend(user2, friendshipReq));
+  }
+
+  @Test
+  public void addFriendFailedWithExistingFriendship() {
+    //Arrange
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(friendship1);
+
+    //Assert
+    assertThrows(DataIntegrityViolationException.class,
+        () -> friendService.addFriend(user1, friendshipReq));
   }
 
   @Test
@@ -136,60 +146,49 @@ public class FriendServiceImplTest {
     friendship1.setActive(false);
     friendship1.setUser2(user1);
     friendship1.setUser1(user2);
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(friendship1);
-    var createdF = new Friendship();
-    createdF.setUser1(user1);
-    createdF.setUser2(user2);
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(createdF);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(friendship1);
+    friendshipReq.setUid(uid1);
 
     //Act
-    friendService.acceptFriend(friendshipReq);
-    Friendship fs2 = friendshipRepository.findByUser1AndUser2(user2, user1);
+    friendService.acceptFriend(user2, friendshipReq);
 
     //Assert
-    assertTrue(fs2.getActive());
+    Mockito.verify(friendshipRepository, Mockito.times(2)).save(Mockito.any(Friendship.class));
   }
 
   @Test
   public void acceptFriendFailedWithNonPersonalUser() {
     //Arrange
-    friendship1.setActive(false);
-    user1.setTypeByStr("business");
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(friendship1);
-
-    //Act && Assert
-    assertThrows(InapplicableOperationException.class,
-            () -> friendService.acceptFriend(friendshipReq));
-
-  }
-
-  @Test
-  public void acceptFriendFailedWithNonPersonalUser2() {
-    //Arrange
+    friendshipReq.setUid(uid1);
     friendship1.setActive(false);
     user2.setTypeByStr("business");
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(friendship1);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(friendship1);
 
     //Act && Assert
     assertThrows(InapplicableOperationException.class,
-            () -> friendService.acceptFriend(friendshipReq));
+            () -> friendService.acceptFriend(user2, friendshipReq));
   }
 
   @Test
   public void acceptFriendFailedWithNoFriendship() {
     //Arr
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(null);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(null);
+
     //Act && Assert
-    assertThrows(ResourceNotFoundException.class, () -> friendService.acceptFriend(friendshipReq));
+    assertThrows(ResourceNotFoundException.class,
+        () -> friendService.acceptFriend(user2, friendshipReq));
   }
 
   @Test
   public void acceptFriendFailedWithActiveFriendship() {
     //Arrange
-    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(friendship1);
+    friendship1.setActive(true);
+    friendshipReq.setUid(uid1);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(friendship1);
 
     //Act && Assert
-    assertThrows(InvalidUpdateException.class, () -> friendService.acceptFriend(friendshipReq));
+    assertThrows(InvalidUpdateException.class,
+        () -> friendService.acceptFriend(user2, friendshipReq));
   }
 
   @Test
@@ -203,7 +202,7 @@ public class FriendServiceImplTest {
     Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(mirrorF);
 
     //Act
-    friendService.delFriend(friendshipReq);
+    friendService.delFriend(user1, uid2);
 
     //Assert
     assertNull(user1.getFriendships());
@@ -216,7 +215,8 @@ public class FriendServiceImplTest {
     Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(null);
 
     //Act && Assert
-    assertThrows(ResourceNotFoundException.class, () -> friendService.delFriend(friendshipReq));;
+    assertThrows(ResourceNotFoundException.class,
+        () -> friendService.delFriend(user1, uid2));
   }
 
   @Test
@@ -237,7 +237,7 @@ public class FriendServiceImplTest {
     user1.setFriendships(Set.of(friendship1));
 
     //Act
-    ProfilesRsp res = friendService.getFriends(user1.getId());
+    ProfilesRsp res = friendService.getFriendProfiles(user1);
 
     //Assert
     assertEquals(user2.getId(), res.getUserProfiles().get(0).getUid());
@@ -250,7 +250,7 @@ public class FriendServiceImplTest {
     Mockito.when(friendshipRepository.findByUser2(user2)).thenReturn(List.of(friendship1));
 
     //Act
-    ProfilesRsp res = friendService.getFriendsPending(user2.getId());
+    ProfilesRsp res = friendService.getFriendProfilesPending(user2);
 
     //Assert
     assertEquals(user1.getId(), res.getUserProfiles().get(0).getUid());
