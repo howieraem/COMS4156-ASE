@@ -3,12 +3,7 @@ package com.lgtm.easymoney.configs;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.security.UserPrincipal;
-import java.util.List;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /** Configs of clients for tests. */
 @TestConfiguration
@@ -31,8 +26,8 @@ public class UserTestConfig {
   public static final User FIN_USR = User.ofTest(
       4L, FIN_EMAIL, "4", "FINANCIAL", "", FIN_ACC);
 
-  public static final UserPrincipal PERSON_PRINCIPAL1 = new UserPrincipal(PERSON1);
-  public static final UserPrincipal PERSON_PRINCIPAL2 = new UserPrincipal(PERSON2);
+  public static final UserPrincipal PERSON1_PRINCIPAL = new UserPrincipal(PERSON1);
+  public static final UserPrincipal PERSON2_PRINCIPAL = new UserPrincipal(PERSON2);
   public static final UserPrincipal BIZ_PRINCIPAL = new UserPrincipal(BIZ_USR);
   public static final UserPrincipal FIN_PRINCIPAL = new UserPrincipal(FIN_USR);
 }

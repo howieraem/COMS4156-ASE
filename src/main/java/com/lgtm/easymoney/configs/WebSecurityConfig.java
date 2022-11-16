@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /** Security configurations of Spring MVC. */
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(
     securedEnabled = true,
     jsr250Enabled = true,

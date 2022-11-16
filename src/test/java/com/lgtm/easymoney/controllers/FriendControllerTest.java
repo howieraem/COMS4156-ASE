@@ -131,7 +131,7 @@ public class FriendControllerTest {
 
     // Act
     ResultActions returnedResponse = mvc.perform(
-        get("/friend").with(user(UserTestConfig.PERSON_PRINCIPAL1)));
+        get("/friend").with(user(UserTestConfig.PERSON1_PRINCIPAL)));
 
     // Assert
     returnedResponse.andExpectAll(
@@ -146,7 +146,7 @@ public class FriendControllerTest {
 
     // Act
     ResultActions returnedResponse = mvc.perform(
-        get("/friend/pending").with(user(UserTestConfig.PERSON_PRINCIPAL1)));
+        get("/friend/pending").with(user(UserTestConfig.PERSON1_PRINCIPAL)));
 
     // Assert
     returnedResponse.andExpectAll(
@@ -156,7 +156,7 @@ public class FriendControllerTest {
 
   private ResultActions person1PostAddFriend(FriendshipReq req) throws Exception {
     return mvc.perform(post("/friend/add")
-        .with(user(UserTestConfig.PERSON_PRINCIPAL1))
+        .with(user(UserTestConfig.PERSON1_PRINCIPAL))
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
@@ -165,7 +165,7 @@ public class FriendControllerTest {
   private ResultActions person2PutAcceptFriend(FriendshipReq req)
       throws Exception {
     return mvc.perform(put("/friend/accept")
-        .with(user(UserTestConfig.PERSON_PRINCIPAL2))
+        .with(user(UserTestConfig.PERSON2_PRINCIPAL))
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
@@ -174,7 +174,7 @@ public class FriendControllerTest {
   private ResultActions person1DeleteFriend(Long friendUid)
       throws Exception {
     return mvc.perform(delete("/friend/{uid}", String.valueOf(friendUid))
-        .with(user(UserTestConfig.PERSON_PRINCIPAL1)));
+        .with(user(UserTestConfig.PERSON1_PRINCIPAL)));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {

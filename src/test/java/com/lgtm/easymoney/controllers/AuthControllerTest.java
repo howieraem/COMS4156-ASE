@@ -1,12 +1,15 @@
 package com.lgtm.easymoney.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.LoginReq;
 import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
 import com.lgtm.easymoney.security.JwtTokenProvider;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -44,18 +48,23 @@ public class AuthControllerTest {
   @MockBean
   private JwtTokenProvider jwtTokenProvider;
 
-  private static RegisterReq req;
+  private static RegisterReq registerReq;
+  private static LoginReq loginReq;
 
   /** Establish a test request payload. */
   @Before
   public void setup() {
-    req = new RegisterReq();
-    req.setEmail("a@a.com");
-    req.setPassword("a");
-    req.setUserType("PERSONAL");
-    req.setAccountName("a");
-    req.setAccountNumber("123");
-    req.setRoutingNumber("123456789");
+    registerReq = new RegisterReq();
+    registerReq.setEmail("a@a.com");
+    registerReq.setPassword("a");
+    registerReq.setUserType("PERSONAL");
+    registerReq.setAccountName("a");
+    registerReq.setAccountNumber("123");
+    registerReq.setRoutingNumber("123456789");
+
+    loginReq = new LoginReq();
+    loginReq.setEmail(UserTestConfig.PERSON1_EMAIL);
+    loginReq.setPassword(UserTestConfig.PERSON1.getPassword());
 
     // Assume userService.saveUser() always succeeds
     Mockito.when(userService.saveUser(Mockito.any(User.class)))
@@ -64,152 +73,169 @@ public class AuthControllerTest {
 
   @Test
   public void registerSuccessful() throws Exception {
-    postRegister(req).andExpect(status().isCreated()); // when field values are all valid
+    postRegister(registerReq).andExpect(status().isCreated()); // when field values are all valid
   }
 
   @Test
   public void registerFailedByInvalidEmail() throws Exception {
     // email is null
-    req.setEmail(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setEmail(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email is empty
-    req.setEmail("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setEmail("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email doesn't contain '@'
-    req.setEmail("a");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setEmail("a");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("email"));
 
     // email contains more than 1 '@'
-    req.setEmail("a@b.com@.com");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setEmail("a@b.com@.com");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("email"));
   }
 
   @Test
   public void registerFailedByInvalidPassword() throws Exception {
     // password is null
-    req.setPassword(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPassword(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("password"));
 
     // password is empty
-    req.setPassword("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPassword("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("password"));
   }
 
   @Test
   public void registerFailedByInvalidUserType() throws Exception {
     // user type is null
-    req.setUserType(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setUserType(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("userType"));
 
     // user type is empty
-    req.setUserType("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setUserType("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("userType"));
 
     // user type is not in enum
-    req.setUserType("abc");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setUserType("abc");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("userType"));
   }
 
   @Test
   public void registerFailedByInvalidPhone() throws Exception {
     // phone is not null but empty
-    req.setPhone("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPhone("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone contains non-numeric characters
-    req.setPhone("abc");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPhone("abc");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone is too short
-    req.setPhone("000");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPhone("000");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("phone"));
 
     // phone is too long
-    req.setPhone("00000000000");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setPhone("00000000000");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("phone"));
   }
 
   @Test
   public void registerFailedByInvalidAccountName() throws Exception {
     // account name is null
-    req.setAccountName(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountName(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountName"));
 
     // account name is empty
-    req.setAccountName("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountName("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountName"));
   }
 
   @Test
   public void registerFailedByInvalidAccountNumber() throws Exception {
     // account number is null
-    req.setAccountNumber(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountNumber(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number is empty
-    req.setAccountNumber("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountNumber("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number contains non-numeric characters
-    req.setAccountNumber("abc");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountNumber("abc");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountNumber"));
 
     // account number is too long
-    req.setAccountNumber("12321371892473218947122");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setAccountNumber("12321371892473218947122");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountNumber"));
   }
 
   @Test
   public void registerFailedByInvalidRoutingNumber() throws Exception {
     // routing number is null
-    req.setRoutingNumber(null);
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setRoutingNumber(null);
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is empty
-    req.setRoutingNumber("");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setRoutingNumber("");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number contains non-numeric characters
-    req.setRoutingNumber("abc");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setRoutingNumber("abc");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is too short
-    req.setRoutingNumber("12321");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setRoutingNumber("12321");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("routingNumber"));
 
     // routing number is too long
-    req.setRoutingNumber("12321371892473218947122");
-    postRegister(req).andExpect(status().isBadRequest())
+    registerReq.setRoutingNumber("12321371892473218947122");
+    postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("routingNumber"));
+  }
+
+  @Test
+  public void testLoginSuccess() throws Exception {
+    String fakeToken = "Bearer";
+    Mockito.when(authService.login(loginReq)).thenReturn(fakeToken);
+
+    postLogin(loginReq).andExpect(status().isOk()).andExpect(content().string(fakeToken));
+
+    // Note: login failure should be tested in integration tests
   }
 
   private ResultActions postRegister(RegisterReq req) throws Exception {
     return mvc.perform(post("/auth/register")
+        .content(asJsonString(req))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
+  }
+
+  private ResultActions postLogin(LoginReq req) throws Exception {
+    return mvc.perform(post("/auth/login")
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));

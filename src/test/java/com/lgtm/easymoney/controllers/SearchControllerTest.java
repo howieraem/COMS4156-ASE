@@ -12,10 +12,9 @@ import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
 import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.SearchService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
