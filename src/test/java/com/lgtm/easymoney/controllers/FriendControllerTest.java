@@ -15,8 +15,6 @@ import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.FriendshipReq;
 import com.lgtm.easymoney.payload.rsp.ProfileRsp;
 import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
-import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
-import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.FriendService;
 import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
@@ -26,7 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,7 +38,8 @@ import org.springframework.test.web.servlet.ResultActions;
  * */
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(FriendController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class FriendControllerTest {
   @Autowired
   private MockMvc mvc;
@@ -49,12 +49,6 @@ public class FriendControllerTest {
 
   @MockBean
   private UserServiceImpl userService;
-
-  @MockBean
-  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-  @MockBean
-  private JwtTokenProvider jwtTokenProvider;
 
   private FriendshipReq friendshipReq;
   private ProfilesRsp profilesRsp;
@@ -81,13 +75,21 @@ public class FriendControllerTest {
   }
 
   @Test
+  public void noAccessForUnauthenticatedUsers() throws Exception {
+    mvc.perform(post("/friend/add")).andExpect(status().isUnauthorized());
+    mvc.perform(put("/friend/accept")).andExpect(status().isUnauthorized());
+    mvc.perform(delete("/friend/{uid}", String.valueOf(uid2))).andExpect(status().isUnauthorized());
+    mvc.perform(get("/friend")).andExpect(status().isUnauthorized());
+    mvc.perform(get("/friend/pending")).andExpect(status().isUnauthorized());
+  }
+
+  @Test
   public void addFriendSuccess() throws Exception {
     // Act
     ResultActions returnedResponse = person1PostAddFriend(friendshipReq);
 
     // Assert
-    returnedResponse.andExpectAll(
-            status().isCreated());
+    returnedResponse.andExpectAll(status().isCreated());
   }
 
   @Test
@@ -175,7 +177,7 @@ public class FriendControllerTest {
 
   private ResultActions person1DeleteFriend(Long friendUid)
       throws Exception {
-    return mvc.perform(delete("/friend/delete/{uid}", String.valueOf(friendUid))
+    return mvc.perform(delete("/friend/{uid}", String.valueOf(friendUid))
         .with(user(UserTestConfig.PERSON_PRINCIPAL1)));
   }
 

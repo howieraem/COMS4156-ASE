@@ -75,7 +75,7 @@ public class FriendController {
    * @param uid the other user's ID.
    * @return 200 OK.
    */
-  @DeleteMapping("/delete/{uid}")
+  @DeleteMapping("/{uid}")
   @Operation(summary = "Method for a user to delete a friend.")
   public ResponseEntity<Void> delFriend(
       @CurrentUser UserPrincipal principal,
