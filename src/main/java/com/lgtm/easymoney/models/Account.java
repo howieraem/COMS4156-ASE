@@ -53,4 +53,11 @@ public class Account implements Serializable {
   /*associated User, one-to-one mapping*/
   @OneToOne(mappedBy = "account")
   private User accountUser;
+
+  /** For unit test purpose. */
+  public static Account ofTest(String accountName) {
+    var a = new Account();
+    a.setAccountName(accountName);
+    return a;
+  }
 }

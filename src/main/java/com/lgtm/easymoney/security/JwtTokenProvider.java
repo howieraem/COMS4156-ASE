@@ -49,26 +49,6 @@ public class JwtTokenProvider {
   }
 
   /**
-   * Returns the token expiration date encapsulated within the token.
-   */
-  public Date getTokenExpiryFromJwt(String token) {
-    Claims claims = Jwts.parser()
-        .setSigningKey(jwtSecret)
-        .parseClaimsJws(token)
-        .getBody();
-
-    return claims.getExpiration();
-  }
-
-  /**
-   * Return the jwt expiration for the client so that they can execute
-   * the refresh token logic appropriately.
-   */
-  public long getExpiryDuration() {
-    return jwtExpirationInMs;
-  }
-
-  /**
    * Validates if a token satisfies the following properties.
    * - Signature is not malformed
    * - Token hasn't expired

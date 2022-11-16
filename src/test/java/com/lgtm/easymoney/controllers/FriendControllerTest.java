@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,13 +10,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lgtm.easymoney.models.Account;
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.FriendshipReq;
 import com.lgtm.easymoney.payload.rsp.ProfileRsp;
 import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.FriendService;
-import com.lgtm.easymoney.services.UserService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -40,17 +43,25 @@ import org.springframework.test.web.servlet.ResultActions;
 public class FriendControllerTest {
   @Autowired
   private MockMvc mvc;
+
   @MockBean
   private FriendService friendService;
+
   @MockBean
-  private UserService userService;
+  private UserServiceImpl userService;
+
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
+
   private FriendshipReq friendshipReq;
-  private ProfileRsp profileRsp;
   private ProfilesRsp profilesRsp;
-  private Long uid1 = 1L;
-  private Long uid2 = 2L;
-  private User friend = new User();
-  private Account friendAccount = new Account();
+  private final User user1 = UserTestConfig.PERSON1;
+  private final User user2 = UserTestConfig.PERSON2;
+  private final Long uid1 = user1.getId();
+  private final Long uid2 = user2.getId();
 
   /**
    * Set up reusable test fixtures.
@@ -59,15 +70,10 @@ public class FriendControllerTest {
   public void setUp() {
     // friendshipreq
     friendshipReq = new FriendshipReq();
-    friendshipReq.setUid1(uid1);
-    friendshipReq.setUid2(uid2);
-    // profilersp
-    friend.setId(uid2);
-    friendAccount.setAccountName("friendAccount");
-    friend.setAccount(friendAccount);
-    Mockito.when(userService.getUserById(uid2)).thenReturn(friend);
-    friendAccount.setAccountUser(friend);
-    profileRsp = new ProfileRsp(friend);
+    friendshipReq.setUid(uid2);
+    Mockito.when(userService.getUserById(uid2)).thenReturn(user2);
+    ProfileRsp profileRsp = new ProfileRsp(user2);
+
     // profilesrsp
     List<ProfileRsp> res = new ArrayList<>();
     res.add(profileRsp);
@@ -77,7 +83,7 @@ public class FriendControllerTest {
   @Test
   public void addFriendSuccess() throws Exception {
     // Act
-    ResultActions returnedResponse = postAddFriend(friendshipReq);
+    ResultActions returnedResponse = person1PostAddFriend(friendshipReq);
 
     // Assert
     returnedResponse.andExpectAll(
@@ -86,20 +92,24 @@ public class FriendControllerTest {
 
   @Test
   public void addFriendFailWithNull() throws Exception {
-    friendshipReq.setUid1(null);
+    friendshipReq.setUid(null);
     // Act
-    ResultActions returnedResponse = postAddFriend(friendshipReq);
+    ResultActions returnedResponse = person1PostAddFriend(friendshipReq);
 
     // Assert
     returnedResponse.andExpectAll(
             status().isBadRequest(),
-            jsonPath("$.errorFields").value("uid1"));
+            jsonPath("$.errorFields").value("uid"));
   }
 
   @Test
   public void acceptFriendSuccess() throws Exception {
+    // Arrange
+    friendshipReq.setUid(uid1);
+
     // Act
-    ResultActions returnedResponse = putAcceptFriend(friendshipReq);
+    ResultActions returnedResponse =
+        person2PutAcceptFriend(friendshipReq);
 
     // Assert
     returnedResponse.andExpectAll(
@@ -109,7 +119,7 @@ public class FriendControllerTest {
   @Test
   public void deleteFriendSuccess() throws Exception {
     // Act
-    ResultActions returnedResponse = deleteDelFriend(friendshipReq);
+    ResultActions returnedResponse = person1DeleteFriend(uid2);
 
     // Assert
     returnedResponse.andExpectAll(
@@ -119,37 +129,26 @@ public class FriendControllerTest {
   @Test
   public void getFriendsSuccess() throws Exception {
     // Arrange
-    Mockito.when(friendService.getFriends(uid1)).thenReturn(profilesRsp);
+    Mockito.when(friendService.getFriendProfiles(user1)).thenReturn(profilesRsp);
 
     // Act
-    ResultActions returnedResponse =
-            mvc.perform(get("/friend/{uid}", String.valueOf(uid1)));
+    ResultActions returnedResponse = mvc.perform(
+        get("/friend").with(user(UserTestConfig.PERSON_PRINCIPAL1)));
 
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
             jsonPath("$.userProfiles[0].uid").value(uid2));
-  }
-
-  @Test
-  public void getFriendsFailedWithEmptyInput() throws Exception {
-    // Act
-    ResultActions returnedResponse =
-            mvc.perform(get("/friend/{uid}", String.valueOf("")));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isNotFound());
   }
 
   @Test
   public void getFriendsPendingSuccess() throws Exception {
     // Arrange
-    Mockito.when(friendService.getFriendsPending(uid1)).thenReturn(profilesRsp);
+    Mockito.when(friendService.getFriendProfilesPending(user1)).thenReturn(profilesRsp);
 
     // Act
-    ResultActions returnedResponse =
-            mvc.perform(get("/friend/{uid}/pending", String.valueOf(uid1)));
+    ResultActions returnedResponse = mvc.perform(
+        get("/friend/pending").with(user(UserTestConfig.PERSON_PRINCIPAL1)));
 
     // Assert
     returnedResponse.andExpectAll(
@@ -157,25 +156,27 @@ public class FriendControllerTest {
             jsonPath("$.userProfiles[0].uid").value(uid2));
   }
 
-  private ResultActions postAddFriend(FriendshipReq req) throws Exception {
+  private ResultActions person1PostAddFriend(FriendshipReq req) throws Exception {
     return mvc.perform(post("/friend/add")
-            .content(asJsonString(req))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON));
+        .with(user(UserTestConfig.PERSON_PRINCIPAL1))
+        .content(asJsonString(req))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
   }
 
-  private ResultActions putAcceptFriend(FriendshipReq req) throws Exception {
+  private ResultActions person2PutAcceptFriend(FriendshipReq req)
+      throws Exception {
     return mvc.perform(put("/friend/accept")
-            .content(asJsonString(req))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON));
+        .with(user(UserTestConfig.PERSON_PRINCIPAL2))
+        .content(asJsonString(req))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
   }
 
-  private ResultActions deleteDelFriend(FriendshipReq req) throws Exception {
-    return mvc.perform(delete("/friend/delete")
-            .content(asJsonString(req))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON));
+  private ResultActions person1DeleteFriend(Long friendUid)
+      throws Exception {
+    return mvc.perform(delete("/friend/delete/{uid}", String.valueOf(friendUid))
+        .with(user(UserTestConfig.PERSON_PRINCIPAL1)));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {
