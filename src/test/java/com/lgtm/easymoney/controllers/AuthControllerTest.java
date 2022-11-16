@@ -8,7 +8,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.RegisterReq;
-import com.lgtm.easymoney.services.UserService;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
+import com.lgtm.easymoney.services.AuthService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +34,15 @@ public class AuthControllerTest {
   private MockMvc mvc;
 
   @MockBean
-  private UserService userService;
+  private AuthService authService;
+
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
 
   private static RegisterReq req;
 
