@@ -2,14 +2,12 @@ package com.lgtm.easymoney.payload.rsp;
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.models.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * response for returning user's profile payload.
  */
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class ProfileRsp {

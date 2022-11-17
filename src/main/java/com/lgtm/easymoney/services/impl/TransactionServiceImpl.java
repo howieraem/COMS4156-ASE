@@ -37,7 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
    */
   @Override
   public boolean transactionExists(Transaction t) {
-    return t.getId() != null && transactionRepository.existsById(t.getId());
+    return transactionRepository.existsById(t.getId());
   }
 
   /**

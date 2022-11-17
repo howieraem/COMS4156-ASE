@@ -1,7 +1,8 @@
-package com.lgtm.easymoney.integrations;
+package com.lgtm.easymoney;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.configs.UserTestConfig;
+import com.lgtm.easymoney.exceptions.handlers.ControllerExceptionHandler;
 import com.lgtm.easymoney.payload.req.LoginReq;
 import com.lgtm.easymoney.payload.req.RegisterReq;
 import com.lgtm.easymoney.repositories.UserRepository;
@@ -34,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthTest {
+public class AuthIntegrationTest {
   @Autowired
   private MockMvc mvc;
 
@@ -46,6 +48,9 @@ public class AuthTest {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private ControllerExceptionHandler controllerExceptionHandler;
 
   @Value("${app.jwt.header}")
   private String tokenRequestHeader;
@@ -121,10 +126,12 @@ public class AuthTest {
 
   @Test
   public void testFeedApi() throws Exception {
-    // Without token
+    // Without valid token
     mvc.perform(get("/feed")).andExpect(status().isUnauthorized());
+    mvc.perform(get("/feed").header(tokenRequestHeader, "bad token"))
+        .andExpect(status().isUnauthorized());
 
-    // With token
+    // With valid token
     mvc.perform(get("/feed").header(tokenRequestHeader, person1Token))
         .andExpect(status().isOk());
   }

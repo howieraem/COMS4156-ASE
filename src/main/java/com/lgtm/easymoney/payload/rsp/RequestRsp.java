@@ -2,14 +2,12 @@ package com.lgtm.easymoney.payload.rsp;
 
 import java.math.BigDecimal;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * response for making a request.
  */
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class RequestRsp {

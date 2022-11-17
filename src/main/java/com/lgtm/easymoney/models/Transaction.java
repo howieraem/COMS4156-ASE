@@ -2,7 +2,6 @@ package com.lgtm.easymoney.models;
 
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
-import com.lgtm.easymoney.enums.validator.ValueOfEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,7 +26,6 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Entity
 @Table(name = "transaction")
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class Transaction implements Serializable {
