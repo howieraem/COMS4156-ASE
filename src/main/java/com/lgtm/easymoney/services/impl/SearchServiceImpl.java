@@ -4,8 +4,8 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Account;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
 import com.lgtm.easymoney.repositories.AccountRepository;
 import com.lgtm.easymoney.repositories.UserRepository;
 import com.lgtm.easymoney.services.SearchService;
@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
    * Return: Search response
    */
   @Override
-  public ProfilesRsp searchById(Long id) {
+  public ProfileRsp searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
     //Compose response
@@ -90,15 +90,8 @@ public class SearchServiceImpl implements SearchService {
     res.setUserType(user.getType());
     res.setPhone(user.getPhone());
 
-    List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
-    boolean searchResult = true;
-    profileList.add(res);
-    ProfilesRsp searchRes = new ProfilesRsp();
-    searchRes.setSuccess(searchResult);
-    searchRes.setUserProfiles(profileList);
-
     //Issue response
-    return searchRes;
+    return res;
   }
 
   /**
@@ -115,9 +108,6 @@ public class SearchServiceImpl implements SearchService {
 
     userList = getUserByEmailOrPhone(userInfo, userInfo);
     userList.addAll(getUserByName(userInfo));
-
-    //Successful search
-    boolean searchResult = true;
 
     //Compose profile list
     List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
@@ -138,7 +128,6 @@ public class SearchServiceImpl implements SearchService {
 
     //Insert profile list into search response
     ProfilesRsp searchRes = new ProfilesRsp();
-    searchRes.setSuccess(searchResult);
     searchRes.setUserProfiles(profileList);
 
     return searchRes;

@@ -13,7 +13,7 @@ public class DbConsts {
       USER_EMAIL_CONSTRAINT, new String[]{"email"},
       ACCOUNT_NUMBERS_CONSTRAINT, new String[]{"accountNumber", "routingNumber"},
       GROUP_NAME_CONSTRAINT, new String[]{"name"},
-      FRIENDSHIP_PRIMARY_CONSTRAINT, new String[]{"uid1", "uid2"}
+      FRIENDSHIP_PRIMARY_CONSTRAINT, new String[]{"uid"}
   );
 
   public static final Map<String, String> CONSTRAINTS_ERR_MSGS = Map.of(

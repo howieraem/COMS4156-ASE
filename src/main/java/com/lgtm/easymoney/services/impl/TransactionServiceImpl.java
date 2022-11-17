@@ -4,7 +4,7 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.TransactionRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
 import com.lgtm.easymoney.repositories.TransactionRepository;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
@@ -37,7 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
    */
   @Override
   public boolean transactionExists(Transaction t) {
-    return t.getId() != null && transactionRepository.existsById(t.getId());
+    return transactionRepository.existsById(t.getId());
   }
 
   /**

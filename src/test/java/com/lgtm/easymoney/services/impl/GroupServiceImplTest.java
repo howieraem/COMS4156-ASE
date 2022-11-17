@@ -5,14 +5,14 @@ import static org.junit.Assert.assertThrows;
 
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.models.BizProfile;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.GroupRepository;
 import com.lgtm.easymoney.services.UserService;
 import java.util.HashSet;
@@ -72,12 +72,10 @@ public class GroupServiceImplTest {
 
     inviteToGroupReq = new InviteToGroupReq();
     inviteToGroupReq.setGid(expectedGid);
-    inviteToGroupReq.setInviterId(uid1);
     inviteToGroupReq.setInviteeId(uid2);
 
     leaveGroupReq = new LeaveGroupReq();
     leaveGroupReq.setGid(expectedGid);
-    leaveGroupReq.setUid(uid1);
 
     groupRsp = new GroupRsp();
     groupRsp.setGid(expectedGid);
@@ -88,15 +86,15 @@ public class GroupServiceImplTest {
     user1 = new User();
     user1.setId(uid1);
     user1.setTypeByStr("business");
-    var bizProfile = new BizProfile();
-    bizProfile.setBizUser(user1);
-    bizProfile.setPromotionText("abc");
-    user1.setBizProfile(bizProfile);
+    user1.setBizPromotionText("abc");
 
     users = new HashSet<>();
     users.add(user1);
+
     user2 = new User();
     user2.setId(uid2);
+    user2.setTypeByStr("personal");
+
     Mockito.when(userService.getUserById(uid1)).thenReturn(user1);
     Mockito.when(userService.getUserById(uid2)).thenReturn(user2);
 
@@ -106,6 +104,8 @@ public class GroupServiceImplTest {
     group.setDescription(groupDescription);
     group.setGroupUsers(users);
     Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+    user1.setGroups(Set.of(group));
+    user2.setGroups(Set.of());
   }
 
   @Test
@@ -131,57 +131,70 @@ public class GroupServiceImplTest {
       return invocation.getArgument(0);
     }).when(groupRepository).save(Mockito.any(Group.class));
 
-    var rsp = groupService.createGroup(createGroupReq);
+    var rsp = groupService.createGroup(user1, createGroupReq);
 
     assertEquals(rsp, createdRsp);
   }
 
   @Test
   public void testInvite() {
-    groupService.inviteToGroup(inviteToGroupReq);
+    groupService.inviteToGroup(user1, inviteToGroupReq);
 
     Mockito.verify(groupRepository, Mockito.times(1)).save(Mockito.any(Group.class));
   }
 
   @Test
   public void inviteFailedByNonMemberInviter() {
-    inviteToGroupReq.setInviterId(uid2);
-
-    assertThrows(InvalidUpdateException.class, () -> groupService.inviteToGroup(inviteToGroupReq));
+    assertThrows(
+        InvalidUpdateException.class, () -> groupService.inviteToGroup(user2, inviteToGroupReq));
   }
 
   @Test
   public void inviteFailedByMemberInvitee() {
     inviteToGroupReq.setInviteeId(uid1);
-
-    assertThrows(InvalidUpdateException.class, () -> groupService.inviteToGroup(inviteToGroupReq));
+    assertThrows(
+        InvalidUpdateException.class, () -> groupService.inviteToGroup(user1, inviteToGroupReq));
   }
 
   @Test
   public void testLeave() {
-    groupService.leaveGroup(leaveGroupReq);
+    groupService.leaveGroup(user1, leaveGroupReq);
 
     Mockito.verify(groupRepository, Mockito.times(1)).save(Mockito.any(Group.class));
   }
 
   @Test
   public void leaveFailedByNonMember() {
-    leaveGroupReq.setUid(uid2);
-
-    assertThrows(InvalidUpdateException.class, () -> groupService.leaveGroup(leaveGroupReq));
+    assertThrows(InvalidUpdateException.class, () -> groupService.leaveGroup(user2, leaveGroupReq));
   }
 
   @Test
   public void testGetGroup() {
-    var rsp = groupService.getGroupProfile(expectedGid);
+    var rsp = groupService.getGroupProfile(user1, expectedGid);
 
     assertEquals(rsp, groupRsp);
   }
 
   @Test
-  public void testGetGroupAds() {
-    var rsp = groupService.getGroupAds(expectedGid);
+  public void getGroupFailedWithNonMember() {
+    assertThrows(UnauthorizedException.class,
+        () -> groupService.getGroupProfile(user2, expectedGid));
+  }
 
-    assertEquals(rsp.getAds(), List.of(user1.getBizProfile().getPromotionText()));
+  @Test
+  public void testGetGroupAds() {
+    users.add(user2);
+    group.setGroupUsers(users);
+    user1.setGroups(Set.of(group));
+    user2.setGroups(Set.of(group));
+    var rsp = groupService.getGroupAds(user1, expectedGid);
+
+    assertEquals(rsp.getAds(), List.of(user1.getBizPromotionText()));
+  }
+
+  @Test
+  public void getGroupAdsFailedWithNonMember() {
+    assertThrows(UnauthorizedException.class,
+        () -> groupService.getGroupAds(user2, expectedGid));
   }
 }

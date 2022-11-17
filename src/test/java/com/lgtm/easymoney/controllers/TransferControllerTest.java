@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -7,13 +8,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
-import com.lgtm.easymoney.payload.TransferReq;
-import com.lgtm.easymoney.payload.TransferRsp;
+import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.TransferReq;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
+import com.lgtm.easymoney.payload.rsp.TransferRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.TransferService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +48,23 @@ public class TransferControllerTest {
   private MockMvc mvc;
   @MockBean
   private TransferService transferService;
+
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
+
   private TransferReq transferReq;
   private TransferRsp transferRsp;
   private TransactionRsp transactionRsp;
-  private Long fromUid = 1L;
-  private Long toUid = 2L;
+  private UserPrincipal fromPrincipal = UserTestConfig.PERSON1_PRINCIPAL;
+  private User fromUser = fromPrincipal.get();
+  private User toUser = UserTestConfig.PERSON2;
+  private Long fromUid = fromUser.getId();
+  private Long toUid = toUser.getId();
   private BigDecimal amount = BigDecimal.valueOf(30.0);
   private String description = "this is a test transfer";
   private Date lastUpdateTime = new Date(20221020L);
@@ -77,7 +96,7 @@ public class TransferControllerTest {
   public void transferSuccess() throws Exception {
     // Arrange
     ResourceCreatedRsp resourceCreatedRsp = new ResourceCreatedRsp(transactionId);
-    Mockito.when(transferService.makeTransfer(transferReq))
+    Mockito.when(transferService.makeTransfer(fromUser, transferReq))
         .thenReturn(resourceCreatedRsp);
 
     // Act
@@ -87,20 +106,6 @@ public class TransferControllerTest {
     returnedResponse.andExpectAll(
         status().isCreated(),
         jsonPath("$.id").value(transactionId));
-  }
-
-  @Test
-  public void transferFailedWithNullFromUid() throws Exception {
-    // Arrange
-    transferReq.setFromUid(null);
-
-    // Act
-    ResultActions returnedResponse = postTransfer(transferReq);
-
-    // Assert
-    returnedResponse.andExpectAll(
-        status().isBadRequest(),
-        jsonPath("$.errorFields").value("fromUid"));
   }
 
   @Test
@@ -190,11 +195,10 @@ public class TransferControllerTest {
   @Test
   public void getTransfersSuccess() throws Exception {
     // Arrange
-    Mockito.when(transferService.getTransfersByUid(fromUid)).thenReturn(transferRsp);
+    Mockito.when(transferService.getTransfers(fromUser)).thenReturn(transferRsp);
 
     // Act
-    ResultActions returnedResponse =
-        mvc.perform(get("/transfer/{uid}", String.valueOf(fromUid)));
+    ResultActions returnedResponse = mvc.perform(get("/transfer").with(user(fromPrincipal)));
 
     // Assert
     returnedResponse.andExpectAll(
@@ -211,6 +215,7 @@ public class TransferControllerTest {
 
   private ResultActions postTransfer(TransferReq transferReq) throws Exception {
     return mvc.perform(post("/transfer/create")
+        .with(user(fromPrincipal))
         .content(asJsonString(transferReq))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));

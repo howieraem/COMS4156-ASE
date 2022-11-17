@@ -1,9 +1,14 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
+import com.lgtm.easymoney.payload.req.BalanceReq;
+import com.lgtm.easymoney.payload.req.BizProfileReq;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user")
+@SecurityRequirement(name = "Authorization")
 public class UserController {
   private final UserService userService;
 
@@ -33,8 +39,11 @@ public class UserController {
   @PutMapping("/deposit")
   @Operation(summary = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
-  public ResponseEntity<BalanceRsp> deposit(@Valid @RequestBody BalanceReq req) {
-    return new ResponseEntity<>(userService.makeDeposit(req), HttpStatus.OK);
+  public ResponseEntity<BalanceRsp> deposit(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody BalanceReq req) {
+    return new ResponseEntity<>(
+        userService.makeDeposit(principal.get(), req.getAmount()), HttpStatus.OK);
   }
 
   /**
@@ -44,8 +53,22 @@ public class UserController {
   @PutMapping("/withdraw")
   @Operation(summary = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")
-  public ResponseEntity<BalanceRsp> withdraw(@Valid @RequestBody BalanceReq req) {
-    return new ResponseEntity<>(userService.makeWithdraw(req), HttpStatus.OK);
+  public ResponseEntity<BalanceRsp> withdraw(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody BalanceReq req) {
+    return new ResponseEntity<>(
+        userService.makeWithdraw(principal.get(), req.getAmount()), HttpStatus.OK);
   }
 
+  /**
+   * Let a non-personal user update the business profile.
+   */
+  @PutMapping("/biz")
+  @Operation(summary = "Method for a non-personal user to update the business profile.")
+  public ResponseEntity<Void> updateBiz(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody BizProfileReq req) {
+    userService.updateBizProfile(principal.get(), req);
+    return ResponseEntity.ok().build();
+  }
 }

@@ -1,10 +1,8 @@
 package com.lgtm.easymoney.services;
 
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.BalanceReq;
-import com.lgtm.easymoney.payload.BalanceRsp;
-import com.lgtm.easymoney.payload.RegisterReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.BizProfileReq;
+import com.lgtm.easymoney.payload.rsp.BalanceRsp;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -20,16 +18,9 @@ public interface UserService {
 
   List<User> getAllUsers();
 
-  ResourceCreatedRsp createUser(RegisterReq registerReq);
+  BalanceRsp makeDeposit(User user, BigDecimal amount);
 
-  boolean makeDeposit(User user, BigDecimal amount);
+  BalanceRsp makeWithdraw(User user, BigDecimal amount);
 
-  BalanceRsp makeDeposit(BalanceReq req);
-
-  BalanceRsp makeWithdraw(BalanceReq req);
-
-  boolean makeWithdraw(User user, BigDecimal amount);
-
-  
-
+  void updateBizProfile(User user, BizProfileReq req);
 }

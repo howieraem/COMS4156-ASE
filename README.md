@@ -1,5 +1,7 @@
 # COMS W4156 ASE Project
 
+Client repository: https://github.com/rl3250/f22_4156_client
+
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
@@ -8,8 +10,8 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 
 1. Install [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) and MySQL server (version >= 8)
 2. Create a schema named "4156db" in your local MySQL server
-3. Enter the username and the password of your local MySQL server in `src/main/resources/application.properties`
-4. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in `src/main/resources/application.properties`
+3. Enter the username and the password of your local MySQL server in [src/main/resources/application.properties](src/main/resources/application.properties)
+4. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in [src/main/resources/application.properties](src/main/resources/application.properties)
 5. Run `./mvnw`
 6. Run `java -jar ./target/easymoney-0.0.1-SNAPSHOT.war`
 
@@ -36,8 +38,8 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 ## How to run unit and integration tests
 
 1. Create a schema named "4156dbtest" in your local MySQL server
-2. Enter the username and the password of your local MySQL server in `src/test/resources/application.properties`
-3. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in `src/test/resources/application.properties`
+2. Enter the username and the password of your local MySQL server in [src/test/resources/application.properties](src/test/resources/application.properties)
+3. By default, the service runs on port 8080. If you wish to use a different port, enter `server.port=<port no.>` in [src/test/resources/application.properties](src/test/resources/application.properties)
 4. Install Maven (>=3.8.6 recommended) if you haven't done so
 5. Run `mvn clean test`
 
@@ -52,12 +54,14 @@ Alternatively, if you'd like to see immediate documentation update after you cha
 
 ## Third-party code in use
 
-These are all defined in `pom.xml` and downloaded by Maven.
+These are mostly defined in `pom.xml` and downloaded by Maven.
 
 - Spring: Handles client requests, returns responses to clients, and manages beans. Used everywhere.
-- Spring validation: Validates data fields in client requests. Mainly used under `src/main/models/*.java`.
-- JPA: Interacts with the database. Mainly used under `src/main/repositories/*.java`.
-- lombok: Simplifies the code by avoiding manually writing getters, setters, etc. Mainly used under `src/main/models/*.java` and `src/main/payload/*.java`.
+- Spring validation: Validates data fields in client requests. Mainly used in [src/main/java/com/lgtm/easymoney/models](src/main/java/com/lgtm/easymoney/models).
+- JPA: Interacts with the database. Mainly used under [src/main/java/com/lgtm/easymoney/repositories](src/main/java/com/lgtm/easymoney/repositories).
+- lombok: Simplifies the code by avoiding manually writing getters, setters, etc. Mainly used in [src/main/java/com/lgtm/easymoney/models](src/main/java/com/lgtm/easymoney/models) and [src/main/java/com/lgtm/easymoney/payload](src/main/java/com/lgtm/easymoney/payload).
+
+We also utilized Spring Security and the JWT implementation from https://github.com/isopropylcyanide/Jwt-Spring-Security-JPA/tree/master/src/main/java/com/accolite/pru/health/AuthApp/security which is in [src/main/java/com/lgtm/easymoney/security](src/main/java/com/lgtm/easymoney/security).
 
 ## Style checker
 
@@ -65,6 +69,8 @@ We follow style rules of Google checks. You may see warnings/errors if you run s
 Below is the screenshot for checking entire project using `checkstyle` plugin from intellij, no errors occured.
 ![img.png](img.png)
 
-## How to deploy
+## Deployment
 
-(TODO)
+Our service is hosted on <http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/>.
+
+This repo also includes a [collection of Postman test requests for the deployed service](remote_server_system_tests.postman_collection.json). You can import it to your Postman workspace by following steps 2-4 of [the instructions above](#how-to-run-multi-client-system-tests-with-postman), but keep in mind that these are just API invocation examples. Before sending requests to the remote server, many of the request parameters need to be modified as the remote database may already contain relevant records.

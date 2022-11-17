@@ -7,11 +7,11 @@ import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.LoanRsp;
-import com.lgtm.easymoney.payload.RequestAcceptDeclineReq;
-import com.lgtm.easymoney.payload.RequestReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
+import com.lgtm.easymoney.payload.req.RequestAcceptDeclineReq;
+import com.lgtm.easymoney.payload.req.RequestReq;
+import com.lgtm.easymoney.payload.rsp.LoanRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
 import com.lgtm.easymoney.services.LoanService;
 import com.lgtm.easymoney.services.RequestService;
 import com.lgtm.easymoney.services.TransactionService;
@@ -48,10 +48,10 @@ public class LoanServiceImpl implements LoanService {
    */
   private void validateLoanUsers(User borrower, User lender) {
     if (!lender.getType().equals(UserType.FINANCIAL)) {
-      throw new InapplicableOperationException("user", lender.getId(), "toUid", "requestLoan");
+      throw new InapplicableOperationException("user", lender.getId(), "toUid", "loan");
     }
     if (!borrower.getType().equals(UserType.PERSONAL)) {
-      throw new InapplicableOperationException("user", borrower.getId(), "fromUid", "requestLoan");
+      throw new InapplicableOperationException("user", borrower.getId(), "fromUid", "loan");
     }
   }
 
@@ -80,14 +80,21 @@ public class LoanServiceImpl implements LoanService {
   }
 
   /**
-   * Get list of loans by user.
+   * Get a list of loans by user.
    */
-  private List<Transaction> getLoansByUser(User user) {
+  @Override
+  public LoanRsp getLoansByUser(User user) {
     List<TransactionStatus> status = List.of(
         TransactionStatus.LOAN_PENDING,
         TransactionStatus.LOAN_APPROVED,
         TransactionStatus.LOAN_DECLINED);
-    return transactionService.getAllTransactionsWithUser(user, status);
+    var loans = transactionService.getAllTransactionsWithUser(user, status);
+    LoanRsp response = new LoanRsp();
+    List<TransactionRsp> transferRsps =
+        transactionService.generateListResponseFromTransactions(loans);
+    response.setLoans(transferRsps);
+    response.setMessage("User's loans returned");
+    return response;
   }
 
   /**
@@ -110,16 +117,16 @@ public class LoanServiceImpl implements LoanService {
   /**
    * Create a loan request.
    *
-   * @param req loan request
+   * @param borrower current logged-in lender.
+   * @param req loan request.
    * @return resource created response containing created loan id
    */
   @Override
-  public ResourceCreatedRsp requestLoan(RequestReq req) {
+  public ResourceCreatedRsp requestLoan(User borrower, RequestReq req) {
     // get params
     BigDecimal amount = req.getAmount();
     String category = req.getCategory();
     String desc = req.getDescription();
-    User borrower = userService.getUserById(req.getFromUid());
     User lender = userService.getUserById(req.getToUid());
     // validate if loan user type is valid
     validateLoanUsers(borrower, lender);
@@ -128,26 +135,6 @@ public class LoanServiceImpl implements LoanService {
         Category.valueOf(category.toUpperCase()));
     // response
     return new ResourceCreatedRsp(loan.getId());
-  }
-
-  /**
-   * Get all loans corresponding to a specific user.
-   *
-   * @param uid user id
-   * @return loan response
-   */
-  @Override
-  public LoanRsp getLoansByUid(Long uid) {
-    User user = userService.getUserById(uid);
-    List<Transaction> loans = getLoansByUser(user);
-    // response
-    LoanRsp response = new LoanRsp();
-    response.setSuccess(true);
-    List<TransactionRsp> transferRsps =
-        transactionService.generateListResponseFromTransactions(loans);
-    response.setLoans(transferRsps);
-    response.setMessage("User's loans returned");
-    return response;
   }
 
   /**
@@ -171,17 +158,17 @@ public class LoanServiceImpl implements LoanService {
   /**
    * Approve a loan request.
    *
-   * @param req request payload, contains loan id, lender id, borrower id
+   * @param lender current logged-in lender.
+   * @param req request payload, contains loan id, lender id, borrower id.
    * @return loan response
    */
   @Override
-  public LoanRsp approveLoan(RequestAcceptDeclineReq req) {
+  public LoanRsp approveLoan(User lender, RequestAcceptDeclineReq req) {
     // get params
     Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
     Long lid = req.getRequestid();
     // validate
-    User lender = userService.getUserById(fromUid);
     User borrower = userService.getUserById(toUid);
     validateLoanUsers(borrower, lender);
     if (!validateLoanRequest(lid, fromUid, toUid)) {
@@ -199,7 +186,6 @@ public class LoanServiceImpl implements LoanService {
         String.valueOf(loan.getId()), Category.LOAN_PAYBACK);
     // response returns the approved loan and the loan-payback request
     LoanRsp response = new LoanRsp();
-    response.setSuccess(true);
     List<TransactionRsp> transferRsps =
         transactionService.generateListResponseFromTransactions(List.of(loan, payback));
     response.setLoans(transferRsps);
@@ -218,17 +204,17 @@ public class LoanServiceImpl implements LoanService {
   /**
    * Decline a loan request.
    *
-   * @param req request payload, contains loan id, lender id, borrower id
+   * @param lender current logged-in lender.
+   * @param req request payload, contains loan id, lender id, borrower id.
    * @return loan response
    */
   @Override
-  public LoanRsp declineLoan(RequestAcceptDeclineReq req) {
+  public LoanRsp declineLoan(User lender, RequestAcceptDeclineReq req) {
     // get params
     Long fromUid = req.getFromUid();
     Long toUid = req.getToUid();
     Long lid = req.getRequestid();
     // validate
-    User lender = userService.getUserById(fromUid);
     User borrower = userService.getUserById(toUid);
     validateLoanUsers(borrower, lender);
     if (!validateLoanRequest(lid, fromUid, toUid)) {
@@ -238,7 +224,6 @@ public class LoanServiceImpl implements LoanService {
     Transaction loan = declineLoan(getLoanById(lid));
     // response
     LoanRsp response = new LoanRsp();
-    response.setSuccess(true);
     List<TransactionRsp> transferRsps =
         transactionService.generateListResponseFromTransactions(List.of(loan));
     response.setLoans(transferRsps);

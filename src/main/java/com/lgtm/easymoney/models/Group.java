@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +27,6 @@ import lombok.NoArgsConstructor;
                 name = DbConsts.GROUP_NAME_CONSTRAINT,
                 columnNames = {"name"})
 )
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class Group implements Serializable {

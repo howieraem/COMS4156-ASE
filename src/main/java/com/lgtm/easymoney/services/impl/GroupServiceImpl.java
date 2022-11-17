@@ -3,14 +3,15 @@ package com.lgtm.easymoney.services.impl;
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
 import com.lgtm.easymoney.models.Group;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.repositories.GroupRepository;
 import com.lgtm.easymoney.services.GroupService;
 import com.lgtm.easymoney.services.UserService;
@@ -57,8 +58,11 @@ public class GroupServiceImpl implements GroupService {
 
   /** Retrieve the group's name, description and member user ids given the group's id. */
   @Override
-  public GroupRsp getGroupProfile(Long gid) {
+  public GroupRsp getGroupProfile(User user, Long gid) {
     Group g = getGroupById(gid);
+    if (!user.getGroups().contains(g)) {
+      throw new UnauthorizedException(user.getId(), "Group", gid);
+    }
     GroupRsp r = new GroupRsp();
     r.setGid(g.getId());
     r.setName(g.getName());
@@ -71,13 +75,16 @@ public class GroupServiceImpl implements GroupService {
 
   /** Get a list of ads from the business users in a group given the group's id. */
   @Override
-  public GroupAdsRsp getGroupAds(Long gid) {
+  public GroupAdsRsp getGroupAds(User user, Long gid) {
     Group g = getGroupById(gid);
+    if (!user.getGroups().contains(g)) {
+      throw new UnauthorizedException(user.getId(), "Group", gid);
+    }
     Set<User> users = g.getGroupUsers();
     List<String> ads = new ArrayList<>();
     for (User u : users) {
       if (u.getType().equals(UserType.BUSINESS)) {
-        ads.add(u.getBizProfile().getPromotionText());
+        ads.add(u.getBizPromotionText());
       }
     }
     return new GroupAdsRsp(ads);
@@ -85,11 +92,14 @@ public class GroupServiceImpl implements GroupService {
 
   /** Create a group of users (maybe of different types) given info in the request payload. */
   @Override
-  public ResourceCreatedRsp createGroup(CreateGroupReq createGroupReq) {
+  public ResourceCreatedRsp createGroup(User creator, CreateGroupReq createGroupReq) {
     Set<User> users = new HashSet<>();
     for (Long uid : createGroupReq.getUids()) {
       users.add(userService.getUserById(uid));
     }
+    // In case creator's ID not in req uids which doesn't make sense.
+    users.add(creator);
+
     Group group = new Group();
     group.setGroupUsers(users);
     group.setName(createGroupReq.getName());
@@ -104,9 +114,8 @@ public class GroupServiceImpl implements GroupService {
    * if inviter is not a member of the group.
    */
   @Override
-  public void inviteToGroup(InviteToGroupReq inviteToGroupReq) {
+  public void inviteToGroup(User inviter, InviteToGroupReq inviteToGroupReq) {
     Group g = getGroupById(inviteToGroupReq.getGid());
-    User inviter = userService.getUserById(inviteToGroupReq.getInviterId());
     User invitee = userService.getUserById(inviteToGroupReq.getInviteeId());
     if (!isInGroup(g, inviter)) {
       throw new InvalidUpdateException("Group", g.getId(), "inviterId", inviter.getId());
@@ -119,15 +128,13 @@ public class GroupServiceImpl implements GroupService {
    * given info in the request payload.
    */
   @Override
-  public void leaveGroup(LeaveGroupReq leaveGroupReq) {
+  public void leaveGroup(User user, LeaveGroupReq leaveGroupReq) {
     Group g = getGroupById(leaveGroupReq.getGid());
-    User u = userService.getUserById(leaveGroupReq.getUid());
-    leaveGroup(g, u);
+    leaveGroup(g, user);
   }
 
   /** A user leaves a group. Throw InvalidUpdateException if the user is not a group member. */
-  @Override
-  public void leaveGroup(Group group, User user) {
+  private void leaveGroup(Group group, User user) {
     if (!isInGroup(group, user)) {
       throw new InvalidUpdateException("Group", group.getId(), "uid", user.getId());
     }
@@ -136,8 +143,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   /** Add a user to a group. Throw InvalidUpdateException if the user is already a group member. */
-  @Override
-  public void joinGroup(Group group, User user) {
+  private void joinGroup(Group group, User user) {
     if (isInGroup(group, user)) {
       throw new InvalidUpdateException("Group", group.getId(), "inviteeId", user.getId());
     }

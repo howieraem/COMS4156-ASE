@@ -1,9 +1,13 @@
 package com.lgtm.easymoney.controllers;
 
-import com.lgtm.easymoney.payload.FriendshipReq;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.req.FriendshipReq;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.FriendService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/friend")
+@SecurityRequirement(name = "Authorization")
 public class FriendController {
   final FriendService friendService;
 
@@ -32,64 +37,81 @@ public class FriendController {
     this.friendService = friendService;
   }
 
-  /*
-   * Method for a user to add a friend (request a friendship, need acceptance)
-   * @param req Friendship request that contains two user ids
-   * @return 201 Created; A friendship is created
+  /**
+   * Method for a user to add a friend (request a friendship, need acceptance).
+   *
+   * @param principal current logged-in user.
+   * @param req Friendship request that contains two user ids.
+   * @return 201 Created; A friendship is created.
    */
   @PostMapping("/add")
   @Operation(summary =
       "Method for a user to add a friend (request a friendship, need acceptance).")
-  public ResponseEntity<Void> addFriend(@Valid @RequestBody FriendshipReq req) {
-    friendService.addFriend(req);
+  public ResponseEntity<Void> addFriend(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody FriendshipReq req) {
+    friendService.addFriend(principal.get(), req);
     return new ResponseEntity<>(null, HttpStatus.CREATED);
   }
 
-  /*
-   * Method for a user to accept a friendship
-   * @param req Friendship request that contains two user ids
-   * @return 200 OK status; friend request accepted; the active field of friendship is true
+  /**
+   * Method for a user to accept a friendship.
+   *
+   * @param principal current logged-in user.
+   * @param req Friendship request that contains two user ids.
+   * @return 200 OK status; friend request accepted; the active field of friendship is true.
    */
   @PutMapping("/accept")
   @Operation(summary = "Method for a user to accept a friendship.")
-  public ResponseEntity<Void> acceptFriend(@Valid @RequestBody FriendshipReq req) {
-    friendService.acceptFriend(req);
+  public ResponseEntity<Void> acceptFriend(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody FriendshipReq req) {
+    friendService.acceptFriend(principal.get(), req);
     return ResponseEntity.ok().build();
   }
 
-  /*
-   * Method for a user to delete a friend
-   * @param req Friendship request that contains two user ids
-   * @return 200 OK
+  /**
+   * Method for a user to delete a friend. Since OpenAPI 3.0, it is standard to
+   * use path variable(s) rather than request body for DELETE methods.
+   *
+   * @param principal current logged-in user.
+   * @param uid the other user's ID.
+   * @return 200 OK.
    */
-  @DeleteMapping("/delete")
+  @DeleteMapping("/{uid}")
   @Operation(summary = "Method for a user to delete a friend.")
-  public ResponseEntity<Void> delFriend(@Valid @RequestBody FriendshipReq req) {
-    friendService.delFriend(req);
+  public ResponseEntity<Void> delFriend(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @PathVariable(value = "uid") @NotNull Long uid) {
+    friendService.delFriend(principal.get(), uid);
     return ResponseEntity.ok().build();
   }
 
-  /*
-   * Method for a user to get all friends accepted
-   * @param uid One user id
-   * @return A list of user profiles of the user's accepted friends
+  /**
+   * Method for a user to get all friends accepted.
+   *
+   * @param principal current logged-in user.
+   * @return A list of user profiles of the user's accepted friends.
    */
-  @GetMapping("/{uid}")
+  @GetMapping
   @Operation(summary = "Method for a user to get all friends accepted.")
-  public ResponseEntity<ProfilesRsp> getFriends(@PathVariable(value = "uid") @NotNull Long uid) {
-    return new ResponseEntity<>(friendService.getFriends(uid), HttpStatus.OK);
+  public ResponseEntity<ProfilesRsp> getFriends(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
+    return new ResponseEntity<>(friendService.getFriendProfiles(principal.get()), HttpStatus.OK);
   }
 
-  /*
-   * Method for a user to get other users who sent addFriend and not yet accepted by this user
-   * @param uid One user id
-   * @return A list of user profiles of the user's pending friends
+  /**
+   * Method for a user to get other users who sent addFriend and not yet accepted by this user.
+   *
+   * @param principal current logged-in user.
+   * @return A list of user profiles of the user's pending friends.
    */
-  @GetMapping("/{uid}/pending")
+  @GetMapping("/pending")
   @Operation(summary =
       "Method for a user to get other users who sent addFriend and not yet accepted by this user.")
   public ResponseEntity<ProfilesRsp> getFriendsPending(
-      @PathVariable(value = "uid") @NotNull Long uid) {
-    return new ResponseEntity<>(friendService.getFriendsPending(uid), HttpStatus.OK);
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
+    return new ResponseEntity<>(
+        friendService.getFriendProfilesPending(principal.get()), HttpStatus.OK);
   }
 }

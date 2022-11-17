@@ -5,13 +5,13 @@ import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,27 +64,27 @@ public class User implements Serializable {
   @Column(nullable = false)
   private BigDecimal balance = BigDecimal.ZERO;
 
+  @Column
+  private String bizPromotionText;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "aid", referencedColumnName = "id")
   private Account account;
 
-  @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user1")
   private Set<Friendship> friendships;
 
-  @ManyToMany(mappedBy = "groupUsers", fetch = FetchType.LAZY)
+  @ManyToMany(mappedBy = "groupUsers")
   private Set<Group> groups;
 
   /**
    * transfer: sender is transaction.from, receiver is transaction.to
    * request: requestor is transaction.to, approver is transaction.from
    */
-  @OneToMany(mappedBy = "from", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "from")
   private Set<Transaction> transactionsSent;
-  @OneToMany(mappedBy = "to", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "to")
   private Set<Transaction> transactionsReceived;
-
-  @OneToOne(mappedBy = "bizUser", optional = true, cascade = CascadeType.ALL)
-  private BizProfile bizProfile;
 
   /**
    * set user type, either personal, business, or financial.
@@ -93,5 +93,38 @@ public class User implements Serializable {
    */
   public void setTypeByStr(final String userTypeStr) {
     type = UserType.valueOf(userTypeStr.toUpperCase());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof User that)) {
+      return false;
+    }
+    return Objects.equals(id, that.getId());
+  }
+
+  /** Create a minimal user for unit test purpose. */
+  public static User ofTest(Long id,
+                            String email,
+                            String password,
+                            String type,
+                            String bizPromotionText,
+                            Account account) {
+    User u = new User();
+    u.setId(id);
+    u.setEmail(email);
+    u.setPassword(password);
+    u.setTypeByStr(type);
+    u.setBizPromotionText(bizPromotionText);
+    u.setAccount(account);
+    return u;
   }
 }

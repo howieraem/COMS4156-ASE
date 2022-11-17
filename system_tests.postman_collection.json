@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b4512586-4ef9-46dc-85f2-c209399b563f",
-		"name": "4156 EasyMoney LGTM",
+		"_postman_id": "10175852-3c84-41e0-899e-93dc8e4871c9",
+		"name": "4156 EasyMoney LGTM Local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24027110"
 	},
@@ -21,14 +21,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user1 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -49,14 +77,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user2 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -69,7 +125,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\",\n    \"accountName\" : \"test\",\n    \"accountNumber\" : \"1311110\",\n    \"routingNumber\" : \"917354521\",\n    \"userType\" : \"business\",\n    \"bizPromotionText\": \"columbia's takin all my cash.\"\n}",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\",\n    \"accountName\" : \"test\",\n    \"accountNumber\" : \"1311110\",\n    \"routingNumber\" : \"917354521\",\n    \"userType\" : \"business\",\n    \"bizPromotionText\": \"Free goods!\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -77,14 +133,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user3 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -105,14 +189,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user4 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -133,14 +245,42 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/register",
+					"raw": "localhost:8080/auth/register",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user5 login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"a@bank.com\",\n    \"password\" : \"heyheyhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -150,10 +290,16 @@
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"amount\" : \"200\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -175,13 +321,121 @@
 			"response": []
 		},
 		{
+			"name": "withdraw user 1 200",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/withdraw",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"withdraw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "deposit user 2 400",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODM3NTYzNSwiZXhwIjoxNjY4OTgwNDM1fQ.1W09qwSqdhmupcYsyE-gOaZNkISiPynWTdE5aeRc04Aop1rChs3CDSo8P9KOD3BJIl6Ay0gtBCbVFLHeFx2z1Q",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"2\",\n    \"amount\" : \"400\"\n}",
+					"raw": "{\n    \"amount\" : \"400\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/deposit",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit user 3 50000",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMXMzMTIxMkB0ZXMxMjN0LmNvbSIsImlhdCI6MTY2ODM3NzUyMCwiZXhwIjoxNjY4OTgyMzIwfQ.6ZReH6dAVgNYPhp8e-I5Co7phsNPluuSrXbp0ayLjzte7ZPp30GFpbjqhxnAfkh6jo3Jo1LpZTNsvnWIyRzLQQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\" : \"50000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/deposit",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit user 4 50000",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlM3QuY29tIiwiaWF0IjoxNjY4Mzc3MzY1LCJleHAiOjE2Njg5ODIxNjV9.2oPrC5-g8md70fEufwQ74LItGL_AALky97c8xp-LQrbNGLSdK5upkIZEC8AAou2IJ_ct-FkCsUMGKynrgmhUcA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\" : \"50000\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -206,10 +460,16 @@
 			"name": "deposit user 5 1000000",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2OTExLCJleHAiOjE2Njg5ODE3MTF9.w8LYNT0SopBVRmyMuZo-BizPRjfik0aKsVr4RJqaFNa_tlHlmLS6fjZMNToTyWCeS3ATb7yezb6uQJ2RnhzcNg",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"5\",\n    \"amount\" : \"1000000\"\n}",
+					"raw": "{\n    \"amount\" : \"1000000\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -231,13 +491,53 @@
 			"response": []
 		},
 		{
+			"name": "update biz user 5",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2OTExLCJleHAiOjE2Njg5ODE3MTF9.w8LYNT0SopBVRmyMuZo-BizPRjfik0aKsVr4RJqaFNa_tlHlmLS6fjZMNToTyWCeS3ATb7yezb6uQJ2RnhzcNg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"promotionText\" : \"unlimited cash!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/biz",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"biz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "create money request",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"fuck this shit\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -262,7 +562,13 @@
 			"name": "accept money request",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODM3NTYzNSwiZXhwIjoxNjY4OTgwNDM1fQ.1W09qwSqdhmupcYsyE-gOaZNkISiPynWTdE5aeRc04Aop1rChs3CDSo8P9KOD3BJIl6Ay0gtBCbVFLHeFx2z1Q",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"requestid\": \"1\",\n    \"fromUid\": \"2\",\n    \"toUid\": \"1\"\n}",
@@ -300,7 +606,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"fuck this shit\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -348,7 +654,7 @@
 					"query": [
 						{
 							"key": "",
-							"value": null,
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -504,7 +810,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uids\": [1, 2],\n    \"name\": \"Test Group\",\n    \"description\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -527,7 +833,27 @@
 			"response": []
 		},
 		{
-			"name": "search users",
+			"name": "search users by digits",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/222",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"222"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users by account name",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -547,13 +873,99 @@
 			"response": []
 		},
 		{
-			"name": "add friend 1, 2",
+			"name": "search users by phone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/22",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users by email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/222@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"222@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search users partial match",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/22",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search failed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/search/info/222@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search",
+						"info",
+						"222@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add friend usr1 => usr2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 1,\n    \"uid2\": 2,\n    \"message\" : \"test\"\n}",
+					"raw": "{\n    \"uid\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -561,7 +973,8 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/friend/add",
+					"raw": "http://localhost:8080/friend/add",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -575,13 +988,22 @@
 			"response": []
 		},
 		{
-			"name": "accept friend",
+			"name": "get usr2's pending friends",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -589,7 +1011,43 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/friend/accept",
+					"raw": "http://localhost:8080/friend/pending",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept friend by usr2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/accept",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -603,16 +1061,22 @@
 			"response": []
 		},
 		{
-			"name": "get user 1's feed",
+			"name": "get usr1's friends",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -620,14 +1084,85 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/feed/1",
+					"raw": "http://localhost:8080/friend",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"feed",
-						"1"
+						"friend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user 1's feed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/feed",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete friend by usr1",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"2"
 					]
 				}
 			},
@@ -637,7 +1172,13 @@
 			"name": "create loan request",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"fromUid\": 1,\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
@@ -665,10 +1206,16 @@
 			"name": "approve loan request",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2MzIyLCJleHAiOjE2Njg5ODExMjJ9.v51kGVYx8PhVs7S1cBTscIfK-3nexg70NHdgeTqqh_6FtA1vI8OBpvX-VxtcrsL4Jv8osJGAZlk38FJJut7B3Q",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"fromUid\": 5,\n  \"toUid\": 1,\n  \"requestid\": 4\n}",
+					"raw": "{\n  \"fromUid\": 5,\n  \"toUid\": 1,\n  \"requestid\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"

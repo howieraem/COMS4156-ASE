@@ -9,10 +9,10 @@ import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
-import com.lgtm.easymoney.payload.TransferReq;
-import com.lgtm.easymoney.payload.TransferRsp;
+import com.lgtm.easymoney.payload.req.TransferReq;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
+import com.lgtm.easymoney.payload.rsp.TransferRsp;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
@@ -98,7 +98,7 @@ public class TransferServiceImplTest {
     ResourceCreatedRsp expectedRsp = new ResourceCreatedRsp(transactionId);
 
     // Act
-    ResourceCreatedRsp returnedRsp = transferService.makeTransfer(transferReq);
+    ResourceCreatedRsp returnedRsp = transferService.makeTransfer(user1, transferReq);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);
@@ -115,7 +115,8 @@ public class TransferServiceImplTest {
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(transaction);
 
     // Act & Assert
-    assertThrows(InvalidUpdateException.class, () -> transferService.makeTransfer(transferReq));
+    assertThrows(InvalidUpdateException.class,
+        () -> transferService.makeTransfer(user1, transferReq));
     assertEquals(transaction.getStatus(), TransactionStatus.TRANS_FAILED);
   }
 
@@ -137,7 +138,7 @@ public class TransferServiceImplTest {
     expectedRsp.setMessage(message);
 
     // Act
-    TransferRsp returnedRsp = transferService.getTransfersByUid(id1);
+    TransferRsp returnedRsp = transferService.getTransfers(user1);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);

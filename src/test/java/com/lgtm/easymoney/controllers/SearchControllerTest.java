@@ -7,9 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.ProfileRsp;
-import com.lgtm.easymoney.payload.ProfilesRsp;
+import com.lgtm.easymoney.payload.rsp.ProfileRsp;
+import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.SearchService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -34,6 +37,15 @@ public class SearchControllerTest {
   private MockMvc mvc;
   @MockBean
   private SearchService searchService;
+
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
+
   private ProfilesRsp profilesRsp;
   private ProfileRsp profileRsp;
   private List<ProfileRsp> profileList;
@@ -61,7 +73,6 @@ public class SearchControllerTest {
 
     //Compose search response
     profilesRsp = new ProfilesRsp();
-    profilesRsp.setSuccess(true);
     profileList = new ArrayList<ProfileRsp>();
     profileList.add(profileRsp);
     profilesRsp.setUserProfiles(profileList);
@@ -71,7 +82,7 @@ public class SearchControllerTest {
   public void searchByIdSuccess() throws Exception {
     // Arrange
     Mockito.when(searchService.searchById(uid))
-            .thenReturn(profilesRsp);
+            .thenReturn(profileRsp);
 
     // Act
     ResultActions returnedResponse = getSearchById(uid);
@@ -79,13 +90,12 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
-            jsonPath("$.userProfiles[0].uid").value(uid),
-            jsonPath("$.userProfiles[0].accountName").value(accountName),
-            jsonPath("$.userProfiles[0].address").value(address),
-            jsonPath("$.userProfiles[0].email").value(email),
-            jsonPath("$.userProfiles[0].phone").value(phone),
-            jsonPath("$.userProfiles[0].userType").value(String.valueOf(userType)));
+            jsonPath("$.uid").value(uid),
+            jsonPath("$.accountName").value(accountName),
+            jsonPath("$.address").value(address),
+            jsonPath("$.email").value(email),
+            jsonPath("$.phone").value(phone),
+            jsonPath("$.userType").value(String.valueOf(userType)));
   }
 
   @Test
@@ -100,7 +110,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),
@@ -121,7 +130,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),
@@ -142,7 +150,6 @@ public class SearchControllerTest {
     // Assert
     returnedResponse.andExpectAll(
             status().isOk(),
-            jsonPath("$.success").value(true),
             jsonPath("$.userProfiles[0].uid").value(uid),
             jsonPath("$.userProfiles[0].accountName").value(accountName),
             jsonPath("$.userProfiles[0].address").value(address),

@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -8,15 +9,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
-import com.lgtm.easymoney.payload.CreateGroupReq;
-import com.lgtm.easymoney.payload.GroupAdsRsp;
-import com.lgtm.easymoney.payload.GroupRsp;
-import com.lgtm.easymoney.payload.InviteToGroupReq;
-import com.lgtm.easymoney.payload.LeaveGroupReq;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
+import com.lgtm.easymoney.models.User;
+import com.lgtm.easymoney.payload.req.CreateGroupReq;
+import com.lgtm.easymoney.payload.req.InviteToGroupReq;
+import com.lgtm.easymoney.payload.req.LeaveGroupReq;
+import com.lgtm.easymoney.payload.rsp.GroupAdsRsp;
+import com.lgtm.easymoney.payload.rsp.GroupRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.GroupService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -42,6 +50,14 @@ public class GroupControllerTest {
 
   @MockBean
   private GroupService groupService;
+
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
 
   private CreateGroupReq createGroupReq;
 
@@ -77,12 +93,10 @@ public class GroupControllerTest {
 
     inviteToGroupReq = new InviteToGroupReq();
     inviteToGroupReq.setGid(expectedGid);
-    inviteToGroupReq.setInviterId(uid1);
     inviteToGroupReq.setInviteeId(uid2);
 
     leaveGroupReq = new LeaveGroupReq();
     leaveGroupReq.setGid(expectedGid);
-    leaveGroupReq.setUid(uid1);
 
     groupRsp = new GroupRsp();
     groupRsp.setGid(expectedGid);
@@ -93,10 +107,10 @@ public class GroupControllerTest {
 
   @Test
   public void createGroupSuccess() throws Exception {
-    Mockito.when(groupService.createGroup(createGroupReq))
+    Mockito.when(groupService.createGroup(UserTestConfig.PERSON1, createGroupReq))
         .thenReturn(createdRsp);
 
-    var resultActions = postCreate(createGroupReq);
+    var resultActions = person1PostCreate(createGroupReq);
 
     resultActions.andExpectAll(
         status().isCreated(),
@@ -107,7 +121,7 @@ public class GroupControllerTest {
   public void createGroupFailedByEmptyUids() throws Exception {
     createGroupReq.setUids(new ArrayList<>());
 
-    var resultActions = postCreate(createGroupReq);
+    var resultActions = person1PostCreate(createGroupReq);
 
     resultActions.andExpectAll(
         status().isBadRequest(),
@@ -119,6 +133,7 @@ public class GroupControllerTest {
     // `createGroupReq.setUids(List.of(uid1, null))` throws exception immediately
     // and can't simulate user input, so raw JSON is used here.
     var resultActions = mvc.perform(post("/group/create")
+        .with(user(UserTestConfig.PERSON1_PRINCIPAL))
         .content(String.format("{\"name\": \"%s\", \"uids\": [%d, null]", groupName, uid1))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
@@ -131,31 +146,35 @@ public class GroupControllerTest {
   @Test
   public void createGroupFailedByNullOrEmptyName() throws Exception {
     createGroupReq.setName(null);
-    postCreate(createGroupReq).andExpectAll(
+    person1PostCreate(createGroupReq).andExpectAll(
         status().isBadRequest(),
         jsonPath("$.errorFields").value("name"));
 
     createGroupReq.setName("");
-    postCreate(createGroupReq).andExpectAll(
+    person1PostCreate(createGroupReq).andExpectAll(
         status().isBadRequest(),
         jsonPath("$.errorFields").value("name"));
   }
 
   @Test
   public void inviteSuccess() throws Exception {
-    putInvite(inviteToGroupReq).andExpect(status().isOk());
-    Mockito.verify(groupService, Mockito.times(1)).inviteToGroup(inviteToGroupReq);
+    person1PutInvite(inviteToGroupReq).andExpect(status().isOk());
+    Mockito.verify(groupService, Mockito.times(1))
+        .inviteToGroup(UserTestConfig.PERSON1, inviteToGroupReq);
   }
 
   @Test
   public void inviteFailedByNonMember() throws Exception {
-    inviteToGroupReq.setInviterId(uid2);  // inviter not in group
     inviteToGroupReq.setInviteeId(3L);
     Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "inviterId", uid2))
         .when(groupService)
-        .inviteToGroup(inviteToGroupReq);
+        .inviteToGroup(UserTestConfig.PERSON2, inviteToGroupReq);
 
-    var resultActions = putInvite(inviteToGroupReq);
+    var resultActions = mvc.perform(put("/group/invite")
+        .with(user(UserTestConfig.PERSON2_PRINCIPAL))
+        .content(asJsonString(inviteToGroupReq))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
 
     resultActions.andExpectAll(
         status().isBadRequest(),
@@ -165,13 +184,12 @@ public class GroupControllerTest {
 
   @Test
   public void inviteFailedByExistingMember() throws Exception {
-    inviteToGroupReq.setInviterId(uid1);
     inviteToGroupReq.setInviteeId(uid1);  // invitee already in group
-    Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "inviteeId", uid2))
+    Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "inviteeId", uid1))
         .when(groupService)
-        .inviteToGroup(inviteToGroupReq);
+        .inviteToGroup(UserTestConfig.PERSON1, inviteToGroupReq);
 
-    var resultActions = putInvite(inviteToGroupReq);
+    var resultActions = person1PutInvite(inviteToGroupReq);
 
     resultActions.andExpectAll(
         status().isBadRequest(),
@@ -181,18 +199,18 @@ public class GroupControllerTest {
 
   @Test
   public void leaveSuccess() throws Exception {
-    putLeave(leaveGroupReq).andExpect(status().isOk());
-    Mockito.verify(groupService, Mockito.times(1)).leaveGroup(leaveGroupReq);
+    putLeave(leaveGroupReq, UserTestConfig.PERSON1_PRINCIPAL).andExpect(status().isOk());
+    Mockito.verify(groupService, Mockito.times(1))
+        .leaveGroup(UserTestConfig.PERSON1, leaveGroupReq);
   }
 
   @Test
   public void leaveFailedByNonMember() throws Exception {
-    leaveGroupReq.setUid(uid2);  // user not in group can't leave
     Mockito.doThrow(new InvalidUpdateException("Group", expectedGid, "uid", uid2))
         .when(groupService)
-        .leaveGroup(leaveGroupReq);
+        .leaveGroup(UserTestConfig.PERSON2, leaveGroupReq);
 
-    var resultActions = putLeave(leaveGroupReq);
+    var resultActions = putLeave(leaveGroupReq, UserTestConfig.PERSON2_PRINCIPAL);
 
     resultActions.andExpectAll(
         status().isBadRequest(),
@@ -202,10 +220,10 @@ public class GroupControllerTest {
 
   @Test
   public void getGroupSuccess() throws Exception {
-    Mockito.when(groupService.getGroupProfile(expectedGid))
+    Mockito.when(groupService.getGroupProfile(UserTestConfig.PERSON1, expectedGid))
         .thenReturn(groupRsp);
 
-    var resultActions = getGroup(expectedGid);
+    var resultActions = person1GetGroup(expectedGid);
 
     resultActions.andExpectAll(
         status().isOk(),
@@ -218,10 +236,10 @@ public class GroupControllerTest {
   @Test
   public void getNonExistentGroupFail() throws Exception {
     Long someId = 2L;
-    Mockito.when(groupService.getGroupProfile(someId))
+    Mockito.when(groupService.getGroupProfile(UserTestConfig.PERSON1, someId))
         .thenThrow(new ResourceNotFoundException("Group", "id", someId));
 
-    var resultActions = getGroup(someId);
+    var resultActions = person1GetGroup(someId);
 
     resultActions.andExpectAll(
         status().isNotFound(),
@@ -231,58 +249,85 @@ public class GroupControllerTest {
 
   @Test
   public void getGroupFailedByInvalidPathVar() throws Exception {
-    getGroup(null).andExpectAll(
+    person1GetGroup(null).andExpectAll(
         status().isBadRequest(),
         jsonPath("$.errorFields").value("id")
     );
 
-    getGroup("abc").andExpectAll(
+    person1GetGroup("abc").andExpectAll(
         status().isBadRequest(),
         jsonPath("$.errorFields").value("id")
     );
   }
 
   @Test
+  public void getGroupFailedByNonMember() throws Exception {
+    Mockito.when(groupService.getGroupProfile(UserTestConfig.PERSON2, expectedGid))
+        .thenThrow(new UnauthorizedException(UserTestConfig.PERSON2.getId(), "Group", expectedGid));
+
+    var resultActions = mvc.perform(get("/group/" + expectedGid)
+        .with(user(UserTestConfig.PERSON2_PRINCIPAL)));
+
+    resultActions.andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.errorFields").value("Authorization"));
+  }
+
+  @Test
   public void getGroupAdsSuccess() throws Exception {
     var ads = "abc";
     var groupAdsRsp = new GroupAdsRsp(List.of(ads));
-    Mockito.when(groupService.getGroupAds(expectedGid))
+    Mockito.when(groupService.getGroupAds(UserTestConfig.PERSON1, expectedGid))
         .thenReturn(groupAdsRsp);
 
-    var resultActions = getGroupAds(expectedGid);
+    var resultActions = getGroupAds(UserTestConfig.PERSON1_PRINCIPAL, expectedGid);
 
     resultActions.andExpectAll(
         status().isOk(),
         jsonPath("$.ads").value(ads));
   }
 
-  private ResultActions postCreate(CreateGroupReq req) throws Exception {
+  @Test
+  public void getGroupAdsFailedByNonMember() throws Exception {
+    Mockito.when(groupService.getGroupAds(UserTestConfig.PERSON2, expectedGid))
+        .thenThrow(new UnauthorizedException(UserTestConfig.PERSON2.getId(), "Group", expectedGid));
+
+    var resultActions = getGroupAds(UserTestConfig.PERSON2_PRINCIPAL, expectedGid);
+
+    resultActions.andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.errorFields").value("Authorization"));
+  }
+
+  private ResultActions person1PostCreate(CreateGroupReq req) throws Exception {
     return mvc.perform(post("/group/create")
+        .with(user(UserTestConfig.PERSON1_PRINCIPAL))
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
   }
 
-  private ResultActions putInvite(InviteToGroupReq req) throws Exception {
+  private ResultActions person1PutInvite(InviteToGroupReq req) throws Exception {
     return mvc.perform(put("/group/invite")
+        .with(user(UserTestConfig.PERSON1_PRINCIPAL))
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
   }
 
-  private ResultActions putLeave(LeaveGroupReq req) throws Exception {
+  private ResultActions putLeave(LeaveGroupReq req, UserPrincipal principal) throws Exception {
     return mvc.perform(put("/group/leave")
+        .with(user(principal))
         .content(asJsonString(req))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON));
   }
 
-  private ResultActions getGroup(Object id) throws Exception {
-    return mvc.perform(get("/group/" + id));
+  private ResultActions person1GetGroup(Object id) throws Exception {
+    return mvc.perform(get("/group/" + id).with(user(UserTestConfig.PERSON1_PRINCIPAL)));
   }
 
-  private ResultActions getGroupAds(Object id) throws Exception {
-    return mvc.perform(get("/group/" + id + "/business"));
+  private ResultActions getGroupAds(UserPrincipal principal, Object id) throws Exception {
+    return mvc.perform(get("/group/" + id + "/business")
+        .with(user(principal)));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {

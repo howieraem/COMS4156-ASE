@@ -7,25 +7,21 @@ import static org.mockito.ArgumentMatchers.any;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
-import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
 import com.lgtm.easymoney.models.User;
-import com.lgtm.easymoney.payload.RequestReq;
-import com.lgtm.easymoney.payload.RequestRsp;
-import com.lgtm.easymoney.payload.ResourceCreatedRsp;
-import com.lgtm.easymoney.payload.TransactionRsp;
-import com.lgtm.easymoney.payload.TransferReq;
-import com.lgtm.easymoney.payload.TransferRsp;
+import com.lgtm.easymoney.payload.req.RequestReq;
+import com.lgtm.easymoney.payload.req.TransferReq;
+import com.lgtm.easymoney.payload.rsp.RequestRsp;
+import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
+import com.lgtm.easymoney.payload.rsp.TransactionRsp;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -112,7 +108,7 @@ public class RequestServiceImplTest {
     ResourceCreatedRsp expectedRsp = new ResourceCreatedRsp(transactionId);
 
     // Act
-    ResourceCreatedRsp returnedRsp = requestService.createRequest(requestReq);
+    ResourceCreatedRsp returnedRsp = requestService.createRequest(user1, requestReq);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);
@@ -136,7 +132,7 @@ public class RequestServiceImplTest {
     expectedRsp.setMessage(message);
 
     // Act
-    RequestRsp returnedRsp = requestService.getRequestsByUid(id1);
+    RequestRsp returnedRsp = requestService.getRequests(user1);
 
     // Assert
     assertEquals(returnedRsp, expectedRsp);
@@ -185,6 +181,16 @@ public class RequestServiceImplTest {
     Boolean returned = requestService.canAcceptDeclineRequest(transactionId, id1, id2);
     // Assert
     assertEquals(Boolean.TRUE, returned);
+  }
+
+  @Test
+  public void cannotAcceptDeclineRequestByWrongUids() {
+    // Arrange
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    // Act && Assert
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id2, id1));
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id2, id2));
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id1, id1));
   }
 
   @Test
