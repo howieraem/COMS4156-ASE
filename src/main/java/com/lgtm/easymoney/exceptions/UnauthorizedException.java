@@ -1,7 +1,5 @@
 package com.lgtm.easymoney.exceptions;
 
-import java.io.Serial;
-import java.util.List;
 import lombok.Getter;
 
 /**

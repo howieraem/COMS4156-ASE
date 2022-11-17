@@ -105,10 +105,9 @@ public class User implements Serializable {
     if (obj == this) {
       return true;
     }
-    if (obj == null || getClass() != obj.getClass()) {
+    if (!(obj instanceof User that)) {
       return false;
     }
-    User that = (User) obj;
     return Objects.equals(id, that.getId());
   }
 

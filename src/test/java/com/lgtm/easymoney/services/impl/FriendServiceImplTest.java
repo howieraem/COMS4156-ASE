@@ -88,6 +88,7 @@ public class FriendServiceImplTest {
 
     //Assert
     assertEquals(uid1, f1.getUser1().getId());
+    assertEquals(note, f1.getNote());
   }
 
   @Test

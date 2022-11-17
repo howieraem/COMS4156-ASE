@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
+import com.lgtm.easymoney.exceptions.UnauthorizedException;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.CreateGroupReq;
 import com.lgtm.easymoney.payload.req.InviteToGroupReq;
@@ -260,17 +261,40 @@ public class GroupControllerTest {
   }
 
   @Test
+  public void getGroupFailedByNonMember() throws Exception {
+    Mockito.when(groupService.getGroupProfile(UserTestConfig.PERSON2, expectedGid))
+        .thenThrow(new UnauthorizedException(UserTestConfig.PERSON2.getId(), "Group", expectedGid));
+
+    var resultActions = mvc.perform(get("/group/" + expectedGid)
+        .with(user(UserTestConfig.PERSON2_PRINCIPAL)));
+
+    resultActions.andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.errorFields").value("Authorization"));
+  }
+
+  @Test
   public void getGroupAdsSuccess() throws Exception {
     var ads = "abc";
     var groupAdsRsp = new GroupAdsRsp(List.of(ads));
     Mockito.when(groupService.getGroupAds(UserTestConfig.PERSON1, expectedGid))
         .thenReturn(groupAdsRsp);
 
-    var resultActions = person1GetGroupAds(expectedGid);
+    var resultActions = getGroupAds(UserTestConfig.PERSON1_PRINCIPAL, expectedGid);
 
     resultActions.andExpectAll(
         status().isOk(),
         jsonPath("$.ads").value(ads));
+  }
+
+  @Test
+  public void getGroupAdsFailedByNonMember() throws Exception {
+    Mockito.when(groupService.getGroupAds(UserTestConfig.PERSON2, expectedGid))
+        .thenThrow(new UnauthorizedException(UserTestConfig.PERSON2.getId(), "Group", expectedGid));
+
+    var resultActions = getGroupAds(UserTestConfig.PERSON2_PRINCIPAL, expectedGid);
+
+    resultActions.andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.errorFields").value("Authorization"));
   }
 
   private ResultActions person1PostCreate(CreateGroupReq req) throws Exception {
@@ -301,9 +325,9 @@ public class GroupControllerTest {
     return mvc.perform(get("/group/" + id).with(user(UserTestConfig.PERSON1_PRINCIPAL)));
   }
 
-  private ResultActions person1GetGroupAds(Object id) throws Exception {
+  private ResultActions getGroupAds(UserPrincipal principal, Object id) throws Exception {
     return mvc.perform(get("/group/" + id + "/business")
-        .with(user(UserTestConfig.PERSON1_PRINCIPAL)));
+        .with(user(principal)));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {

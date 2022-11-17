@@ -1,6 +1,5 @@
 package com.lgtm.easymoney.security;
 
-import com.lgtm.easymoney.exceptions.InvalidTokenRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -55,10 +54,13 @@ public class JwtTokenProvider {
    * - Token is supported
    */
   public boolean validateToken(String authToken) {
+    if (authToken.isEmpty()) {
+      return false;
+    }
     try {
       Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
     } catch (RuntimeException ex) {
-      throw new InvalidTokenRequestException("Malformed, expired or unsupported token", authToken);
+      return false;
     }
     return true;
   }
