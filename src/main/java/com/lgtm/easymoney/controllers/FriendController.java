@@ -7,6 +7,7 @@ import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.FriendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/friend")
+@SecurityRequirement(name = "Authorization")
 public class FriendController {
   final FriendService friendService;
 
