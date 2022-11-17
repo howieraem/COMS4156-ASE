@@ -8,23 +8,18 @@ import org.springframework.boot.test.context.TestConfiguration;
 /** Configs of clients for tests. */
 @TestConfiguration
 public class UserTestConfig {
-  private static final Account PERSON1_ACC = Account.ofTest("a");
-  private static final Account PERSON2_ACC = Account.ofTest("b");
-  private static final Account BIZ_ACC = Account.ofTest("c");
-  private static final Account FIN_ACC = Account.ofTest("d");
-  public static final String PERSON1_EMAIL = "1@a.com";
-  public static final String PERSON2_EMAIL = "2@a.com";
-  public static final String BIZ_EMAIL = "3@b.com";
-  public static final String FIN_EMAIL = "4@c.com";
-
   public static final User PERSON1 = User.ofTest(
-      1L, PERSON1_EMAIL, "1", "PERSONAL", "", PERSON1_ACC);
+      1L, "1@a.com", "1", "PERSONAL", "",
+      Account.ofTest("a", "1"));
   public static final User PERSON2 = User.ofTest(
-      2L, PERSON2_EMAIL, "2", "PERSONAL", "", PERSON2_ACC);
+      2L, "2@a.com", "2", "PERSONAL", "",
+      Account.ofTest("b", "2"));
   public static final User BIZ_USR = User.ofTest(
-      3L, BIZ_EMAIL, "3", "BUSINESS", "free goods!", BIZ_ACC);
+      3L, "3@b.com", "3", "BUSINESS", "free goods!",
+      Account.ofTest("c", "3"));
   public static final User FIN_USR = User.ofTest(
-      4L, FIN_EMAIL, "4", "FINANCIAL", "", FIN_ACC);
+      4L, "4@c.com", "4", "FINANCIAL", "",
+      Account.ofTest("d", "4"));
 
   public static final UserPrincipal PERSON1_PRINCIPAL = new UserPrincipal(PERSON1);
   public static final UserPrincipal PERSON2_PRINCIPAL = new UserPrincipal(PERSON2);

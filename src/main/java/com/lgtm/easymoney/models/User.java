@@ -112,7 +112,7 @@ public class User implements Serializable {
     return Objects.equals(id, that.getId());
   }
 
-  /** For unit test purpose. */
+  /** Create a minimal user for unit test purpose. */
   public static User ofTest(Long id,
                             String email,
                             String password,

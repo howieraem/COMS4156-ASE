@@ -63,7 +63,7 @@ public class AuthControllerTest {
     registerReq.setRoutingNumber("123456789");
 
     loginReq = new LoginReq();
-    loginReq.setEmail(UserTestConfig.PERSON1_EMAIL);
+    loginReq.setEmail(UserTestConfig.PERSON1.getEmail());
     loginReq.setPassword(UserTestConfig.PERSON1.getPassword());
 
     // Assume userService.saveUser() always succeeds
