@@ -58,11 +58,10 @@ These are mostly defined in `pom.xml` and downloaded by Maven.
 
 - Spring: Handles client requests, returns responses to clients, and manages beans. Used everywhere.
 - Spring validation: Validates data fields in client requests. Mainly used in [src/main/java/com/lgtm/easymoney/models](src/main/java/com/lgtm/easymoney/models).
-- Spring Security: for client authorizations.
 - JPA: Interacts with the database. Mainly used under [src/main/java/com/lgtm/easymoney/repositories](src/main/java/com/lgtm/easymoney/repositories).
 - lombok: Simplifies the code by avoiding manually writing getters, setters, etc. Mainly used in [src/main/java/com/lgtm/easymoney/models](src/main/java/com/lgtm/easymoney/models) and [src/main/java/com/lgtm/easymoney/payload](src/main/java/com/lgtm/easymoney/payload).
 
-We also utilized the JWT implementation from https://github.com/isopropylcyanide/Jwt-Spring-Security-JPA/tree/master/src/main/java/com/accolite/pru/health/AuthApp/security which is in [src/main/java/com/lgtm/easymoney/security](src/main/java/com/lgtm/easymoney/security).
+We also utilized Spring Security and the JWT implementation from https://github.com/isopropylcyanide/Jwt-Spring-Security-JPA/tree/master/src/main/java/com/accolite/pru/health/AuthApp/security which is in [src/main/java/com/lgtm/easymoney/security](src/main/java/com/lgtm/easymoney/security).
 
 ## Style checker
 
