@@ -90,8 +90,11 @@ public class GroupServiceImplTest {
 
     users = new HashSet<>();
     users.add(user1);
+
     user2 = new User();
     user2.setId(uid2);
+    user2.setTypeByStr("personal");
+
     Mockito.when(userService.getUserById(uid1)).thenReturn(user1);
     Mockito.when(userService.getUserById(uid2)).thenReturn(user2);
 
@@ -180,6 +183,10 @@ public class GroupServiceImplTest {
 
   @Test
   public void testGetGroupAds() {
+    users.add(user2);
+    group.setGroupUsers(users);
+    user1.setGroups(Set.of(group));
+    user2.setGroups(Set.of(group));
     var rsp = groupService.getGroupAds(user1, expectedGid);
 
     assertEquals(rsp.getAds(), List.of(user1.getBizPromotionText()));

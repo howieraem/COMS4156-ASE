@@ -206,8 +206,18 @@ public class FriendServiceImplTest {
     friendService.delFriend(user1, uid2);
 
     //Assert
-    assertNull(user1.getFriendships());
-    assertNull(user2.getFriendships());
+    Mockito.verify(friendshipRepository, Mockito.times(2)).delete(Mockito.any(Friendship.class));
+  }
+
+  @Test
+  public void delFriendshipNotAcceptedYet() {
+    friendship1.setActive(false);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user1, user2)).thenReturn(friendship1);
+    Mockito.when(friendshipRepository.findByUser1AndUser2(user2, user1)).thenReturn(null);
+
+    friendService.delFriend(user1, uid2);
+
+    Mockito.verify(friendshipRepository, Mockito.times(1)).delete(Mockito.any(Friendship.class));
   }
 
   @Test
@@ -223,32 +233,48 @@ public class FriendServiceImplTest {
   @Test
   public void getFriendsSuccess() {
     //Arrange
-    user1.setFriendships(Set.of(friendship1));
+    var fsNotAccepted = new Friendship();
+    fsNotAccepted.setUser1(user1);
+    fsNotAccepted.setUser2(new User());
+    fsNotAccepted.setActive(false);
+    user1.setFriendships(Set.of(friendship1, fsNotAccepted));
 
     //Act
     List<User> res = friendService.getFriends(user1);
 
     //Assert
+    assertEquals(res.size(), 1);
     assertEquals(user2, res.get(0));
   }
 
   @Test
-  public void getFriendsSuccessWithId() {
+  public void getFriendsRspSuccess() {
     //Arrange
-    user1.setFriendships(Set.of(friendship1));
+    var fsNotAccepted = new Friendship();
+    fsNotAccepted.setUser1(user1);
+    fsNotAccepted.setUser2(new User());
+    fsNotAccepted.setActive(false);
+    user1.setFriendships(Set.of(friendship1, fsNotAccepted));
 
     //Act
     ProfilesRsp res = friendService.getFriendProfiles(user1);
 
     //Assert
+    assertEquals(1, res.getUserProfiles().size());
     assertEquals(user2.getId(), res.getUserProfiles().get(0).getUid());
   }
 
   @Test
   public void getFriendsPendingSuccess() {
     //Arrange
+    var existingActiveFs = new Friendship();
+    existingActiveFs.setUser1(new User());
+    existingActiveFs.setUser2(user2);
+    existingActiveFs.setActive(true);
+
     friendship1.setActive(false);
-    Mockito.when(friendshipRepository.findByUser2(user2)).thenReturn(List.of(friendship1));
+    Mockito.when(friendshipRepository.findByUser2(user2))
+        .thenReturn(List.of(friendship1, existingActiveFs));
 
     //Act
     ProfilesRsp res = friendService.getFriendProfilesPending(user2);

@@ -184,6 +184,16 @@ public class RequestServiceImplTest {
   }
 
   @Test
+  public void cannotAcceptDeclineRequestByWrongUids() {
+    // Arrange
+    Mockito.when(requestService.getRequestById(transactionId)).thenReturn(transaction);
+    // Act && Assert
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id2, id1));
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id2, id2));
+    assertEquals(Boolean.FALSE, requestService.canAcceptDeclineRequest(transactionId, id1, id1));
+  }
+
+  @Test
   public void acceptRequestSuccess() {
     // Arrange
     Mockito.when(transactionService.executeTransaction(transaction)).thenReturn(Boolean.TRUE);

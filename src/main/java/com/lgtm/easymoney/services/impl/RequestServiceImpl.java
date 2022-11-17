@@ -79,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
   }
 
   /**
-   * EXTERNAL generate a response payload of user's requests given id.
+   * EXTERNAL generate a response payload of user's requests.
    *
    * @param user current logged-in user
    * @return response payload with list of transactions
@@ -88,7 +88,7 @@ public class RequestServiceImpl implements RequestService {
   public RequestRsp getRequests(User user) {
     RequestRsp res = new RequestRsp();
     List<Transaction> listTrans = getRequestByUser(user);
-    res.setSuccess(listTrans != null);
+    res.setSuccess(true);
     res.setCurrBalance(user.getBalance());
 
     res.setRequests(transactionService.generateListResponseFromTransactions(listTrans));
