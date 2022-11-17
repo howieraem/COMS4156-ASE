@@ -38,7 +38,7 @@ public class UserController {
   @Operation(summary = "Method for a user to "
           + "deposit money to this service from the bank account registered.")
   public ResponseEntity<BalanceRsp> deposit(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody BalanceReq req) {
     return new ResponseEntity<>(
         userService.makeDeposit(principal.get(), req.getAmount()), HttpStatus.OK);

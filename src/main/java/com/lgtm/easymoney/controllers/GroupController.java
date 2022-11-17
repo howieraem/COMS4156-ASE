@@ -84,7 +84,7 @@ public class GroupController {
           "Method to get a group's ads(texts from business profiles"
                   + "), description and the list of user IDs, by a group ID.")
   public ResponseEntity<GroupAdsRsp> getGroupAds(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @PathVariable(value = "id") @NotNull Long id) {
     return new ResponseEntity<>(
         groupService.getGroupAds(principal.get(), id), HttpStatus.OK);
