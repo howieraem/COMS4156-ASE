@@ -53,4 +53,13 @@ public class Account implements Serializable {
   /*associated User, one-to-one mapping*/
   @OneToOne(mappedBy = "account")
   private User accountUser;
+
+  /** Create a minimal account for unit test purpose. */
+  public static Account ofTest(String accountName, String accountNumber) {
+    var a = new Account();
+    a.setAccountName(accountName);
+    a.setAccountNumber(accountNumber);
+    a.setRoutingNumber("000000000");
+    return a;
+  }
 }

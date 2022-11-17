@@ -8,12 +8,14 @@ import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.RequestService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.Valid;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/request")
+@SecurityRequirement(name = "Authorization")
 public class RequestController {
   private final RequestService requestService;
 
@@ -44,7 +47,7 @@ public class RequestController {
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money request to another user.")
   public ResponseEntity<ResourceCreatedRsp> createRequest(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody RequestReq req) {
     return new ResponseEntity<>(
         requestService.createRequest(principal.get(), req), HttpStatus.CREATED);
@@ -59,7 +62,8 @@ public class RequestController {
   @GetMapping
   @Operation(summary = "Method for a user "
           + "to get all money requests sent (but not yet completed).")
-  public ResponseEntity<RequestRsp> getRequests(@CurrentUser UserPrincipal principal) {
+  public ResponseEntity<RequestRsp> getRequests(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
     return new ResponseEntity<>(requestService.getRequests(principal.get()), HttpStatus.OK);
   }
 
@@ -74,7 +78,7 @@ public class RequestController {
   @PutMapping("/accept")
   @Operation(summary = "Method for a user to accept a money request from another user.")
   public ResponseEntity<ResourceCreatedRsp> acceptRequest(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody RequestAcceptDeclineReq r) {
     return new ResponseEntity<>(requestService.acceptRequest(
             r.getRequestid(),
@@ -92,7 +96,7 @@ public class RequestController {
   @PutMapping("/decline")
   @Operation(summary = "Method for a user to decline a money request from another user.")
   public ResponseEntity<ResourceCreatedRsp> declineRequest(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody RequestAcceptDeclineReq r) {
     return new ResponseEntity<>(requestService.declineRequest(
             r.getRequestid(),

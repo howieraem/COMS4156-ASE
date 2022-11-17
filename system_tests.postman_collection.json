@@ -953,13 +953,19 @@
 			"response": []
 		},
 		{
-			"name": "add friend 1, 2",
+			"name": "add friend usr1 => usr2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 1,\n    \"uid2\": 2,\n    \"message\" : \"test\"\n}",
+					"raw": "{\n    \"uid\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -967,7 +973,8 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/friend/add",
+					"raw": "http://localhost:8080/friend/add",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -981,13 +988,22 @@
 			"response": []
 		},
 		{
-			"name": "accept friend",
+			"name": "get usr2's pending friends",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -995,7 +1011,43 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/friend/accept",
+					"raw": "http://localhost:8080/friend/pending",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept friend by usr2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/accept",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -1003,6 +1055,43 @@
 					"path": [
 						"friend",
 						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get usr1's friends",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend"
 					]
 				}
 			},
@@ -1039,6 +1128,41 @@
 					"port": "8080",
 					"path": [
 						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete friend by usr1",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"2"
 					]
 				}
 			},

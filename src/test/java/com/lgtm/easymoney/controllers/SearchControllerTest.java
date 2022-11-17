@@ -9,7 +9,10 @@ import com.lgtm.easymoney.enums.UserType;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.payload.rsp.ProfileRsp;
 import com.lgtm.easymoney.payload.rsp.ProfilesRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.SearchService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -34,6 +37,15 @@ public class SearchControllerTest {
   private MockMvc mvc;
   @MockBean
   private SearchService searchService;
+
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
+
   private ProfilesRsp profilesRsp;
   private ProfileRsp profileRsp;
   private List<ProfileRsp> profileList;

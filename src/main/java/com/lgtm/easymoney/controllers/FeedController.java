@@ -5,6 +5,8 @@ import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.FeedService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/feed")
+@SecurityRequirement(name = "Authorization")
 public class FeedController {
   final FeedService feedService;
 
@@ -35,7 +38,8 @@ public class FeedController {
    */
   @GetMapping
   @Operation(summary = "Method for getting users' feed activity")
-  public ResponseEntity<FeedRsp> getFeed(@CurrentUser UserPrincipal principal) {
+  public ResponseEntity<FeedRsp> getFeed(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
     return new ResponseEntity<>(feedService.getFeed(principal.get()), HttpStatus.OK);
   }
 
