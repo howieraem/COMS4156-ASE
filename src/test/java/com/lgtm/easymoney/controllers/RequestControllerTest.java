@@ -2,6 +2,7 @@ package com.lgtm.easymoney.controllers;
 
 
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -10,17 +11,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.models.Transaction;
+import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.RequestAcceptDeclineReq;
 import com.lgtm.easymoney.payload.req.RequestReq;
 import com.lgtm.easymoney.payload.rsp.RequestRsp;
 import com.lgtm.easymoney.payload.rsp.ResourceCreatedRsp;
 import com.lgtm.easymoney.payload.rsp.TransactionRsp;
+import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
+import com.lgtm.easymoney.security.JwtTokenProvider;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.RequestService;
+import com.lgtm.easymoney.services.impl.UserServiceImpl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -52,14 +59,25 @@ public class RequestControllerTest {
   @MockBean
   private RequestService requestService;
 
+  // We test jwt functionalities in integration tests instead
+  @MockBean
+  private UserServiceImpl userService;
+  @MockBean
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  @MockBean
+  private JwtTokenProvider jwtTokenProvider;
+
   private RequestReq requestReq;
 
   private RequestRsp requestRsp;
   private ResourceCreatedRsp resourceCreatedRsp;
   private TransactionRsp transactionRsp;
 
-  private Long fromUid = 1L;
-  private Long toUid = 2L;
+  private UserPrincipal fromPrincipal = UserTestConfig.PERSON1_PRINCIPAL;
+  private User fromUser = UserTestConfig.PERSON1;
+  private User toUser = UserTestConfig.PERSON2;
+  private Long fromUid = fromUser.getId();
+  private Long toUid = toUser.getId();
 
   private Long requestId = 1L;
   private BigDecimal amount = BigDecimal.valueOf(30.0);
@@ -93,15 +111,15 @@ public class RequestControllerTest {
   @Test
   public void createRequestSuccess() throws Exception {
     // Arrange
-    Mockito.when(requestService.createRequest(requestReq)).thenReturn(resourceCreatedRsp);
+    Mockito.when(requestService.createRequest(fromUser, requestReq)).thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse = postRequest(requestReq);
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isCreated(),
-            jsonPath("$.id").value(1L));
+        status().isCreated(),
+        jsonPath("$.id").value(1L));
   }
 
   @Test
@@ -109,41 +127,29 @@ public class RequestControllerTest {
     // negative amount
     requestReq.setAmount(BigDecimal.valueOf(-100));
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("amount"));
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("amount"));
     // zero
     requestReq.setAmount(BigDecimal.ZERO);
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("amount"));
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("amount"));
     // too small
     requestReq.setAmount(BigDecimal.valueOf(0.001));
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("amount"));
-
-  }
-
-  @Test
-  public void createRequestFailedWithInvalidFromUid() throws Exception {
-    // fromUid that does not exsist
-    requestReq.setFromUid(3L);
-    Mockito.when(requestService.createRequest(requestReq))
-            .thenThrow(new ResourceNotFoundException("uid", "uid", 3L));
-    postRequest(requestReq).andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("uid"));
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("amount"));
   }
 
   @Test
   public void createRequestFailedWithInvalidToUid() throws Exception {
-    // fromUid that does not exsist
+    // toUid that does not exist
     requestReq.setToUid(3L);
-    Mockito.when(requestService.createRequest(requestReq))
-            .thenThrow(new ResourceNotFoundException("uid", "uid", 3L));
+    Mockito.when(requestService.createRequest(fromUser, requestReq))
+        .thenThrow(new ResourceNotFoundException("User", "uid", 3L));
     postRequest(requestReq).andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("uid"));
+        status().isNotFound(),
+        jsonPath("$.errorFields").value("uid"));
   }
 
   @Test
@@ -151,41 +157,39 @@ public class RequestControllerTest {
     // null category
     requestReq.setCategory(null);
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("category"));
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("category"));
     // empty string
     requestReq.setCategory("");
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("category"));
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("category"));
     // string not in Category enum
     requestReq.setCategory("wtf");
     postRequest(requestReq).andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("category"));
-
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("category"));
   }
 
   @Test
   public void getRequestsSuccess() throws Exception {
     // Arrange
-    Mockito.when(requestService.getRequestsByUid(fromUid)).thenReturn(requestRsp);
+    Mockito.when(requestService.getRequests(fromUser)).thenReturn(requestRsp);
 
     // Act
-    ResultActions returnedResponse =
-            mvc.perform(get("/request/{uid}", String.valueOf(fromUid)));
+    ResultActions returnedResponse = mvc.perform(get("/request").with(user(fromPrincipal)));
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isOk(),
-            jsonPath("$.success").value(true),
-            jsonPath("$.currBalance").value("70.0"),
-            jsonPath("$.requests[0].fromUid").value(fromUid),
-            jsonPath("$.requests[0].toUid").value(toUid),
-            jsonPath("$.requests[0].amount").value(amount),
-            jsonPath("$.requests[0].status").value("TRANS_COMPLETE"),
-            jsonPath("$.requests[0].desc").value(description),
-            jsonPath("$.requests[0].category").value("PARTY"));
+        status().isOk(),
+        jsonPath("$.success").value(true),
+        jsonPath("$.currBalance").value("70.0"),
+        jsonPath("$.requests[0].fromUid").value(fromUid),
+        jsonPath("$.requests[0].toUid").value(toUid),
+        jsonPath("$.requests[0].amount").value(amount),
+        jsonPath("$.requests[0].status").value("TRANS_COMPLETE"),
+        jsonPath("$.requests[0].desc").value(description),
+        jsonPath("$.requests[0].category").value("PARTY"));
   }
 
   @Test
@@ -196,19 +200,20 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
-            .thenReturn(resourceCreatedRsp);
+        .thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse =
-            mvc.perform(put("/request/accept")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
+        mvc.perform(put("/request/accept")
+            .with(user(fromPrincipal))
+            .content(asJsonString(req))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isOk(),
-            jsonPath("$.id").value(requestId)
+        status().isOk(),
+        jsonPath("$.id").value(requestId)
     );
   }
 
@@ -220,65 +225,20 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
-            .thenThrow(new InvalidUpdateException("request cannot be accepted.",
-                            requestId, "request", requestId));
+        .thenThrow(new InvalidUpdateException(
+            "request cannot be accepted.", requestId, "request", requestId));
     // Act
     ResultActions returnedResponse =
-            mvc.perform(put("/request/accept")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
+        mvc.perform(put("/request/accept")
+            .with(user(fromPrincipal))
+            .content(asJsonString(req))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("request")
-    );
-  }
-
-  @Test
-  public void acceptRequestFailedByInvalidSender() throws Exception {
-    // Arrange
-    RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
-    req.setToUid(toUid);
-    req.setRequestid(requestId);
-    Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
-            .thenThrow(new ResourceNotFoundException("From Uid", "fromUid", fromUid));
-    // Act
-    ResultActions returnedResponse =
-            mvc.perform(put("/request/accept")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("fromUid")
-    );
-  }
-
-  @Test
-  public void acceptRequestFailedByInvalidReceiver() throws Exception {
-    // Arrange
-    RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
-    req.setToUid(toUid);
-    req.setRequestid(requestId);
-    Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
-            .thenThrow(new ResourceNotFoundException("To Uid", "toUid", toUid));
-    // Act
-    ResultActions returnedResponse =
-            mvc.perform(put("/request/accept")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("toUid")
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("request")
     );
   }
 
@@ -290,23 +250,24 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService
-            .canAcceptDeclineRequest(requestId, fromUid, toUid)).thenReturn(Boolean.TRUE);
+        .canAcceptDeclineRequest(requestId, fromUid, toUid)).thenReturn(Boolean.TRUE);
     Mockito.when(requestService
-            .declineRequest(Mockito.any(Transaction.class))).thenReturn(Boolean.TRUE);
+        .declineRequest(Mockito.any(Transaction.class))).thenReturn(Boolean.TRUE);
     Mockito.when(requestService
-            .declineRequest(requestId, fromUid, toUid)).thenReturn(resourceCreatedRsp);
+        .declineRequest(requestId, fromUid, toUid)).thenReturn(resourceCreatedRsp);
 
     // Act
     ResultActions returnedResponse =
-            mvc.perform(put("/request/decline")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
+        mvc.perform(put("/request/decline")
+            .with(user(fromPrincipal))
+            .content(asJsonString(req))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
 
     // Assert
     returnedResponse.andExpectAll(
-            status().isOk(),
-            jsonPath("$.id").value(requestId)
+        status().isOk(),
+        jsonPath("$.id").value(requestId)
     );
   }
 
@@ -318,78 +279,33 @@ public class RequestControllerTest {
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.declineRequest(requestId, fromUid, toUid))
-            .thenThrow(
-                    new InvalidUpdateException(
-                            "request cannot be declined.",
-                            requestId,
-                            "request",
-                            requestId));
+        .thenThrow(
+            new InvalidUpdateException(
+                "request cannot be declined.",
+                requestId,
+                "request",
+                requestId));
     // Act
     ResultActions returnedResponse =
-            mvc.perform(put("/request/decline")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isBadRequest(),
-            jsonPath("$.errorFields").value("request")
-    );
-  }
-
-  @Test
-  public void declineRequestFailedByInvalidSender() throws Exception {
-    // Arrange
-    RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
-    req.setToUid(toUid);
-    req.setRequestid(requestId);
-    Mockito.when(requestService.declineRequest(requestId, fromUid, toUid))
-            .thenThrow(new ResourceNotFoundException("From Uid", "fromUid", fromUid));
-    // Act
-    ResultActions returnedResponse =
-            mvc.perform(put("/request/decline")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("fromUid")
-    );
-  }
-
-  @Test
-  public void declineRequestFailedByInvalidReceiver() throws Exception {
-    // Arrange
-    RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
-    req.setToUid(toUid);
-    req.setRequestid(requestId);
-    Mockito.when(requestService.declineRequest(requestId, fromUid, toUid))
-            .thenThrow(new ResourceNotFoundException("To Uid", "toUid", toUid));
-    // Act
-    ResultActions returnedResponse =
-            mvc.perform(put("/request/decline")
-                    .content(asJsonString(req))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON));
-
-    // Assert
-    returnedResponse.andExpectAll(
-            status().isNotFound(),
-            jsonPath("$.errorFields").value("toUid")
-    );
-  }
-
-
-  private ResultActions postRequest(RequestReq req) throws Exception {
-    return mvc.perform(post("/request/create")
+        mvc.perform(put("/request/decline")
+            .with(user(fromPrincipal))
             .content(asJsonString(req))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON));
+
+    // Assert
+    returnedResponse.andExpectAll(
+        status().isBadRequest(),
+        jsonPath("$.errorFields").value("request")
+    );
+  }
+
+  private ResultActions postRequest(RequestReq req) throws Exception {
+    return mvc.perform(post("/request/create")
+        .with(user(fromPrincipal))
+        .content(asJsonString(req))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON));
   }
 
   private String asJsonString(final Object obj) throws JsonProcessingException {

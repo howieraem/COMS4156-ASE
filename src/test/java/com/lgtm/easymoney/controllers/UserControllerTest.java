@@ -118,7 +118,8 @@ public class UserControllerTest {
 
     balanceReq.setAmount(new BigDecimal(2000));
     Mockito.when(userService.makeWithdraw(person, balanceReq.getAmount()))
-        .thenThrow(new InvalidUpdateException("User", person.getId(), "amount", balanceReq.getAmount()));
+        .thenThrow(
+            new InvalidUpdateException("User", person.getId(), "amount", balanceReq.getAmount()));
     putWithdraw(balanceReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("amount"));
   }
