@@ -54,12 +54,15 @@ Alternatively, if you'd like to see immediate documentation update after you cha
 
 ## Third-party code in use
 
-These are all defined in `pom.xml` and downloaded by Maven.
+These are mostly defined in `pom.xml` and downloaded by Maven.
 
 - Spring: Handles client requests, returns responses to clients, and manages beans. Used everywhere.
 - Spring validation: Validates data fields in client requests. Mainly used under `src/main/models/*.java`.
+- Spring Security: for client authorizations
 - JPA: Interacts with the database. Mainly used under `src/main/repositories/*.java`.
 - lombok: Simplifies the code by avoiding manually writing getters, setters, etc. Mainly used under `src/main/models/*.java` and `src/main/payload/*.java`.
+
+We also utilized the JWT implementation from https://github.com/isopropylcyanide/Jwt-Spring-Security-JPA/tree/master/src/main/java/com/accolite/pru/health/AuthApp/security which is in [src/main/java/com/lgtm/easymoney/security](src/main/java/com/lgtm/easymoney/security).
 
 ## Style checker
 
