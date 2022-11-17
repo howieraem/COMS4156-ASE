@@ -7,12 +7,12 @@ import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +40,7 @@ public class TransferController {
   @PostMapping("/create")
   @Operation(summary = "Method for a user to create a money transfer to another user.")
   public ResponseEntity<ResourceCreatedRsp> transfer(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody TransferReq req) {
     return new ResponseEntity<>(
         transferService.makeTransfer(principal.get(), req), HttpStatus.CREATED);
@@ -55,7 +55,8 @@ public class TransferController {
   @GetMapping
   @Operation(summary = "Method for a user to get"
           + " all money transfers (incl. completed money requests).")
-  public ResponseEntity<TransferRsp> getTransfers(@CurrentUser UserPrincipal principal) {
+  public ResponseEntity<TransferRsp> getTransfers(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
     // get all the transfers (both from and to) corresponding to the user with given uid
     // TODO: isFromOrTo may be added to param as filter
     return new ResponseEntity<>(transferService.getTransfers(principal.get()), HttpStatus.OK);

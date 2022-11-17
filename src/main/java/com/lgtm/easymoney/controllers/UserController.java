@@ -7,6 +7,7 @@ import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,7 @@ public class UserController {
   @Operation(summary = "Method for a user to"
           + " withdraw money from this service to the bank account registered.")
   public ResponseEntity<BalanceRsp> withdraw(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody BalanceReq req) {
     return new ResponseEntity<>(
         userService.makeWithdraw(principal.get(), req.getAmount()), HttpStatus.OK);
@@ -62,8 +63,9 @@ public class UserController {
    */
   @PutMapping("/biz")
   @Operation(summary = "Method for a non-personal user to update the business profile.")
-  public ResponseEntity<Void> updateBiz(@CurrentUser UserPrincipal principal,
-                                        @Valid @RequestBody BizProfileReq req) {
+  public ResponseEntity<Void> updateBiz(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
+      @Valid @RequestBody BizProfileReq req) {
     userService.updateBizProfile(principal.get(), req);
     return ResponseEntity.ok().build();
   }

@@ -10,6 +10,7 @@ import com.lgtm.easymoney.security.CurrentUser;
 import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class GroupController {
   @PostMapping("/create")
   @Operation(summary = "Method for new group creation.")
   public ResponseEntity<ResourceCreatedRsp> createGroup(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody CreateGroupReq createGroupReq) {
     return new ResponseEntity<>(
         groupService.createGroup(principal.get(), createGroupReq), HttpStatus.CREATED);
@@ -50,7 +51,7 @@ public class GroupController {
   @PutMapping("/invite")
   @Operation(summary = "Method for a user to invite another user to a group.")
   public ResponseEntity<Void> inviteToGroup(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody InviteToGroupReq inviteToGroupReq) {
     groupService.inviteToGroup(principal.get(), inviteToGroupReq);
     return ResponseEntity.ok().build();
@@ -60,7 +61,7 @@ public class GroupController {
   @PutMapping("/leave")
   @Operation(summary = "Method for a user to leave a group.")
   public ResponseEntity<Void> leaveGroup(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody LeaveGroupReq leaveGroupReq) {
     groupService.leaveGroup(principal.get(), leaveGroupReq);
     return ResponseEntity.ok().build();
@@ -71,7 +72,7 @@ public class GroupController {
   @Operation(summary =
       "Method to get a group's name, description and the list of user IDs, by a group ID.")
   public ResponseEntity<GroupRsp> getGroup(
-      @CurrentUser UserPrincipal principal,
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @PathVariable(value = "id") @NotNull Long id) {
     return new ResponseEntity<>(
         groupService.getGroupProfile(principal.get(), id), HttpStatus.OK);
