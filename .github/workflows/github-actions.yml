@@ -3,7 +3,11 @@ on:
   push:
     branches:
       - main
-    pull_request: {}
+  pull_request:
+    types:
+      - labeled
+      - review_requested
+      - reopened
 jobs:
   run_tests:
     runs-on: ubuntu-latest
@@ -33,5 +37,41 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: ========== Running Tests ==========
-        run: mvn clean test
+      - name: ========== Running Tests And Generate Report ==========
+        run: mvn verify
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 85
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+
+      - name: Commit and push the badge (if it changed)
+        uses: EndBug/add-and-commit@v7
+        with:
+          default_author: github_actions
+          message: 'commit badge'
+          add: '*.svg'
+
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+      - name: Fail PR if overall coverage is less than 85%
+        if: ${{ steps.jacoco.outputs.coverage-overall < 85.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Overall coverage is less than 85%!')
+
