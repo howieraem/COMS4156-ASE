@@ -65,7 +65,6 @@ public class RequestServiceImplTest {
   public void setUp() {
     // requestReq
     requestReq = new RequestReq();
-    requestReq.setFromUid(id1);
     requestReq.setToUid(id2);
     requestReq.setAmount(amount);
     requestReq.setCategory(String.valueOf(category));

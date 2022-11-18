@@ -9,7 +9,5 @@ import java.util.List;
  * Feed service interface. restful api for feed,
  */
 public interface FeedService {
-  List<FeedActivityRsp> getFeedByUser(User u);  // internal
-
   FeedRsp getFeed(User u); // external
 }

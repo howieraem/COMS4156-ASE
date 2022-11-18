@@ -77,7 +77,6 @@ public class TransferControllerTest {
   public void setUp() {
     // transferReq
     transferReq = new TransferReq();
-    transferReq.setFromUid(fromUid);
     transferReq.setToUid(toUid);
     transferReq.setAmount(amount);
     transferReq.setCategory("party");
