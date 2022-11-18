@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - main
-    pull_request: {}
+    pull_request:
+      types: [labeled]
 jobs:
   run_tests:
     runs-on: ubuntu-latest
@@ -33,5 +34,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: ========== Running Tests ==========
-        run: mvn clean test
+      - name: ========== Running Tests And Generate Report ==========
+        run: mvn verify
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 85
+
