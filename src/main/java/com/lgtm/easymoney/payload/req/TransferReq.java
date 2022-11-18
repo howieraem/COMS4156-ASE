@@ -14,9 +14,6 @@ import lombok.Data;
 @Data
 public class TransferReq {
   @NotNull
-  private Long fromUid;
-
-  @NotNull
   private Long toUid;
 
   @NotNull

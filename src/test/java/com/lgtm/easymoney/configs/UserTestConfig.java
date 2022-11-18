@@ -18,7 +18,7 @@ public class UserTestConfig {
       3L, "3@b.com", "3", "BUSINESS", "free goods!",
       Account.ofTest("c", "3"));
   public static final User FIN_USR = User.ofTest(
-      4L, "4@c.com", "4", "FINANCIAL", "",
+      4L, "4@c.com", "4", "FINANCIAL", "low loan interest rate",
       Account.ofTest("d", "4"));
 
   public static final UserPrincipal PERSON1_PRINCIPAL = new UserPrincipal(PERSON1);

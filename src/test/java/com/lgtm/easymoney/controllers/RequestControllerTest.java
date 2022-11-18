@@ -91,7 +91,6 @@ public class RequestControllerTest {
   public void setUp() {
     // request for making request
     requestReq = new RequestReq();
-    requestReq.setFromUid(fromUid);
     requestReq.setToUid(toUid);
     requestReq.setAmount(amount);
     requestReq.setCategory("PARTY");

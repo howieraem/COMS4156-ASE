@@ -13,7 +13,6 @@ import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.exceptions.ResourceNotFoundException;
 import com.lgtm.easymoney.exceptions.UnauthorizedException;
-import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.CreateGroupReq;
 import com.lgtm.easymoney.payload.req.InviteToGroupReq;
 import com.lgtm.easymoney.payload.req.LeaveGroupReq;
@@ -81,7 +80,7 @@ public class GroupControllerTest {
 
   private Long uid2 = 2L;
 
-  /** Establish request payloads for further testing. */
+  /** Establish payloads for further testing. */
   @Before
   public void setUp() {
     createGroupReq = new CreateGroupReq();

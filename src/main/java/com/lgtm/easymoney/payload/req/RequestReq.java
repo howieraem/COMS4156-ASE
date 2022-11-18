@@ -14,8 +14,6 @@ import lombok.Data;
 @Data
 public class RequestReq {
   @NotNull
-  private Long fromUid;
-  @NotNull
   private Long toUid;
   @NotNull
   @Digits(integer = 100, fraction = 2)

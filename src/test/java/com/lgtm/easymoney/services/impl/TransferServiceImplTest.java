@@ -60,7 +60,6 @@ public class TransferServiceImplTest {
   public void setUp() {
     // transferReq
     transferReq = new TransferReq();
-    transferReq.setFromUid(id1);
     transferReq.setToUid(id2);
     transferReq.setAmount(amount);
     transferReq.setCategory(String.valueOf(category));
