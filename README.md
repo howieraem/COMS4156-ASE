@@ -1,4 +1,6 @@
 # COMS W4156 ASE Project
+![Branch Coverage](.github/badges/branches.svg)
+![Overall Coverage](.github/badges/jacoco.svg)
 
 Client repository: https://github.com/rl3250/f22_4156_client
 
