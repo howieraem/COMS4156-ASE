@@ -7,6 +7,7 @@ import com.lgtm.easymoney.services.AnalyticService;
 import com.lgtm.easymoney.services.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/analytic")
+@SecurityRequirement(name = "Authorization")
 public class AnalyticController {
   private final AnalyticService analyticService;
 
