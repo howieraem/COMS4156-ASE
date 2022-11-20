@@ -8,8 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -234,6 +233,7 @@ public class AuthIntegrationTest {
   @Test
   public void testUserApi() throws Exception {
     // Without token
+    mvc.perform(get("/user/me")).andExpect(status().isUnauthorized());
     mvc.perform(put("/user/deposit")).andExpect(status().isUnauthorized());
     mvc.perform(put("/user/withdraw")).andExpect(status().isUnauthorized());
     mvc.perform(put("/user/biz")).andExpect(status().isUnauthorized());
@@ -245,6 +245,25 @@ public class AuthIntegrationTest {
         .andExpect(status().isBadRequest());
     mvc.perform(put("/user/biz").header(tokenRequestHeader, person1Token))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void getCurrentUserWithToken() throws Exception {
+    var u = person1.get();
+    var a = u.getAccount();
+    mvc.perform(get("/user/me").header(tokenRequestHeader, person1Token))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.id").value(u.getId()),
+            jsonPath("$.email").value(u.getEmail()),
+            jsonPath("$.phone").value(u.getPhone()),
+            jsonPath("$.address").value(u.getAddress()),
+            jsonPath("$.type").value(u.getType().name()),
+            jsonPath("$.balance").value(u.getBalance().doubleValue()),
+            jsonPath("$.account.accountName").value(a.getAccountName()),
+            jsonPath("$.account.accountNumber").value(a.getAccountNumber()),
+            jsonPath("$.account.routingNumber").value(a.getRoutingNumber())
+        );
   }
 
   private static String asJsonString(final Object obj) throws JsonProcessingException {

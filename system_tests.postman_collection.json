@@ -287,6 +287,79 @@
 			"response": []
 		},
 		{
+			"name": "get current user details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4OTE1MDI1LCJleHAiOjE2Njk1MTk4MjV9.DQWpZWXCNy6jAeg4Qj1LazxbsiWzRFcHOIri-vqtv33K5irXfGVLnkJiQAXs1ghhk7lItz_PlP1HuPMNLvoeSA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/me",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get current user analytics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4OTE1MDI1LCJleHAiOjE2Njk1MTk4MjV9.DQWpZWXCNy6jAeg4Qj1LazxbsiWzRFcHOIri-vqtv33K5irXfGVLnkJiQAXs1ghhk7lItz_PlP1HuPMNLvoeSA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/analytic",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",

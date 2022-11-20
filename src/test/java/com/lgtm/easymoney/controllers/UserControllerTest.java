@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,6 +62,25 @@ public class UserControllerTest {
 
     bizProfileReq = new BizProfileReq();
     bizProfileReq.setPromotionText("abc");
+  }
+
+  @Test
+  public void testPrincipalGetDetails() throws Exception {
+    var u = UserTestConfig.PERSON1;
+    var a = u.getAccount();
+    var resultActions = mvc.perform(get("/user/me").with(user(UserTestConfig.PERSON1_PRINCIPAL)));
+
+    resultActions.andExpectAll(
+        status().isOk(),
+        jsonPath("$.id").value(u.getId()),
+        jsonPath("$.email").value(u.getEmail()),
+        jsonPath("$.phone").value(u.getPhone()),
+        jsonPath("$.address").value(u.getAddress()),
+        jsonPath("$.type").value(u.getType().name()),
+        jsonPath("$.balance").value(u.getBalance().doubleValue()),
+        jsonPath("$.account.accountName").value(a.getAccountName()),
+        jsonPath("$.account.accountNumber").value(a.getAccountNumber()),
+        jsonPath("$.account.routingNumber").value(a.getRoutingNumber()));
   }
 
   @Test
