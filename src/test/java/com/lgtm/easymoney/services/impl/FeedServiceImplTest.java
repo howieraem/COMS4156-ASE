@@ -110,7 +110,6 @@ public class FeedServiceImplTest {
     assertEquals(4, activities.size());
 
     var a1 = activities.get(0);
-    assertFalse(a1.equals(feedRsp));
     assertNotNull(a1);
     assertEquals(a1.getLastUpdateTime(), transaction1.getLastUpdateTime());
     assertNotNull(a1.getAmount());
