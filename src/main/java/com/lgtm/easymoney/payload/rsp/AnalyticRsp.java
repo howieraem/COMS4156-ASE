@@ -19,7 +19,7 @@ public class AnalyticRsp {
   private BigDecimal currBalance;
   private BigDecimal expenditure;
   private Map<Category, BigDecimal> report;
-  //For financial user, {requester accountname : loan status}
+  //For financial user, {requester email : loan status}
   private Map<String, TransactionStatus> finance;
 
   /**
