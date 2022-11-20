@@ -8,5 +8,5 @@ import com.lgtm.easymoney.payload.rsp.AnalyticRsp;
  * Analytic Service Interface.
  */
 public interface AnalyticService {
-  AnalyticRsp getAnalytic(Long uid);
+  AnalyticRsp getAnalytic(User u);
 }

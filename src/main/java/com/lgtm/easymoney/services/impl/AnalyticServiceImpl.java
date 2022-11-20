@@ -44,8 +44,7 @@ public class AnalyticServiceImpl implements AnalyticService {
   }
 
   @Override
-  public AnalyticRsp getAnalytic(Long uid) {
-    User u = userService.getUserById(uid);
+  public AnalyticRsp getAnalytic(User u) {
     BigDecimal expenditure = BigDecimal.ZERO;
     Map<Category, BigDecimal> report = new HashMap<Category, BigDecimal>();
     AnalyticRsp res = new AnalyticRsp(u);

@@ -1,9 +1,12 @@
 package com.lgtm.easymoney.controllers;
 
 import com.lgtm.easymoney.payload.rsp.AnalyticRsp;
+import com.lgtm.easymoney.security.CurrentUser;
+import com.lgtm.easymoney.security.UserPrincipal;
 import com.lgtm.easymoney.services.AnalyticService;
 import com.lgtm.easymoney.services.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +29,10 @@ public class AnalyticController {
     this.analyticService = analyticService;
   }
 
-  @GetMapping("/{id}")
+  @GetMapping
   @Operation(summary = "Method to retrieve the analytic report of a user by user ID.")
-  public ResponseEntity<AnalyticRsp> getAnalytic(@PathVariable(value = "id") @NotNull Long id) {
-    return new ResponseEntity<>(analyticService.getAnalytic(id), HttpStatus.OK);
+  public ResponseEntity<AnalyticRsp> getAnalytic(
+          @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
+    return new ResponseEntity<>(analyticService.getAnalytic(principal.get()), HttpStatus.OK);
   }
 }
