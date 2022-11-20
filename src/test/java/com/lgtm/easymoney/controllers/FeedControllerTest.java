@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.jayway.jsonpath.JsonPath;
 import com.lgtm.easymoney.configs.UserTestConfig;
+import com.lgtm.easymoney.configs.WebSecurityConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.rsp.FeedActivityRsp;
@@ -27,6 +28,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(FeedController.class)
+@Import({WebSecurityConfig.class})
 public class FeedControllerTest {
   @Autowired
   private MockMvc mvc;

@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.controllers;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.configs.UserTestConfig;
+import com.lgtm.easymoney.configs.WebSecurityConfig;
 import com.lgtm.easymoney.exceptions.InapplicableOperationException;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
 import com.lgtm.easymoney.models.User;
@@ -25,6 +27,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,6 +39,7 @@ import org.springframework.test.web.servlet.ResultActions;
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
+@Import({WebSecurityConfig.class})
 public class UserControllerTest {
   @Autowired
   private MockMvc mvc;
@@ -61,6 +65,25 @@ public class UserControllerTest {
 
     bizProfileReq = new BizProfileReq();
     bizProfileReq.setPromotionText("abc");
+  }
+
+  @Test
+  public void testPrincipalGetDetails() throws Exception {
+    var u = UserTestConfig.PERSON1;
+    var a = u.getAccount();
+    var resultActions = mvc.perform(get("/user/me").with(user(UserTestConfig.PERSON1_PRINCIPAL)));
+
+    resultActions.andExpectAll(
+        status().isOk(),
+        jsonPath("$.id").value(u.getId()),
+        jsonPath("$.email").value(u.getEmail()),
+        jsonPath("$.phone").value(u.getPhone()),
+        jsonPath("$.address").value(u.getAddress()),
+        jsonPath("$.type").value(u.getType().name()),
+        jsonPath("$.balance").value(u.getBalance().doubleValue()),
+        jsonPath("$.account.accountName").value(a.getAccountName()),
+        jsonPath("$.account.accountNumber").value(a.getAccountNumber()),
+        jsonPath("$.account.routingNumber").value(a.getRoutingNumber()));
   }
 
   @Test

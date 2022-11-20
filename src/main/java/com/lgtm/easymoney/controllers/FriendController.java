@@ -47,11 +47,11 @@ public class FriendController {
   @PostMapping("/add")
   @Operation(summary =
       "Method for a user to add a friend (request a friendship, need acceptance).")
-  public ResponseEntity<Void> addFriend(
+  public ResponseEntity<String> addFriend(
       @CurrentUser @Parameter(hidden = true) UserPrincipal principal,
       @Valid @RequestBody FriendshipReq req) {
     friendService.addFriend(principal.get(), req);
-    return new ResponseEntity<>(null, HttpStatus.CREATED);
+    return new ResponseEntity<>("", HttpStatus.CREATED);
   }
 
   /**

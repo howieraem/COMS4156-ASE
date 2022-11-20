@@ -243,7 +243,7 @@ public class RequestServiceImplTest {
     Boolean returned = requestService.declineRequest(transaction);
     // Assert
     assertEquals(Boolean.TRUE, returned);
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+    assertEquals(TransactionStatus.TRANS_DENIED, transaction.getStatus());
   }
 
   @Test
@@ -257,7 +257,7 @@ public class RequestServiceImplTest {
     ResourceCreatedRsp returned = requestService.declineRequest(transactionId, id1, id2);
     // Assert
     assertEquals(expected, returned);
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+    assertEquals(TransactionStatus.TRANS_DENIED, transaction.getStatus());
   }
 
   @Test

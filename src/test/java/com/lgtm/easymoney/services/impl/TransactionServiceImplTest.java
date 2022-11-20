@@ -83,7 +83,7 @@ public class TransactionServiceImplTest {
   public void transactionExistsSuccess() {
     Mockito.when(transactionRepo.existsById(transactionId)).thenReturn(Boolean.TRUE);
     boolean returned = transactionService.transactionExists(transaction);
-    assertEquals(returned, Boolean.TRUE);
+    assertEquals(Boolean.TRUE, returned);
   }
 
   @Test
@@ -91,7 +91,7 @@ public class TransactionServiceImplTest {
     // todo why we have these two?
     Mockito.when(transactionRepo.existsById(transactionId)).thenReturn(Boolean.TRUE);
     boolean returned = transactionService.existsTransactionById(transactionId);
-    assertEquals(returned, Boolean.TRUE);
+    assertEquals(Boolean.TRUE, returned);
   }
 
   @Test
@@ -156,7 +156,7 @@ public class TransactionServiceImplTest {
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(user2.getBalance(), expectedReceiverBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.TRUE);
+    assertEquals(Boolean.TRUE, returned);
   }
 
   @Test
@@ -174,7 +174,7 @@ public class TransactionServiceImplTest {
     // Assert
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(user2.getBalance(), expectedReceiverBalance);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test
@@ -192,7 +192,7 @@ public class TransactionServiceImplTest {
     // Assert
     assertEquals(user2.getBalance(), expectedReceiverBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test
@@ -210,7 +210,7 @@ public class TransactionServiceImplTest {
     // Assert
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test
@@ -231,7 +231,7 @@ public class TransactionServiceImplTest {
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(user2.getBalance(), expectedReceiverBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test
@@ -252,7 +252,7 @@ public class TransactionServiceImplTest {
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(user2.getBalance(), expectedReceiverBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test
@@ -273,7 +273,7 @@ public class TransactionServiceImplTest {
     assertEquals(user1.getBalance(), expectedSenderBalance);
     assertEquals(user2.getBalance(), expectedReceiverBalance);
     assertEquals(transaction.getStatus(), expectedStatus);
-    assertEquals(returned, Boolean.FALSE);
+    assertEquals(Boolean.FALSE, returned);
   }
 
   @Test

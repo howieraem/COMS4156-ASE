@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lgtm.easymoney.configs.DbConsts;
 import com.lgtm.easymoney.configs.ValidationConsts;
 import java.io.Serializable;
@@ -50,6 +51,7 @@ public class Account implements Serializable {
   private String routingNumber;
   /*associated User, one-to-one mapping*/
   @OneToOne(mappedBy = "account")
+  @JsonBackReference
   private User accountUser;
 
   /** Create a minimal account for unit test purpose. */

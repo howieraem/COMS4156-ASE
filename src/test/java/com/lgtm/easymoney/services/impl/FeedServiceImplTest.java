@@ -1,6 +1,7 @@
 package com.lgtm.easymoney.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -106,10 +107,10 @@ public class FeedServiceImplTest {
 
     assertNotNull(feedRsp);
     var activities = feedRsp.getActivities();
-    assertEquals(activities.size(), 4);
+    assertEquals(4, activities.size());
 
     var a1 = activities.get(0);
-    assertNotEquals(a1, null);
+    assertNotNull(a1);
     assertEquals(a1.getLastUpdateTime(), transaction1.getLastUpdateTime());
     assertNotNull(a1.getAmount());
     assertEquals(a1.getPromoText(), biz.getBizPromotionText());

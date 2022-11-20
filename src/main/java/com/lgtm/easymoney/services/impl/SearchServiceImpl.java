@@ -54,7 +54,7 @@ public class SearchServiceImpl implements SearchService {
   @Override
   public List<User> getUserByName(String accountName) {
     var accountWrapper = accountRepository.findByAccountNameContainingIgnoreCase(accountName);
-    List<User> userList = new ArrayList<User>();
+    List<User> userList = new ArrayList<>();
     for (Account account : accountWrapper) {
       userList.add(account.getAccountUser());
     }
@@ -81,17 +81,9 @@ public class SearchServiceImpl implements SearchService {
   public ProfileRsp searchById(Long id) {
     //Getting user by id
     User user = getUserById(id);
-    //Compose response
-    ProfileRsp res = new ProfileRsp();
-    res.setUid(user.getId());
-    res.setAccountName(user.getAccount().getAccountName());
-    res.setEmail(user.getEmail());
-    res.setAddress(user.getAddress());
-    res.setUserType(user.getType());
-    res.setPhone(user.getPhone());
 
     //Issue response
-    return res;
+    return new ProfileRsp(user);
   }
 
   /**
@@ -110,18 +102,12 @@ public class SearchServiceImpl implements SearchService {
     userList.addAll(getUserByName(userInfo));
 
     //Compose profile list
-    List<ProfileRsp> profileList = new ArrayList<ProfileRsp>();
+    List<ProfileRsp> profileList = new ArrayList<>();
     for (User user : userList) {
       if (uids.contains(user.getId())) {
         continue;
       }
-      ProfileRsp res = new ProfileRsp();
-      res.setUid(user.getId());
-      res.setAccountName(user.getAccount().getAccountName());
-      res.setEmail(user.getEmail());
-      res.setAddress(user.getAddress());
-      res.setUserType(user.getType());
-      res.setPhone(user.getPhone());
+      ProfileRsp res = new ProfileRsp(user);
       profileList.add(res);
       uids.add(user.getId());
     }

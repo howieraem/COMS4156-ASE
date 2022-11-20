@@ -112,11 +112,11 @@ public class DataIntegrityIntegrationTest {
     });
 
     var rsp = controllerExceptionHandler.handle(ex);
-    assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
     var body = rsp.getBody();
     assertNotNull(body);
-    assertEquals(body.getErrorFields(), Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)));
-    assertEquals(body.getMessage(), DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint));
+    assertEquals(Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)), body.getErrorFields());
+    assertEquals(DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint), body.getMessage());
   }
 
   @Test
@@ -129,11 +129,11 @@ public class DataIntegrityIntegrationTest {
     });
 
     var rsp = controllerExceptionHandler.handle(ex);
-    assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
     var body = rsp.getBody();
     assertNotNull(body);
-    assertEquals(body.getErrorFields(), Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)));
-    assertEquals(body.getMessage(), DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint));
+    assertEquals(Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)), body.getErrorFields());
+    assertEquals(DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint), body.getMessage());
   }
 
   @Test
@@ -146,10 +146,10 @@ public class DataIntegrityIntegrationTest {
     });
 
     var rsp = controllerExceptionHandler.handle(ex);
-    assertEquals(rsp.getStatusCode(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
     var body = rsp.getBody();
     assertNotNull(body);
-    assertEquals(body.getErrorFields(), Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)));
-    assertEquals(body.getMessage(), DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint));
+    assertEquals(Arrays.asList(DbConsts.CONSTRAINTS_FIELDS.get(constraint)), body.getErrorFields());
+    assertEquals(DbConsts.CONSTRAINTS_ERR_MSGS.get(constraint), body.getMessage());
   }
 }

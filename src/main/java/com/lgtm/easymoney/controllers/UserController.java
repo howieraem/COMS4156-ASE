@@ -1,5 +1,6 @@
 package com.lgtm.easymoney.controllers;
 
+import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.req.BalanceReq;
 import com.lgtm.easymoney.payload.req.BizProfileReq;
 import com.lgtm.easymoney.payload.rsp.BalanceRsp;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,16 @@ public class UserController {
   @Autowired
   public UserController(UserService userService) {
     this.userService = userService;
+  }
+
+  /**
+   * Get the full details of the current logged-in user.
+   */
+  @GetMapping("/me")
+  @Operation(summary = "Method for the current logged-in user to view the full profile.")
+  public ResponseEntity<User> getCurrentUser(
+      @CurrentUser @Parameter(hidden = true) UserPrincipal principal) {
+    return new ResponseEntity<>(principal.get(), HttpStatus.OK);
   }
 
   /**
