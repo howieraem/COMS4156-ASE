@@ -26,7 +26,7 @@ public class FeedServiceImpl implements FeedService {
   private final UserService userService;
   private final FriendService friendService;
   private final TransactionService transactionService;
-  private final int feedSize = 20;
+  private static final int feedSize = 20;
 
   /**
    * feed service for getting user's feed activity.
@@ -63,7 +63,7 @@ public class FeedServiceImpl implements FeedService {
     // sort, the latest first
     res.sort(Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
     // only return 20 latest and valid transaction
-    return res.stream().limit(feedSize).collect(Collectors.toList());
+    return res.stream().limit(feedSize).toList();
   }
 
   /**

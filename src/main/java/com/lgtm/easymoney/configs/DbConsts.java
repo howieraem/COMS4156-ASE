@@ -4,6 +4,8 @@ import java.util.Map;
 
 /** Constants for database schema. */
 public class DbConsts {
+  private DbConsts() {}
+
   public static final String USER_EMAIL_CONSTRAINT = "user_email_uniq_idx";
   public static final String ACCOUNT_NUMBERS_CONSTRAINT = "account_numbers_uniq_idx";
   public static final String GROUP_NAME_CONSTRAINT = "group_name_uniq_idx";

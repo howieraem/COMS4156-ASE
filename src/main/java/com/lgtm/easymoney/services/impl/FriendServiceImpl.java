@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * service for friendship.
- * TODO after we have auth, move the inapplicable op checks to a HandlerInterceptor instead
  */
 @Service
 @Transactional(rollbackFor = Exception.class)  // required for delete
@@ -31,6 +30,8 @@ public class FriendServiceImpl implements FriendService {
   private final UserService userService;
 
   private final FriendshipRepository friendshipRepository;
+
+  private static final String RESOURCE = "Friendship";
 
   @Autowired
   public FriendServiceImpl(UserService userService, FriendshipRepository friendshipRepository) {
@@ -95,11 +96,11 @@ public class FriendServiceImpl implements FriendService {
 
     var fs1 = getFriendshipRecord(requester, acceptor);
     if (fs1 == null) {
-      throw new ResourceNotFoundException("Friendship", "uid", friendshipReq.getUid());
+      throw new ResourceNotFoundException(RESOURCE, "uid", friendshipReq.getUid());
     }
     if (fs1.getActive()) {
       throw new InvalidUpdateException(
-          "Friendship", fs1.getKeyString(), "uid", friendshipReq.getUid());
+          RESOURCE, fs1.getKeyString(), "uid", friendshipReq.getUid());
     }
 
     fs1.setActive(Boolean.TRUE);
@@ -124,7 +125,7 @@ public class FriendServiceImpl implements FriendService {
 
     var fs1 = getFriendshipRecord(current, friend);
     if (fs1 == null) {
-      throw new ResourceNotFoundException("Friendship", "uid", friendUid);
+      throw new ResourceNotFoundException(RESOURCE, "uid", friendUid);
     }
     friendshipRepository.delete(fs1);
 

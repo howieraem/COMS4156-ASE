@@ -126,7 +126,6 @@ public class TransactionServiceImpl implements TransactionService {
         return false;
       }
       if (sender.getBalance().compareTo(t.getAmount()) < 0) {
-        // TODO insufficient fund, do nothing
         return false;
       }
       sender.setBalance(sender.getBalance().subtract(t.getAmount()));

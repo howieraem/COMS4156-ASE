@@ -106,10 +106,11 @@ public class FeedServiceImplTest {
 
     assertNotNull(feedRsp);
     var activities = feedRsp.getActivities();
-    assertEquals(activities.size(), 4);
+    assertEquals(4, activities.size());
 
     var a1 = activities.get(0);
-    assertNotEquals(a1, null);
+    assertNotEquals(a1, feedRsp);
+    assertNotNull(a1);
     assertEquals(a1.getLastUpdateTime(), transaction1.getLastUpdateTime());
     assertNotNull(a1.getAmount());
     assertEquals(a1.getPromoText(), biz.getBizPromotionText());

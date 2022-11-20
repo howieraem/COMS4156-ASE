@@ -218,7 +218,8 @@ public class LoanControllerTest {
     TransactionRsp transactionRsp1 = new TransactionRsp(toUid, fromUid, amount,
         TransactionStatus.LOAN_APPROVED, description, Category.PARTY, lastUpdateTime);
     TransactionRsp transactionRsp2 = new TransactionRsp(fromUid, toUid, amount,
-        TransactionStatus.TRANS_PENDING, requestId.toString(), Category.LOAN_PAYBACK, lastUpdateTime);
+        TransactionStatus.TRANS_PENDING, requestId.toString(), Category.LOAN_PAYBACK,
+        lastUpdateTime);
     loanRsp.setLoans(List.of(transactionRsp1, transactionRsp2));
     Mockito.when(loanService.approveLoan(toUser, requestAcceptDeclineReq)).thenReturn(loanRsp);
     // Act

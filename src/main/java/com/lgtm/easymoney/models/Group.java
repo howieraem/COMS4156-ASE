@@ -37,7 +37,7 @@ public class Group implements Serializable {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = true)
+  @Column
   private String description;
 
   @ManyToMany(cascade = CascadeType.MERGE)
@@ -46,5 +46,5 @@ public class Group implements Serializable {
           joinColumns = @JoinColumn(name = "gid"),
           inverseJoinColumns = @JoinColumn(name = "uid")
   )
-  Set<User> groupUsers;
+  private Set<User> groupUsers;
 }

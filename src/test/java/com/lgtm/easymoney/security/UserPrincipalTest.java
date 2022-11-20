@@ -24,12 +24,11 @@ public class UserPrincipalTest {
     u.setId(UserTestConfig.PERSON1_PRINCIPAL.getId());
     UserPrincipal p = new UserPrincipal(u);
 
-    assertEquals(UserTestConfig.PERSON1_PRINCIPAL, UserTestConfig.PERSON1_PRINCIPAL);
     assertEquals(UserTestConfig.PERSON1_PRINCIPAL, p);
   }
 
   @Test
   public void testNotEqual() {
-    assertNotEquals(UserTestConfig.PERSON1_PRINCIPAL, null);
+    assertNotEquals(UserTestConfig.PERSON1_PRINCIPAL, UserTestConfig.PERSON1);
   }
 }

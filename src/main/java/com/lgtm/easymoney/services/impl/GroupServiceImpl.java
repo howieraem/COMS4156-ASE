@@ -31,6 +31,8 @@ public class GroupServiceImpl implements GroupService {
   private final GroupRepository groupRepository;
   private final UserService userService;
 
+  private static final String RESOURCE = "Group";
+
   /**
    * Constructor of group service.
    *
@@ -51,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
   public Group getGroupById(Long gid) {
     var groupWrapper = groupRepository.findById(gid);
     if (groupWrapper.isEmpty()) {
-      throw new ResourceNotFoundException("Group", "id", gid);
+      throw new ResourceNotFoundException(RESOURCE, "id", gid);
     }
     return groupWrapper.get();
   }
@@ -61,7 +63,7 @@ public class GroupServiceImpl implements GroupService {
   public GroupRsp getGroupProfile(User user, Long gid) {
     Group g = getGroupById(gid);
     if (!user.getGroups().contains(g)) {
-      throw new UnauthorizedException(user.getId(), "Group", gid);
+      throw new UnauthorizedException(user.getId(), RESOURCE, gid);
     }
     GroupRsp r = new GroupRsp();
     r.setGid(g.getId());
@@ -78,7 +80,7 @@ public class GroupServiceImpl implements GroupService {
   public GroupAdsRsp getGroupAds(User user, Long gid) {
     Group g = getGroupById(gid);
     if (!user.getGroups().contains(g)) {
-      throw new UnauthorizedException(user.getId(), "Group", gid);
+      throw new UnauthorizedException(user.getId(), RESOURCE, gid);
     }
     Set<User> users = g.getGroupUsers();
     List<String> ads = new ArrayList<>();
@@ -118,7 +120,7 @@ public class GroupServiceImpl implements GroupService {
     Group g = getGroupById(inviteToGroupReq.getGid());
     User invitee = userService.getUserById(inviteToGroupReq.getInviteeId());
     if (!isInGroup(g, inviter)) {
-      throw new InvalidUpdateException("Group", g.getId(), "inviterId", inviter.getId());
+      throw new InvalidUpdateException(RESOURCE, g.getId(), "inviterId", inviter.getId());
     }
     joinGroup(g, invitee);
   }
@@ -136,7 +138,7 @@ public class GroupServiceImpl implements GroupService {
   /** A user leaves a group. Throw InvalidUpdateException if the user is not a group member. */
   private void leaveGroup(Group group, User user) {
     if (!isInGroup(group, user)) {
-      throw new InvalidUpdateException("Group", group.getId(), "uid", user.getId());
+      throw new InvalidUpdateException(RESOURCE, group.getId(), "uid", user.getId());
     }
     group.getGroupUsers().remove(user);
     groupRepository.save(group);
@@ -145,7 +147,7 @@ public class GroupServiceImpl implements GroupService {
   /** Add a user to a group. Throw InvalidUpdateException if the user is already a group member. */
   private void joinGroup(Group group, User user) {
     if (isInGroup(group, user)) {
-      throw new InvalidUpdateException("Group", group.getId(), "inviteeId", user.getId());
+      throw new InvalidUpdateException(RESOURCE, group.getId(), "inviteeId", user.getId());
     }
     group.getGroupUsers().add(user);
     groupRepository.save(group);
