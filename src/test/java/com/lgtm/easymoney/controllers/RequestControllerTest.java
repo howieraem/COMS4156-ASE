@@ -1,7 +1,5 @@
 package com.lgtm.easymoney.controllers;
 
-
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.configs.UserTestConfig;
+import com.lgtm.easymoney.configs.WebSecurityConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.exceptions.InvalidUpdateException;
@@ -38,6 +37,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -53,6 +53,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @RunWith(SpringRunner.class)
 @WebMvcTest(RequestController.class)
 @ContextConfiguration
+@Import({WebSecurityConfig.class})
 public class RequestControllerTest {
   @Autowired
   private MockMvc mvc;
