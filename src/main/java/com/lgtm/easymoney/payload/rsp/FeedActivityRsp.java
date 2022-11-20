@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 
 /**
  * transaction response.
@@ -30,6 +31,7 @@ public class FeedActivityRsp {
   }
 
   @Override
+  @Generated
   public boolean equals(Object o) {
     if (!(o instanceof FeedActivityRsp that)) {
       return false;

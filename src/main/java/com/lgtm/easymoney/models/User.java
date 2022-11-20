@@ -1,5 +1,7 @@
 package com.lgtm.easymoney.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lgtm.easymoney.configs.DbConsts;
 import com.lgtm.easymoney.configs.ValidationConsts;
 import com.lgtm.easymoney.enums.UserType;
@@ -48,6 +50,7 @@ public class User implements Serializable {
   @Column(nullable = false)
   private String email;
 
+  @JsonIgnore
   @Column(nullable = false)
   private String password;
 
@@ -69,11 +72,14 @@ public class User implements Serializable {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "aid", referencedColumnName = "id")
+  @JsonManagedReference
   private Account account;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "user1")
   private Set<Friendship> friendships;
 
+  @JsonIgnore
   @ManyToMany(mappedBy = "groupUsers")
   private Set<Group> groups;
 
@@ -81,8 +87,10 @@ public class User implements Serializable {
    * transfer: sender is transaction.from, receiver is transaction.to
    * request: requestor is transaction.to, approver is transaction.from
    */
+  @JsonIgnore
   @OneToMany(mappedBy = "from")
   private Set<Transaction> transactionsSent;
+  @JsonIgnore
   @OneToMany(mappedBy = "to")
   private Set<Transaction> transactionsReceived;
 

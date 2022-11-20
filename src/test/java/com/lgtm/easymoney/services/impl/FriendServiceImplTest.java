@@ -243,7 +243,7 @@ public class FriendServiceImplTest {
     List<User> res = friendService.getFriends(user1);
 
     //Assert
-    assertEquals(res.size(), 1);
+    assertEquals(1, res.size());
     assertEquals(user2, res.get(0));
   }
 

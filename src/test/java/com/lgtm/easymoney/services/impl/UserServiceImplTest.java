@@ -93,10 +93,10 @@ public class UserServiceImplTest {
   @Test
   public void shouldGetUserById() {
     User user = userService.getUserById(uid1);
-    assertEquals(user.getId(), uid1);
-    assertEquals(user.getEmail(), email1);
-    assertEquals(user.getPassword(), pwd1);
-    assertEquals(user.getBalance(), BigDecimal.ZERO);
+    assertEquals(uid1, user.getId());
+    assertEquals(email1, user.getEmail());
+    assertEquals(pwd1, user.getPassword());
+    assertEquals(BigDecimal.ZERO, user.getBalance());
   }
 
   @Test
@@ -129,7 +129,7 @@ public class UserServiceImplTest {
   @Test
   public void shouldGetAllUsers() {
     List<User> users = userService.getAllUsers();
-    assertEquals(users.size(), 2);
+    assertEquals(2, users.size());
   }
 
   @Test
@@ -146,7 +146,7 @@ public class UserServiceImplTest {
     user1.setBalance(amount);
     var rsp = userService.makeWithdraw(user1, amount);
     assertNotNull(rsp);
-    assertEquals(rsp.getCurrBalance(), BigDecimal.ZERO);
+    assertEquals(BigDecimal.ZERO, rsp.getCurrBalance());
   }
 
   @Test

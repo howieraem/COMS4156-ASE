@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgtm.easymoney.configs.UserTestConfig;
+import com.lgtm.easymoney.configs.WebSecurityConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.models.User;
@@ -33,6 +34,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,6 +47,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(LoanController.class)
+@Import({WebSecurityConfig.class})
 public class LoanControllerTest {
   @Autowired
   private MockMvc mvc;
@@ -218,7 +221,8 @@ public class LoanControllerTest {
     TransactionRsp transactionRsp1 = new TransactionRsp(toUid, fromUid, amount,
         TransactionStatus.LOAN_APPROVED, description, Category.PARTY, lastUpdateTime);
     TransactionRsp transactionRsp2 = new TransactionRsp(fromUid, toUid, amount,
-        TransactionStatus.TRANS_PENDING, requestId.toString(), Category.LOAN_PAYBACK, lastUpdateTime);
+        TransactionStatus.TRANS_PENDING, requestId.toString(), Category.LOAN_PAYBACK,
+        lastUpdateTime);
     loanRsp.setLoans(List.of(transactionRsp1, transactionRsp2));
     Mockito.when(loanService.approveLoan(toUser, requestAcceptDeclineReq)).thenReturn(loanRsp);
     // Act

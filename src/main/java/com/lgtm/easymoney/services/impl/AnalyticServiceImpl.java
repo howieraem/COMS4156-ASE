@@ -12,6 +12,7 @@ import com.lgtm.easymoney.services.LoanService;
 import com.lgtm.easymoney.services.TransactionService;
 import com.lgtm.easymoney.services.UserService;
 import java.math.BigDecimal;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class AnalyticServiceImpl implements AnalyticService {
   @Override
   public AnalyticRsp getAnalytic(User u) {
     BigDecimal expenditure = BigDecimal.ZERO;
-    Map<Category, BigDecimal> report = new HashMap<Category, BigDecimal>();
+    Map<Category, BigDecimal> report = new EnumMap<>(Category.class);
     AnalyticRsp res = new AnalyticRsp(u);
 
     List<Transaction> transactions = transactionService.getAllTransactionsWithUser(

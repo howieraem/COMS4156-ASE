@@ -116,7 +116,7 @@ public class TransferServiceImplTest {
     // Act & Assert
     assertThrows(InvalidUpdateException.class,
         () -> transferService.makeTransfer(user1, transferReq));
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_FAILED);
+    assertEquals(TransactionStatus.TRANS_FAILED, transaction.getStatus());
   }
 
   @Test
