@@ -63,9 +63,9 @@ public class AnalyticServiceImpl implements AnalyticService {
     if (u.getType() == UserType.FINANCIAL) {
       Map<String, TransactionStatus> finance = new HashMap<>();
       for (TransactionRsp rsp : loanService.getLoansByUser(u).getLoans()) {
-        String name = userService.getUserById(rsp.getToUid()).getAccount().getAccountName();
+        String email = userService.getUserById(rsp.getToUid()).getEmail();
         TransactionStatus status = rsp.getStatus();
-        finance.put(name, status);
+        finance.put(email, status);
       }
       res.setFinance(finance);
     }
