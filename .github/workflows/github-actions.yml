@@ -86,10 +86,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=easymoney
       - name: Create comment in PR
+        if: ${{ github.event_name != 'push' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{github.event.number}}
           body: |
             SonarQube Scan Report: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
       - name: Add markdown to summary
+        if: ${{ github.event_name != 'push' }}
         run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >$GITHUB_STEP_SUMMARY
