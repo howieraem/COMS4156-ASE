@@ -92,4 +92,9 @@ jobs:
           body: |
             SonarQube Scan Report: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
       - name: Add markdown to summary
-        run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >> $GITHUB_STEP_SUMMARY
+        uses: LouisBrunner/checks-action@v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: SonarQube Scan
+          conclusion: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
+          output: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
