@@ -1,12 +1,23 @@
 # COMS W4156 ASE Project
 ![Branch Coverage](.github/badges/branches.svg)
 ![Overall Coverage](.github/badges/jacoco.svg)
-
-Client repository: https://github.com/rl3250/f22_4156_client
-
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
+## Client Repo (Second Iteration)
+[Link to our second iteration Client repository](https://github.com/rl3250/f22_4156_client) 
+We decide to demo personal user related use case, i.e. personal end users can view the feed, make money requests/transfers to someone
+else, and update their user profile. You can think of venmo/zelle as a real-life example.
+
+
+
+## How to view CI/CD Reports
+
+We set up Github Actions and run all tests(unit tests, controllers, services, integrations, data integrity, multi-clients) using Junit with Jacoco
+coverage report. The actions workflow will create two badges, as shown at the very top of the Readme: one is showing the `branch` coverages, and the other one
+is the `overall` coverage.
+
+To manually run the coverage, you can use Intellij client to open this repo, and configure Jacoco coverage report, and `run all tests with coverage`.
 
 ## How to build and run locally
 
