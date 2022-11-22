@@ -88,3 +88,9 @@ jobs:
         with:
           args: >
             -Dsonar.verbose=false
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{github.event.number}}
+          body: |
+            SonarQube Scan Report: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
