@@ -24,6 +24,8 @@ public class RequestServiceImpl implements RequestService {
   private final TransactionService transactionService;
   private final UserService userService;
 
+  private static final String COMMON_ERR_FIELD = "requestId";
+
   // initialize service with dependent services:
   // userService, transactionService
   @Autowired
@@ -109,8 +111,6 @@ public class RequestServiceImpl implements RequestService {
   @Override
   public Transaction createRequest(User reqBy, User reqTo, BigDecimal amount, String desc,
                                    Category category) {
-    // TODO validate input
-
     Transaction trans = new Transaction();
     // request: requested by A, requested to B
     // once accept, money goes from B to A
@@ -186,12 +186,13 @@ public class RequestServiceImpl implements RequestService {
   public ResourceCreatedRsp acceptRequest(Long tid, Long fuid, Long tuid) {
     // verify
     if (!canAcceptDeclineRequest(tid, fuid, tuid)) {
-      // todo write a own exception handler
-      throw new InvalidUpdateException("accept request", tid, "requestId", tid);
+      // status not pending or info not matched
+      throw new InvalidUpdateException("Transaction", tid, COMMON_ERR_FIELD, tid);
     }
     // accept request
     if (!acceptRequest(getRequestById(tid))) {
-      throw new InvalidUpdateException("accept request", tid, "requestId", tid);
+      // not enough balance
+      throw new InvalidUpdateException("User", fuid, COMMON_ERR_FIELD, tid);
     }
     // response
     return new ResourceCreatedRsp(tid);
@@ -206,7 +207,6 @@ public class RequestServiceImpl implements RequestService {
    */
   @Override
   public boolean declineRequest(Transaction request) {
-    // todo refactor to return transaction? or false case
     request.setStatus(TransactionStatus.TRANS_DENIED);
     transactionService.saveTransaction(request);
     return true;
@@ -225,8 +225,8 @@ public class RequestServiceImpl implements RequestService {
   public ResourceCreatedRsp declineRequest(Long tid, Long fuid, Long tuid) {
     // verify
     if (!canAcceptDeclineRequest(tid, fuid, tuid)) {
-      // todo write a own exception handler
-      throw new InvalidUpdateException("decline request", tid, "requestId", tid);
+      // status not pending or info not matched
+      throw new InvalidUpdateException("Transaction", tid, COMMON_ERR_FIELD, tid);
     }
     // decline request
     declineRequest(getRequestById(tid));

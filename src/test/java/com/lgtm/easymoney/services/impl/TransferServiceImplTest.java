@@ -60,7 +60,6 @@ public class TransferServiceImplTest {
   public void setUp() {
     // transferReq
     transferReq = new TransferReq();
-    transferReq.setFromUid(id1);
     transferReq.setToUid(id2);
     transferReq.setAmount(amount);
     transferReq.setCategory(String.valueOf(category));
@@ -117,7 +116,7 @@ public class TransferServiceImplTest {
     // Act & Assert
     assertThrows(InvalidUpdateException.class,
         () -> transferService.makeTransfer(user1, transferReq));
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_FAILED);
+    assertEquals(TransactionStatus.TRANS_FAILED, transaction.getStatus());
   }
 
   @Test

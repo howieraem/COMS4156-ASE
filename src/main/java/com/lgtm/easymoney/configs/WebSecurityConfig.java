@@ -10,12 +10,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /** Security configurations of Spring MVC. */
@@ -25,23 +25,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     securedEnabled = true,
     jsr250Enabled = true,
     prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class WebSecurityConfig {
   private final UserServiceImpl userDetailsService;
-
   private final JwtAuthenticationEntryPoint jwtEntryPoint;
 
   @Autowired
-  public WebSecurityConfig(
-      UserServiceImpl userDetailsService, JwtAuthenticationEntryPoint jwtEntryPoint) {
+  public WebSecurityConfig(UserServiceImpl userDetailsService,
+                           JwtAuthenticationEntryPoint jwtEntryPoint) {
     this.userDetailsService = userDetailsService;
     this.jwtEntryPoint = jwtEntryPoint;
   }
 
-  @Override
+  /**
+   * Configure the authentication manager to load user with username/email
+   * and verify the encoded password.
+   */
   @Bean
-  public AuthenticationManager authenticationManager() throws Exception {
-    return super.authenticationManager();
+  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    return http.getSharedObject(AuthenticationManagerBuilder.class)
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(passwordEncoder())
+        .and()
+        .build();
   }
 
   @Bean
@@ -49,14 +54,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new JwtAuthenticationFilter();
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  }
-
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring()
+  /** Migrated from WebSecurityConfigurerAdapter.configure(WebSecurity web). */
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return web -> web.ignoring()
         .antMatchers("/v2/api-docs",
             "/v3/api-docs",
             "/api-docs/**",
@@ -68,8 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**");
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  /** Migrated from WebSecurityConfigurerAdapter.configure(HttpSecurity http). */
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors()
         .and()
         .csrf().disable()
@@ -104,6 +106,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated();
 
     http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
   }
 
   @Bean

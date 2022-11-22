@@ -65,7 +65,6 @@ public class RequestServiceImplTest {
   public void setUp() {
     // requestReq
     requestReq = new RequestReq();
-    requestReq.setFromUid(id1);
     requestReq.setToUid(id2);
     requestReq.setAmount(amount);
     requestReq.setCategory(String.valueOf(category));
@@ -244,7 +243,7 @@ public class RequestServiceImplTest {
     Boolean returned = requestService.declineRequest(transaction);
     // Assert
     assertEquals(Boolean.TRUE, returned);
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+    assertEquals(TransactionStatus.TRANS_DENIED, transaction.getStatus());
   }
 
   @Test
@@ -258,7 +257,7 @@ public class RequestServiceImplTest {
     ResourceCreatedRsp returned = requestService.declineRequest(transactionId, id1, id2);
     // Assert
     assertEquals(expected, returned);
-    assertEquals(transaction.getStatus(), TransactionStatus.TRANS_DENIED);
+    assertEquals(TransactionStatus.TRANS_DENIED, transaction.getStatus());
   }
 
   @Test

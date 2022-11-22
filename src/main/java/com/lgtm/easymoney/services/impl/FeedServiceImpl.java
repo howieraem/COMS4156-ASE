@@ -26,7 +26,7 @@ public class FeedServiceImpl implements FeedService {
   private final UserService userService;
   private final FriendService friendService;
   private final TransactionService transactionService;
-  private final int feedSize = 20;
+  private static final int FEED_SIZE = 20;
 
   /**
    * feed service for getting user's feed activity.
@@ -49,23 +49,21 @@ public class FeedServiceImpl implements FeedService {
    * @param u user
    * @return list of feed activity response.
    */
-  @Override
-  public List<FeedActivityRsp> getFeedByUser(User u) {
+  private List<FeedActivityRsp> getFeedByUser(User u) {
     // get user's activity
-    List<FeedActivityRsp> userActivity = getUserActivity(u, false);
-    List<FeedActivityRsp> res = new ArrayList<>(userActivity);
+    List<FeedActivityRsp> res = getUserActivity(u, false);
     // get friends' activity,hide amount
     List<User> friends = friendService.getFriends(u);
     for (User f : friends) {
       List<FeedActivityRsp> fs = getUserActivity(f, true);
       res.addAll(fs);
     }
-    // remove duplicates, 1->2 and 2->1 are same transaction
+    // remove duplicates by checking fromUid, toUid and time
     res = res.stream().distinct().collect(Collectors.toList());
     // sort, the latest first
     res.sort(Comparator.comparing(FeedActivityRsp::getLastUpdateTime));
     // only return 20 latest and valid transaction
-    return res.stream().limit(feedSize).collect(Collectors.toList());
+    return res.stream().limit(FEED_SIZE).toList();
   }
 
   /**
@@ -73,7 +71,7 @@ public class FeedServiceImpl implements FeedService {
    *
    * @param u user
    * @param hideAmount should hide amount or not, privacy
-   * @return list of user's own feed activity response
+   * @return (mutable) list of user's own feed activity response
    */
   private List<FeedActivityRsp> getUserActivity(User u, boolean hideAmount) {
     // get transactions
@@ -92,7 +90,7 @@ public class FeedServiceImpl implements FeedService {
                     a.getLastUpdateTime(),
                     null  // placeholder
             ))
-            .collect(Collectors.toList());
+            .collect(Collectors.toCollection(ArrayList::new));
 
   }
 
@@ -100,21 +98,19 @@ public class FeedServiceImpl implements FeedService {
    * INTERNAL helper method to set promotion text.
    *
    * @param activities list of users' activity
-   * @return list of activity
    */
-  private List<FeedActivityRsp> setPromoText(List<FeedActivityRsp> activities) {
+  private void setPromoText(List<FeedActivityRsp> activities) {
     // set promo text
-    for (FeedActivityRsp a : activities) {
-      User from = userService.getUserById(a.getFromUid());
-      User to = userService.getUserById(a.getToUid());
+    for (FeedActivityRsp activity : activities) {
+      User from = userService.getUserById(activity.getFromUid());
+      User to = userService.getUserById(activity.getToUid());
       // get the one that has promo: EXCEPT personal
       User promo = from.getType() != UserType.PERSONAL ? from :
-              (to.getType() != UserType.PERSONAL ? to : null);
+          (to.getType() != UserType.PERSONAL ? to : null);
       if (promo != null) {
-        a.setPromoText(promo.getBizPromotionText());
+        activity.setPromoText(promo.getBizPromotionText());
       }
     }
-    return activities;
   }
 
   /**
@@ -128,11 +124,8 @@ public class FeedServiceImpl implements FeedService {
     // get user's feed
     List<FeedActivityRsp> activities = getFeedByUser(user);
     // set promo text
-    activities = setPromoText(activities);
+    setPromoText(activities);
 
     return new FeedRsp(activities);
-
   }
-
-
 }

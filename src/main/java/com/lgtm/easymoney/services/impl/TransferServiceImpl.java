@@ -92,9 +92,9 @@ public class TransferServiceImpl implements TransferService {
     // payload
     if (!success) {
       transaction.setStatus(TransactionStatus.TRANS_FAILED);
-      transaction = transactionService.saveTransaction(transaction);
-      throw new InvalidUpdateException("make transfer", transaction.getId(),
-          "transfer id", transaction.getId());
+      transactionService.saveTransaction(transaction);
+      throw new InvalidUpdateException("User", fromUser.getId(),
+          "amount", amount);
     }
     return new ResourceCreatedRsp(transaction.getId());
   }

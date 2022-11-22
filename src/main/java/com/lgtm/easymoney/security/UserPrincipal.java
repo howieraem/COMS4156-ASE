@@ -60,16 +60,13 @@ public class UserPrincipal implements UserDetails {
     return true;
   }
 
-  //  @Override
-  //  public int hashCode() {
-  //    return Objects.hash(getId());
-  //  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
+  }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
-    }
     if (!(obj instanceof UserPrincipal that)) {
       return false;
     }
