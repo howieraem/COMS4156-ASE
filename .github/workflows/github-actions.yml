@@ -91,3 +91,5 @@ jobs:
           issue-number: ${{github.event.number}}
           body: |
             SonarQube Scan Report: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
+      - name: Add markdown to summary
+        run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >> $GITHUB_STEP_SUMMARY
