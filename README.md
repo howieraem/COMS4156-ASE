@@ -1,6 +1,9 @@
 # COMS W4156 ASE Project
 ![Branch Coverage](.github/badges/branches.svg)
 ![Overall Coverage](.github/badges/jacoco.svg)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=easymoney&metric=bugs)](https://sonarcloud.io/summary/new_code?id=easymoney)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=easymoney&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=easymoney)
+
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
