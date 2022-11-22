@@ -96,5 +96,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: SonarQube Scan
-          conclusion: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
+          conclusion: ${{ job.status }}
           output: https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}
