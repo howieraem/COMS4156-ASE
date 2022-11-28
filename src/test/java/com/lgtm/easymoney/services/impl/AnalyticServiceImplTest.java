@@ -56,9 +56,6 @@ public class AnalyticServiceImplTest {
   @Before
   public void setUp() {
     final Instant t = Instant.now();
-    person1.setBalance(new BigDecimal(200));
-    person2.setBalance(new BigDecimal(200));
-    fin.setBalance(new BigDecimal(200));
 
     transaction1 = new Transaction();
     transaction1.setFrom(person1);
