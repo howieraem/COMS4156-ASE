@@ -72,8 +72,14 @@ public class AnalyticServiceImplTest {
     transaction2.setStatus(TransactionStatus.TRANS_COMPLETE);
     transaction2.setLastUpdateTime(Date.from(t.plusSeconds(1)));
     transaction2.setCategory(Category.SHOPPING);
-    TransactionRsp transactionRsp = new TransactionRsp(transaction2.getFrom().getId(),transaction2.getTo().getId(),transaction2.getAmount(),
-            transaction2.getStatus(),transaction2.getDescription(),transaction2.getCategory(),transaction2.getLastUpdateTime());
+    TransactionRsp transactionRsp = new TransactionRsp(
+        transaction2.getFrom().getId(),
+        transaction2.getTo().getId(),
+        transaction2.getAmount(),
+        transaction2.getStatus(),
+        transaction2.getDescription(),
+        transaction2.getCategory(),
+        transaction2.getLastUpdateTime());
     LoanRsp loanRsp = new LoanRsp();
     loanRsp.setLoans(List.of(transactionRsp));
 
@@ -111,7 +117,8 @@ public class AnalyticServiceImplTest {
 
     var analyticRsp1 = analyticService.getAnalytic(fin);
     assertEquals(1, analyticRsp1.getFinance().size());
-    assertEquals(TransactionStatus.TRANS_COMPLETE, analyticRsp1.getFinance().get(person2.getEmail()));
+    assertEquals(TransactionStatus.TRANS_COMPLETE,
+        analyticRsp1.getFinance().get(person2.getEmail()));
 
     var analyticRsp2 = analyticService.getAnalytic(person2);
     assertNotNull(analyticRsp2);

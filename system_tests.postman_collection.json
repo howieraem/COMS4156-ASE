@@ -35,34 +35,6 @@
 			"response": []
 		},
 		{
-			"name": "user1 login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/auth/login",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"auth",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "create user 2 personal",
 			"request": {
 				"method": "POST",
@@ -85,34 +57,6 @@
 					"path": [
 						"auth",
 						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user2 login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/auth/login",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"auth",
-						"login"
 					]
 				}
 			},
@@ -147,34 +91,6 @@
 			"response": []
 		},
 		{
-			"name": "user3 login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/auth/login",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"auth",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "create user 4 business",
 			"request": {
 				"method": "POST",
@@ -197,34 +113,6 @@
 					"path": [
 						"auth",
 						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user4 login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/auth/login",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"auth",
-						"login"
 					]
 				}
 			},
@@ -259,7 +147,174 @@
 			"response": []
 		},
 		{
+			"name": "user1 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user1Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user2 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user2Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user3 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user3Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user4 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user4Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user5 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user5Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -287,86 +342,13 @@
 			"response": []
 		},
 		{
-			"name": "get current user details",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4OTE1MDI1LCJleHAiOjE2Njk1MTk4MjV9.DQWpZWXCNy6jAeg4Qj1LazxbsiWzRFcHOIri-vqtv33K5irXfGVLnkJiQAXs1ghhk7lItz_PlP1HuPMNLvoeSA",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/me",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"me"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get current user analytics",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4OTE1MDI1LCJleHAiOjE2Njk1MTk4MjV9.DQWpZWXCNy6jAeg4Qj1LazxbsiWzRFcHOIri-vqtv33K5irXfGVLnkJiQAXs1ghhk7lItz_PlP1HuPMNLvoeSA",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/analytic",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"analytic"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -380,14 +362,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/deposit",
+					"raw": "localhost:5000/balance",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "5000",
 					"path": [
-						"user",
-						"deposit"
+						"balance"
 					]
 				}
 			},
@@ -400,7 +381,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -434,7 +415,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODM3NTYzNSwiZXhwIjoxNjY4OTgwNDM1fQ.1W09qwSqdhmupcYsyE-gOaZNkISiPynWTdE5aeRc04Aop1rChs3CDSo8P9KOD3BJIl6Ay0gtBCbVFLHeFx2z1Q",
+						"value": "{{user2Token}}",
 						"type": "text"
 					}
 				],
@@ -468,7 +449,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMXMzMTIxMkB0ZXMxMjN0LmNvbSIsImlhdCI6MTY2ODM3NzUyMCwiZXhwIjoxNjY4OTgyMzIwfQ.6ZReH6dAVgNYPhp8e-I5Co7phsNPluuSrXbp0ayLjzte7ZPp30GFpbjqhxnAfkh6jo3Jo1LpZTNsvnWIyRzLQQ",
+						"value": "{{user3Token}}",
 						"type": "text"
 					}
 				],
@@ -502,7 +483,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlM3QuY29tIiwiaWF0IjoxNjY4Mzc3MzY1LCJleHAiOjE2Njg5ODIxNjV9.2oPrC5-g8md70fEufwQ74LItGL_AALky97c8xp-LQrbNGLSdK5upkIZEC8AAou2IJ_ct-FkCsUMGKynrgmhUcA",
+						"value": "{{user4Token}}",
 						"type": "text"
 					}
 				],
@@ -536,7 +517,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2OTExLCJleHAiOjE2Njg5ODE3MTF9.w8LYNT0SopBVRmyMuZo-BizPRjfik0aKsVr4RJqaFNa_tlHlmLS6fjZMNToTyWCeS3ATb7yezb6uQJ2RnhzcNg",
+						"value": "{{user5Token}}",
 						"type": "text"
 					}
 				],
@@ -570,7 +551,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2OTExLCJleHAiOjE2Njg5ODE3MTF9.w8LYNT0SopBVRmyMuZo-BizPRjfik0aKsVr4RJqaFNa_tlHlmLS6fjZMNToTyWCeS3ATb7yezb6uQJ2RnhzcNg",
+						"value": "{{user5Token}}",
 						"type": "text"
 					}
 				],
@@ -598,19 +579,56 @@
 			"response": []
 		},
 		{
-			"name": "create money request",
+			"name": "get user 1 details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/me",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create money request 1=>2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -632,19 +650,19 @@
 			"response": []
 		},
 		{
-			"name": "accept money request",
+			"name": "accept money request 2=>1",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODM3NTYzNSwiZXhwIjoxNjY4OTgwNDM1fQ.1W09qwSqdhmupcYsyE-gOaZNkISiPynWTdE5aeRc04Aop1rChs3CDSo8P9KOD3BJIl6Ay0gtBCbVFLHeFx2z1Q",
+						"value": "{{user2Token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\": \"1\",\n    \"fromUid\": \"2\",\n    \"toUid\": \"1\"\n}",
+					"raw": "{\n    \"requestid\": \"1\",\n    \"toUid\": \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -673,13 +691,19 @@
 			"response": []
 		},
 		{
-			"name": "create money request dec",
+			"name": "create money request dec 1=>2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -701,13 +725,19 @@
 			"response": []
 		},
 		{
-			"name": "decline money request",
+			"name": "decline money request 2=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\" : \"2\",\n    \"fromUid\" : \"2\",\n    \"toUid\" : \"1\"\n}",
+					"raw": "{\n    \"requestid\" : \"2\",\n    \"toUid\" : \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -739,29 +769,40 @@
 			"name": "get all money requests",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "localhost:8080/request/1",
+					"raw": "localhost:8080/request",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"request",
-						"1"
+						"request"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "make a  transfer from 1 to 2",
+			"name": "make a  transfer 1=>2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\": 1,\n    \"toUid\": 2,\n    \"amount\": \"133.0\",\n    \"category\": \"PARTY\",\n    \"description\": \"123\"\n}",
+					"raw": "{\n    \"toUid\": 2,\n    \"amount\": \"133.0\",\n    \"category\": \"PARTY\",\n    \"description\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -786,7 +827,13 @@
 			"name": "create group with personal user 1, business user 3",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user3Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"uids\": [1, 3],\n    \"name\": \"Test Group\",\n    \"description\": \"test\"\n}",
@@ -817,7 +864,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -849,7 +902,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -906,86 +965,6 @@
 			"response": []
 		},
 		{
-			"name": "search users by digits",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/search/info/222",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						"info",
-						"222"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search users by account name",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/search/info/22",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search users by phone",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/search/info/22",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search users by email",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/search/info/222@gmail.com",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						"info",
-						"222@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "search users partial match",
 			"request": {
 				"method": "GET",
@@ -1006,33 +985,13 @@
 			"response": []
 		},
 		{
-			"name": "search failed",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/search/info/222@gmail.com",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"search",
-						"info",
-						"222@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "add friend usr1 => usr2",
+			"name": "add friend 1=>2",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -1061,7 +1020,7 @@
 			"response": []
 		},
 		{
-			"name": "get usr2's pending friends",
+			"name": "usr2 gets pending friends",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1070,7 +1029,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"value": "{{user2Token}}",
 						"type": "text"
 					}
 				],
@@ -1099,13 +1058,13 @@
 			"response": []
 		},
 		{
-			"name": "accept friend by usr2",
+			"name": "accept friend 2=>1",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjIzQGdtYWlsLmNvbSIsImlhdCI6MTY2ODI5MjY3OCwiZXhwIjoxNjY4ODk3NDc4fQ._ePdxZGlclEuf8FYwW2AdQvNtLyvYmzLl_HPeauMqtee2muop3oO0Xe4U3sROP7lO93A4gik8nQpy6I4Vw-b7w",
+						"value": "{{user2Token}}",
 						"type": "text"
 					}
 				],
@@ -1143,7 +1102,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -1171,7 +1130,7 @@
 			"response": []
 		},
 		{
-			"name": "get user 1's feed",
+			"name": "get usr1's feed",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1180,7 +1139,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -1207,13 +1166,13 @@
 			"response": []
 		},
 		{
-			"name": "delete friend by usr1",
+			"name": "usr1 deletes friend 2",
 			"request": {
 				"method": "DELETE",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mjg5NDcwLCJleHAiOjE2Njg4OTQyNzB9.yhF2oq5g_ccjBwd_G_57i69PzAaIoP6qlMpIz6a9RdXALMb-HT8rR8LixhDIPR_zBgiDNvlspCGLIN2Ds5LZtA",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -1242,13 +1201,13 @@
 			"response": []
 		},
 		{
-			"name": "create loan request",
+			"name": "create loan request 1=>5",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMjJAZ21haWwuY29tIiwiaWF0IjoxNjY4Mzc1NDk4LCJleHAiOjE2Njg5ODAyOTh9.B3VM1cPlq4hrYFQmmJd-KmLZvCYRYekFqnjCLsqoezdWhyLXsndUBG9cy2qLuFCdExO5ojx-AUcqKj_vrwmihQ",
+						"value": "{{user1Token}}",
 						"type": "text"
 					}
 				],
@@ -1276,19 +1235,19 @@
 			"response": []
 		},
 		{
-			"name": "approve loan request",
+			"name": "approve loan request 5=>1",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhQGJhbmsuY29tIiwiaWF0IjoxNjY4Mzc2MzIyLCJleHAiOjE2Njg5ODExMjJ9.v51kGVYx8PhVs7S1cBTscIfK-3nexg70NHdgeTqqh_6FtA1vI8OBpvX-VxtcrsL4Jv8osJGAZlk38FJJut7B3Q",
+						"value": "{{user5Token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"fromUid\": 5,\n  \"toUid\": 1,\n  \"requestid\": 1\n}",
+					"raw": "{\n  \"toUid\": 1,\n  \"requestid\": 4\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1317,13 +1276,19 @@
 			"response": []
 		},
 		{
-			"name": "create loan request dec",
+			"name": "create loan request dec 1=>5",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"fromUid\": 1,\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
+					"raw": "{\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1345,13 +1310,19 @@
 			"response": []
 		},
 		{
-			"name": "decline loan request",
+			"name": "decline loan request 5=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user5Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\" : \"6\",\n    \"fromUid\" : \"5\",\n    \"toUid\" : \"1\"\n}",
+					"raw": "{\n    \"requestid\" : \"6\",\n    \"toUid\" : \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1378,6 +1349,64 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "get user 1 analytics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/analytic",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytic"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "user1Token",
+			"value": ""
+		},
+		{
+			"key": "user2Token",
+			"value": ""
+		},
+		{
+			"key": "user3Token",
+			"value": ""
+		},
+		{
+			"key": "user4Token",
+			"value": ""
+		},
+		{
+			"key": "user5Token",
+			"value": ""
 		}
 	]
 }
