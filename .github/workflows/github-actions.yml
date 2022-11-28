@@ -95,14 +95,15 @@ jobs:
       - name: Add markdown to summary
         if: ${{ github.event_name != 'push' }}
         run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >$GITHUB_STEP_SUMMARY
-      - name: Start server in background before System/API tests
-        run: |
-          RUNNER_TRACKING_ID="" && (mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8083 &)
-      - name: Pause before System/API tests
-        run: |
-          sleep 15
-      - uses: actions/checkout@master
-      - name: Run System/API tests in Postman collection
-        uses: matt-ball/newman-action@master
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          collection: system_tests.postman_collection.json
+          node-version: 16
+      - name: Install newman
+        run: npm install -g newman
+      - uses: actions/checkout@master
+      - name: Start server in background and run System/API tests
+        run: |
+          mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8083 &
+          sleep 15
+          newman run "system_tests.postman_collection.json"
