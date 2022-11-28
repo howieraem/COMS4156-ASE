@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * Response for getting loans.
  */
+
 @Data
 @NoArgsConstructor
 public class LoanRsp {
