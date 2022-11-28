@@ -1,10 +1,7 @@
 package com.lgtm.easymoney.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.enums.Category;
