@@ -95,3 +95,14 @@ jobs:
       - name: Add markdown to summary
         if: ${{ github.event_name != 'push' }}
         run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >$GITHUB_STEP_SUMMARY
+      - name: Start server in background before System/API tests
+        run: |
+          mvn spring-boot:run &
+      - name: Pause before System/API tests
+        run: |
+          sleep 15
+      - uses: actions/checkout@master
+      - name: Run System/API tests in Postman collection
+        uses: matt-ball/newman-action@master
+        with:
+          collection: system_tests.postman_collection.json
