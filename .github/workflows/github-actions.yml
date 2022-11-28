@@ -97,7 +97,7 @@ jobs:
         run: echo ‘SonarQube Scan Report https://sonarcloud.io/dashboard?id=easymoney&pullRequest=${{github.event.number}}’ >$GITHUB_STEP_SUMMARY
       - name: Start server in background before System/API tests
         run: |
-          mvn spring-boot:run &
+          mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8083 &
       - name: Pause before System/API tests
         run: |
           sleep 15
