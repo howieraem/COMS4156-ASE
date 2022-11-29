@@ -362,13 +362,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8083/balance",
+					"raw": "localhost:8083/user/deposit",
 					"host": [
 						"localhost"
 					],
 					"port": "8083",
 					"path": [
-						"balance"
+						"user",
+						"deposit"
 					]
 				}
 			},
