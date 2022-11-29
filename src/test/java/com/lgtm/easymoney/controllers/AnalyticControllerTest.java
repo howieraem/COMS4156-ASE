@@ -1,28 +1,18 @@
 package com.lgtm.easymoney.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.jayway.jsonpath.JsonPath;
 import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.configs.WebSecurityConfig;
-import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.models.User;
 import com.lgtm.easymoney.payload.rsp.AnalyticRsp;
-import com.lgtm.easymoney.payload.rsp.FeedActivityRsp;
-import com.lgtm.easymoney.payload.rsp.FeedRsp;
 import com.lgtm.easymoney.security.JwtAuthenticationEntryPoint;
 import com.lgtm.easymoney.security.JwtTokenProvider;
 import com.lgtm.easymoney.services.AnalyticService;
-import com.lgtm.easymoney.services.FeedService;
 import com.lgtm.easymoney.services.impl.UserServiceImpl;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

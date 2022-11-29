@@ -165,7 +165,7 @@ public class LoanServiceImpl implements LoanService {
   @Override
   public LoanRsp approveLoan(User lender, RequestAcceptDeclineReq req) {
     // get params
-    Long fromUid = req.getFromUid();
+    Long fromUid = lender.getId();
     Long toUid = req.getToUid();
     Long lid = req.getRequestid();
     // validate
@@ -211,7 +211,7 @@ public class LoanServiceImpl implements LoanService {
   @Override
   public LoanRsp declineLoan(User lender, RequestAcceptDeclineReq req) {
     // get params
-    Long fromUid = req.getFromUid();
+    Long fromUid = lender.getId();
     Long toUid = req.getToUid();
     Long lid = req.getRequestid();
     // validate
