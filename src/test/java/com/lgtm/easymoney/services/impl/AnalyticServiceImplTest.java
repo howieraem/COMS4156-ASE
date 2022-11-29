@@ -72,6 +72,7 @@ public class AnalyticServiceImplTest {
     TransactionRsp transactionRsp = new TransactionRsp(
         transaction2.getFrom().getId(),
         transaction2.getTo().getId(),
+        transaction2.getId(),
         transaction2.getAmount(),
         transaction2.getStatus(),
         transaction2.getDescription(),

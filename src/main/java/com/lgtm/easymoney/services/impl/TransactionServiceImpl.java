@@ -154,6 +154,7 @@ public class TransactionServiceImpl implements TransactionService {
     TransactionRsp r = new TransactionRsp();
     r.setFromUid(t.getFrom().getId());
     r.setToUid(t.getTo().getId());
+    r.setTransactionId(t.getId());
     r.setAmount(t.getAmount());
     r.setStatus(t.getStatus());
     r.setDesc(t.getDescription());

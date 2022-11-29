@@ -278,7 +278,7 @@ public class TransactionServiceImplTest {
 
   @Test
   public void generateResponseFromTransactionSuccess() {
-    TransactionRsp expectedRsp = new TransactionRsp(id1, id2, amount,
+    TransactionRsp expectedRsp = new TransactionRsp(id1, id2, transaction.getId(), amount,
         TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime);
     TransactionRsp returnedRsp = transactionService.generateResponseFromTransaction(transaction);
     assertEquals(returnedRsp, expectedRsp);
@@ -286,7 +286,7 @@ public class TransactionServiceImplTest {
 
   @Test
   public void generateListResponseFromTransactionsSuccess() {
-    List<TransactionRsp> expectedRsp = List.of(new TransactionRsp(id1, id2, amount,
+    List<TransactionRsp> expectedRsp = List.of(new TransactionRsp(id1, id2, transaction.getId(), amount,
         TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime));
     List<TransactionRsp> returnedRsp =
         transactionService.generateListResponseFromTransactions(List.of(transaction));

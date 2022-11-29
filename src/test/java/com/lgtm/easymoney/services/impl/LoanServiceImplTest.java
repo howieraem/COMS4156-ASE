@@ -104,7 +104,7 @@ public class LoanServiceImplTest {
     transaction.setStatus(TransactionStatus.LOAN_PENDING);
     transaction.setId(transactionId);
     // transaction response
-    transactionRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_PENDING,
+    transactionRsp = new TransactionRsp(id2, id1, 1L, amount, TransactionStatus.LOAN_PENDING,
         description, category, lastUpdateTime);
     // requestAcceptDeclineReq
     requestAcceptDeclineReq = new RequestAcceptDeclineReq();
@@ -188,14 +188,14 @@ public class LoanServiceImplTest {
     payback.setStatus(TransactionStatus.TRANS_PENDING);
     payback.setId(paybackId);
     // payback response
-    TransactionRsp paybackRsp = new TransactionRsp(id1, id2, amount,
+    TransactionRsp paybackRsp = new TransactionRsp(id1, id2, 2L, amount,
         TransactionStatus.TRANS_PENDING, String.valueOf(transactionId), Category.LOAN_PAYBACK,
         lastUpdateTime);
 
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
     Mockito.when(requestService.createRequest(user2, user1, amount, String.valueOf(transactionId),
         Category.LOAN_PAYBACK)).thenReturn(payback);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_APPROVED,
+    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 3L, amount, TransactionStatus.LOAN_APPROVED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan, payback))).thenReturn(List.of(loanRsp, paybackRsp));
@@ -296,7 +296,7 @@ public class LoanServiceImplTest {
     loan.setId(transactionId);
 
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_DECLINED,
+    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 1L, amount, TransactionStatus.LOAN_DECLINED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan))).thenReturn(List.of(loanRsp));
