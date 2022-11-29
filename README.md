@@ -7,10 +7,12 @@
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
-## Client Repo (Second Iteration)
-[Link to our second iteration Client repository](https://github.com/rl3250/f22_4156_client) 
+
+## Client Repository (Second Iteration)
+
+[Link to our second iteration client repository](https://github.com/rl3250/f22_4156_client) 
 We decide to demo personal user related use case, i.e. personal end users can view the feed, make money requests/transfers to someone
-else, and update their user profile. You can think of venmo/zelle as a real-life example.
+else, view their user profile and deposit/withdraw money. You can think of venmo/zelle as a real-life example. **For details about end-to-end tests, please go to the README of the client repository.**
 
 ## How some third party could develop using our service
 
@@ -22,13 +24,13 @@ We provided some common money service apis that are mostly extensible, clients c
 other services. For example, the addresses can be integrated with some auto complete address service, and same thing for the telephones, emails, and so on. In
 our setting, one user has one bank account, and clients can further this and can potentially integerate it with some banking service to include multiple bank accounts.
 
+
 ## How to view CI/CD Reports
 
-We set up Github Actions and run all tests(unit tests, controllers, services, integrations, data integrity, multi-clients) using Junit with Jacoco
-coverage report. The actions workflow will create two badges, as shown at the very top of the Readme: one is showing the `branch` coverages, and the other one
-is the `overall` coverage.
+We set up GitHub Actions and run all tests (unit tests, integration tests, SonarQube scan and Postman API tests) using JUnit, JaCoCo
+coverage report, SonarCloud plugin and newman. The actions workflow will update two badges, as shown at the very top of the Readme: one is showing the `branch` coverages, and the other one is the `overall` coverage. The workflow will also update the report on SonarCloud which can be viewed by clicking on the bugs badge above. For more test outputs, go to the Actions tab, select a run and then click on "run_tests" on the left. 
 
-To manually run the coverage, you can use Intellij client to open this repo, and configure Jacoco coverage report, and `run all tests with coverage`.
+To check the coverage locally, you can use Intellij client to open this repo, and configure JaCoCo coverage report, and `run all tests with coverage`.
 
 ## How to build and run locally
 

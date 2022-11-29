@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
+import com.lgtm.easymoney.configs.UserTestConfig;
 import com.lgtm.easymoney.enums.Category;
 import com.lgtm.easymoney.enums.TransactionStatus;
 import com.lgtm.easymoney.enums.UserType;
@@ -49,6 +50,7 @@ public class LoanServiceImplTest {
   private RequestReq requestReq;
   private User user1;
   private User user2;
+  private User user3;
   private Transaction transaction;
   private TransactionRsp transactionRsp;
   private RequestAcceptDeclineReq requestAcceptDeclineReq;
@@ -83,6 +85,9 @@ public class LoanServiceImplTest {
     user2.setPassword("b");
     user2.setBalance(user2Balance);
     user2.setType(UserType.FINANCIAL);
+    // user3
+    user3 = UserTestConfig.FIN_USR;
+
     // requestReq
     requestReq = new RequestReq();
     requestReq.setToUid(id2);
@@ -99,11 +104,10 @@ public class LoanServiceImplTest {
     transaction.setStatus(TransactionStatus.LOAN_PENDING);
     transaction.setId(transactionId);
     // transaction response
-    transactionRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_PENDING,
+    transactionRsp = new TransactionRsp(id2, id1, 1L, amount, TransactionStatus.LOAN_PENDING,
         description, category, lastUpdateTime);
     // requestAcceptDeclineReq
     requestAcceptDeclineReq = new RequestAcceptDeclineReq();
-    requestAcceptDeclineReq.setFromUid(id2);
     requestAcceptDeclineReq.setToUid(id1);
     requestAcceptDeclineReq.setRequestid(transactionId);
   }
@@ -184,14 +188,14 @@ public class LoanServiceImplTest {
     payback.setStatus(TransactionStatus.TRANS_PENDING);
     payback.setId(paybackId);
     // payback response
-    TransactionRsp paybackRsp = new TransactionRsp(id1, id2, amount,
+    TransactionRsp paybackRsp = new TransactionRsp(id1, id2, 2L, amount,
         TransactionStatus.TRANS_PENDING, String.valueOf(transactionId), Category.LOAN_PAYBACK,
         lastUpdateTime);
 
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
     Mockito.when(requestService.createRequest(user2, user1, amount, String.valueOf(transactionId),
         Category.LOAN_PAYBACK)).thenReturn(payback);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_APPROVED,
+    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 3L, amount, TransactionStatus.LOAN_APPROVED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan, payback))).thenReturn(List.of(loanRsp, paybackRsp));
@@ -225,15 +229,15 @@ public class LoanServiceImplTest {
   }
 
   @Test
-  public void approveLoanFailedWithWrongFromUid() {
+  public void approveLoanFailedWithWrongLender() {
     // Arrange
-    requestAcceptDeclineReq.setFromUid(3L);
+    Mockito.when(userService.getUserById(user3.getId())).thenReturn(user3);
     Mockito.when(userService.getUserById(requestAcceptDeclineReq.getToUid())).thenReturn(user1);
     Mockito.when(transactionService.getTransactionById(requestAcceptDeclineReq.getRequestid()))
         .thenReturn(transaction);
     // Act & Assert
     assertThrows(InvalidUpdateException.class,
-        () -> loanService.approveLoan(user2, requestAcceptDeclineReq));
+        () -> loanService.approveLoan(user3, requestAcceptDeclineReq));
   }
 
   @Test
@@ -292,7 +296,7 @@ public class LoanServiceImplTest {
     loan.setId(transactionId);
 
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, amount, TransactionStatus.LOAN_DECLINED,
+    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 1L, amount, TransactionStatus.LOAN_DECLINED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan))).thenReturn(List.of(loanRsp));
@@ -326,15 +330,15 @@ public class LoanServiceImplTest {
   }
 
   @Test
-  public void declineLoanFailedWithWrongFromUid() {
+  public void declineLoanFailedWithWrongLender() {
     // Arrange
-    requestAcceptDeclineReq.setFromUid(3L);
+    Mockito.when(userService.getUserById(user3.getId())).thenReturn(user3);
     Mockito.when(userService.getUserById(requestAcceptDeclineReq.getToUid())).thenReturn(user1);
     Mockito.when(transactionService.getTransactionById(requestAcceptDeclineReq.getRequestid()))
         .thenReturn(transaction);
     // Act & Assert
     assertThrows(InvalidUpdateException.class,
-        () -> loanService.declineLoan(user2, requestAcceptDeclineReq));
+        () -> loanService.declineLoan(user3, requestAcceptDeclineReq));
   }
 
   @Test

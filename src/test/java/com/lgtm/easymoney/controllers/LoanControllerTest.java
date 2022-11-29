@@ -92,13 +92,12 @@ public class LoanControllerTest {
     requestReq.setDescription(description);
     // request for loan approve/decline
     requestAcceptDeclineReq = new RequestAcceptDeclineReq();
-    requestAcceptDeclineReq.setFromUid(toUid);
     requestAcceptDeclineReq.setToUid(fromUid);
     requestAcceptDeclineReq.setRequestid(requestId);
     // response for loan request
     resourceCreatedRsp = new ResourceCreatedRsp(requestId);
     // transaction response
-    transactionRsp = new TransactionRsp(fromUid, toUid, amount,
+    transactionRsp = new TransactionRsp(fromUid, toUid, requestId, amount,
         TransactionStatus.LOAN_PENDING, description, Category.PARTY, lastUpdateTime);
     // response for get all loans
     loanRsp = new LoanRsp();
@@ -218,9 +217,9 @@ public class LoanControllerTest {
   @Test
   public void approveLoanSuccess() throws Exception {
     // Arrange
-    TransactionRsp transactionRsp1 = new TransactionRsp(toUid, fromUid, amount,
+    TransactionRsp transactionRsp1 = new TransactionRsp(toUid, fromUid, 2L, amount,
         TransactionStatus.LOAN_APPROVED, description, Category.PARTY, lastUpdateTime);
-    TransactionRsp transactionRsp2 = new TransactionRsp(fromUid, toUid, amount,
+    TransactionRsp transactionRsp2 = new TransactionRsp(fromUid, toUid, 3L, amount,
         TransactionStatus.TRANS_PENDING, requestId.toString(), Category.LOAN_PAYBACK,
         lastUpdateTime);
     loanRsp.setLoans(List.of(transactionRsp1, transactionRsp2));

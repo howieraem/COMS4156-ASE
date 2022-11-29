@@ -126,7 +126,7 @@ public class TransferServiceImplTest {
     transaction.setStatus(TransactionStatus.TRANS_COMPLETE);
     Mockito.when(transactionService.getAllTransactionsWithUser(any(), any()))
         .thenReturn(List.of(transaction));
-    TransactionRsp transactionRsp = new TransactionRsp(id1, id2, amount,
+    TransactionRsp transactionRsp = new TransactionRsp(id1, id2, 1L, amount,
         TransactionStatus.TRANS_COMPLETE, description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(any()))
         .thenReturn(List.of(transactionRsp));
