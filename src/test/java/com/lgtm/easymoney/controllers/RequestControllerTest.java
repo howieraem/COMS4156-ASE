@@ -97,7 +97,7 @@ public class RequestControllerTest {
     requestReq.setCategory("PARTY");
     requestReq.setDescription(description);
     // transaction response
-    transactionRsp = new TransactionRsp(fromUid, toUid, amount,
+    transactionRsp = new TransactionRsp(fromUid, toUid, requestId, amount,
             TransactionStatus.TRANS_COMPLETE, description, Category.PARTY, lastUpdateTime);
     // response for making requests
     resourceCreatedRsp = new ResourceCreatedRsp(requestId);

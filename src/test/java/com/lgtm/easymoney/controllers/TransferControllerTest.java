@@ -85,7 +85,7 @@ public class TransferControllerTest {
     transferReq.setCategory("party");
     transferReq.setDescription(description);
     // transactionRsp
-    transactionRsp = new TransactionRsp(fromUid, toUid, amount,
+    transactionRsp = new TransactionRsp(fromUid, toUid, 1L, amount,
         TransactionStatus.TRANS_COMPLETE, description, Category.PARTY, lastUpdateTime);
     // transferRsp
     transferRsp = new TransferRsp();
