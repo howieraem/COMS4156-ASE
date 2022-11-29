@@ -17,11 +17,10 @@ else, view their user profile and deposit/withdraw money. You can think of venmo
 
 ## How to view CI/CD Reports
 
-We set up Github Actions and run all tests(unit tests, controllers, services, integrations, data integrity, multi-clients) using Junit with Jacoco
-coverage report. The actions workflow will create two badges, as shown at the very top of the Readme: one is showing the `branch` coverages, and the other one
-is the `overall` coverage.
+We set up GitHub Actions and run all tests (unit tests, integration tests, SonarQube scan and Postman API tests) using JUnit, JaCoCo
+coverage report, SonarCloud plugin and newman. The actions workflow will update two badges, as shown at the very top of the Readme: one is showing the `branch` coverages, and the other one is the `overall` coverage. The workflow will also update the report on SonarCloud which can be viewed by clicking on the bugs badge above. For more test outputs, go to the Actions tab, select a run and then click on "run_tests" on the left. 
 
-To manually run the coverage, you can use Intellij client to open this repo, and configure Jacoco coverage report, and `run all tests with coverage`.
+To check the coverage locally, you can use Intellij client to open this repo, and configure JaCoCo coverage report, and `run all tests with coverage`.
 
 ## How to build and run locally
 
