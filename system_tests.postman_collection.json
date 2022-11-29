@@ -8,6 +8,21 @@
 	"item": [
 		{
 			"name": "create user 1 personal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user created response 1\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -36,6 +51,21 @@
 		},
 		{
 			"name": "create user 2 personal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user created response 2\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -64,6 +94,21 @@
 		},
 		{
 			"name": "create user 3 business",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user created response 3\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(3);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -92,6 +137,21 @@
 		},
 		{
 			"name": "create user 4 business",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user created response 4\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -120,6 +180,21 @@
 		},
 		{
 			"name": "create user 5 financial",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user created response 5\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(5);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -153,6 +228,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Test user 1 token\", () => {",
+							"  pm.expect(responseBody).to.be.a(\"string\");",
+							"  pm.expect(responseBody.length).greaterThan(0);",
+							"});",
 							"pm.collectionVariables.set(\"user1Token\", responseBody)"
 						],
 						"type": "text/javascript"
@@ -192,6 +271,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Test user 2 token\", () => {",
+							"  pm.expect(responseBody).to.be.a(\"string\");",
+							"  pm.expect(responseBody.length).greaterThan(0);",
+							"});",
 							"pm.collectionVariables.set(\"user2Token\", responseBody)"
 						],
 						"type": "text/javascript"
@@ -231,6 +314,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Test user 3 token\", () => {",
+							"  pm.expect(responseBody).to.be.a(\"string\");",
+							"  pm.expect(responseBody.length).greaterThan(0);",
+							"});",
 							"pm.collectionVariables.set(\"user3Token\", responseBody)"
 						],
 						"type": "text/javascript"
@@ -270,6 +357,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Test user 4 token\", () => {",
+							"  pm.expect(responseBody).to.be.a(\"string\");",
+							"  pm.expect(responseBody.length).greaterThan(0);",
+							"});",
 							"pm.collectionVariables.set(\"user4Token\", responseBody)"
 						],
 						"type": "text/javascript"
@@ -309,6 +400,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Test user 5 token\", () => {",
+							"  pm.expect(responseBody).to.be.a(\"string\");",
+							"  pm.expect(responseBody.length).greaterThan(0);",
+							"});",
 							"pm.collectionVariables.set(\"user5Token\", responseBody)"
 						],
 						"type": "text/javascript"
@@ -342,7 +437,22 @@
 			"response": []
 		},
 		{
-			"name": "deposit user 1 200",
+			"name": "deposit user 1 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 1 balance after first deposit\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -354,7 +464,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"amount\" : \"400\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -377,6 +487,21 @@
 		},
 		{
 			"name": "withdraw user 1 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 1 balance after first withdraw\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -388,7 +513,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"amount\": \"200\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -411,6 +536,21 @@
 		},
 		{
 			"name": "deposit user 2 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 2 balance after first deposit\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -445,6 +585,21 @@
 		},
 		{
 			"name": "deposit user 3 50000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 3 balance after first deposit\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(50000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -479,6 +634,21 @@
 		},
 		{
 			"name": "deposit user 4 50000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 4 balance after first deposit\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(50000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -513,6 +683,21 @@
 		},
 		{
 			"name": "deposit user 5 1000000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 5 balance after first deposit\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.currBalance).eqls(1000000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -581,6 +766,21 @@
 		},
 		{
 			"name": "get user 1 details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test user 1 details\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -618,6 +818,21 @@
 		},
 		{
 			"name": "create money request 1=>2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test transaction 1 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -652,6 +867,17 @@
 		},
 		{
 			"name": "accept money request 2=>1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -693,6 +919,21 @@
 		},
 		{
 			"name": "create money request dec 1=>2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test transaction 2 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -768,6 +1009,21 @@
 		},
 		{
 			"name": "get all money requests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test pending requests\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.requests.length).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -792,6 +1048,21 @@
 		},
 		{
 			"name": "make a  transfer 1=>2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test transaction 3 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(3);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -826,6 +1097,21 @@
 		},
 		{
 			"name": "create group with personal user 1, business user 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test group 1 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -860,6 +1146,21 @@
 		},
 		{
 			"name": "get group ads",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test group ads\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.ads.length).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -967,6 +1268,21 @@
 		},
 		{
 			"name": "search users partial match",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test partial matching search\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.userProfiles.length).eqls(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -1022,6 +1338,21 @@
 		},
 		{
 			"name": "usr2 gets pending friends",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test pending friends\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.userProfiles.length).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1095,6 +1426,21 @@
 		},
 		{
 			"name": "get usr1's friends",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test friend list\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.userProfiles.length).eqls(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1132,6 +1478,21 @@
 		},
 		{
 			"name": "get usr1's feed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test feed\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.activities.length).greaterThan(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1203,6 +1564,21 @@
 		},
 		{
 			"name": "create loan request 1=>5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test transaction 4 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -1278,6 +1654,22 @@
 		},
 		{
 			"name": "create loan request dec 1=>5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Approved loan creates an extra transaction, so the ID is 6 here",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test transaction 6 created\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).eqls(6);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
