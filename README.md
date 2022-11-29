@@ -7,11 +7,12 @@
 ## Team members
 
 Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
-## Client Repo (Second Iteration)
-[Link to our second iteration Client repository](https://github.com/rl3250/f22_4156_client) 
-We decide to demo personal user related use case, i.e. personal end users can view the feed, make money requests/transfers to someone
-else, view their user profile and deposit/withdraw money. You can think of venmo/zelle as a real-life example.
 
+## Client Repository (Second Iteration)
+
+[Link to our second iteration client repository](https://github.com/rl3250/f22_4156_client) 
+We decide to demo personal user related use case, i.e. personal end users can view the feed, make money requests/transfers to someone
+else, view their user profile and deposit/withdraw money. You can think of venmo/zelle as a real-life example. **For details about end-to-end tests, please go to the README of the client repository.**
 
 
 ## How to view CI/CD Reports

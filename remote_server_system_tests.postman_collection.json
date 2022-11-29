@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f487c018-07fb-46ab-b4f4-acdf60795add",
+		"_postman_id": "02db2825-1758-42d3-b619-e039c61cb9ce",
 		"name": "4156 EasyMoney LGTM Remote",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24027110"
@@ -21,7 +21,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/register",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/register",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -31,7 +31,7 @@
 						"com"
 					],
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -53,7 +53,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/register",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/register",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -63,7 +63,7 @@
 						"com"
 					],
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -85,7 +85,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/register",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/register",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -95,7 +95,7 @@
 						"com"
 					],
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -117,7 +117,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/register",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/register",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -127,7 +127,7 @@
 						"com"
 					],
 					"path": [
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -149,7 +149,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/register",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/register",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -159,8 +159,223 @@
 						"com"
 					],
 					"path": [
-						"user",
+						"auth",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user1 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user1Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/login",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user2 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user2Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/login",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user3 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user3Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"11s31212@tes123t.com\",\n    \"password\" : \"heyhe4yhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/login",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user4 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user4Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/login",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user5 login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user5Token\", responseBody)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"a@bank.com\",\n    \"password\" : \"heyheyhey\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/auth/login",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"auth",
+						"login"
 					]
 				}
 			},
@@ -170,10 +385,16 @@
 			"name": "deposit user 1 200",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"raw": "{\n    \"amount\" : \"200\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,13 +420,133 @@
 			"response": []
 		},
 		{
+			"name": "withdraw user 1 200",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\" : \"1\",\n    \"amount\" : \"200\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/withdraw",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"user",
+						"withdraw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "deposit user 2 400",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"2\",\n    \"amount\" : \"400\"\n}",
+					"raw": "{\n    \"amount\" : \"400\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/deposit",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"user",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit user 3 50000",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user3Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\" : \"50000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/deposit",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"user",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit user 4 50000",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user4Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\" : \"50000\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -234,10 +575,16 @@
 			"name": "deposit user 5 1000000",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user5Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid\" : \"5\",\n    \"amount\" : \"1000000\"\n}",
+					"raw": "{\n    \"amount\" : \"1000000\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -263,13 +610,98 @@
 			"response": []
 		},
 		{
-			"name": "create money request",
+			"name": "update biz user 5",
 			"request": {
-				"method": "POST",
-				"header": [],
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user5Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"promotionText\" : \"unlimited cash!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/biz",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"user",
+						"biz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user 1 details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/user/me",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create money request 1=>2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -295,13 +727,19 @@
 			"response": []
 		},
 		{
-			"name": "accept money request",
+			"name": "accept money request 2=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\": \"1\",\n    \"fromUid\": \"2\",\n    \"toUid\": \"1\"\n}",
+					"raw": "{\n    \"requestid\": \"1\",\n    \"toUid\": \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -334,13 +772,19 @@
 			"response": []
 		},
 		{
-			"name": "create money request dec",
+			"name": "create money request dec 1=>2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\" : \"1\",\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
+					"raw": "{\n    \"toUid\" : \"2\",\n    \"amount\" : \"50\",\n    \"description\" : \"test description\",\n    \"category\" : \"FOOD\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -366,13 +810,19 @@
 			"response": []
 		},
 		{
-			"name": "decline money request",
+			"name": "decline money request 2=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\" : \"2\",\n    \"fromUid\" : \"2\",\n    \"toUid\" : \"1\"\n}",
+					"raw": "{\n    \"requestid\" : \"2\",\n    \"toUid\" : \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -396,7 +846,7 @@
 					"query": [
 						{
 							"key": "",
-							"value": null,
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -408,41 +858,15 @@
 			"name": "get all money requests",
 			"request": {
 				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/request/1",
-					"protocol": "http",
-					"host": [
-						"easymoneytest-env",
-						"eba-gxycxg4j",
-						"us-east-1",
-						"elasticbeanstalk",
-						"com"
-					],
-					"path": [
-						"request",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "make a  transfer from 1 to 2",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"fromUid\": 1,\n    \"toUid\": 2,\n    \"amount\": \"133.0\",\n    \"category\": \"PARTY\",\n    \"description\": \"123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
 					}
-				},
+				],
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/transfer/create",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/request",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -452,21 +876,26 @@
 						"com"
 					],
 					"path": [
-						"transfer",
-						"create"
+						"request"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "make a  transfer from 2 to 3",
+			"name": "make a  transfer 1=>2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromUid\": 2,\n    \"toUid\": 3,\n    \"amount\": \"199.0\",\n    \"category\": \"FOOD\",\n    \"description\": \"this is a transfer involving business!!\"\n}",
+					"raw": "{\n    \"toUid\": 2,\n    \"amount\": \"133.0\",\n    \"category\": \"PARTY\",\n    \"description\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -495,7 +924,13 @@
 			"name": "create group with personal user 1, business user 3",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user3Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"uids\": [1, 3],\n    \"name\": \"Test Group\",\n    \"description\": \"test\"\n}",
@@ -530,7 +965,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -566,7 +1007,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -631,78 +1078,6 @@
 			"response": []
 		},
 		{
-			"name": "search users by name",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
-					"protocol": "http",
-					"host": [
-						"easymoneytest-env",
-						"eba-gxycxg4j",
-						"us-east-1",
-						"elasticbeanstalk",
-						"com"
-					],
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search users email",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
-					"protocol": "http",
-					"host": [
-						"easymoneytest-env",
-						"eba-gxycxg4j",
-						"us-east-1",
-						"elasticbeanstalk",
-						"com"
-					],
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search users phone",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
-					"protocol": "http",
-					"host": [
-						"easymoneytest-env",
-						"eba-gxycxg4j",
-						"us-east-1",
-						"elasticbeanstalk",
-						"com"
-					],
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "search users partial match",
 			"request": {
 				"method": "GET",
@@ -727,37 +1102,19 @@
 			"response": []
 		},
 		{
-			"name": "search failed",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
-					"protocol": "http",
-					"host": [
-						"easymoneytest-env",
-						"eba-gxycxg4j",
-						"us-east-1",
-						"elasticbeanstalk",
-						"com"
-					],
-					"path": [
-						"search",
-						"info",
-						"22"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "add friend 1, 2",
+			"name": "add friend 1=>2",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 1,\n    \"uid2\": 2,\n    \"message\" : \"test\"\n}",
+					"raw": "{\n    \"uid\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -783,13 +1140,60 @@
 			"response": []
 		},
 		{
-			"name": "accept friend",
+			"name": "usr2 gets pending friends",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"uid1\": 2,\n    \"uid2\": 1\n}",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/friend/pending",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"friend",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept friend 2=>1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user2Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -815,13 +1219,19 @@
 			"response": []
 		},
 		{
-			"name": "get user 1's feed",
+			"name": "get usr1's friends",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -832,7 +1242,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/feed/1",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/friend",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -842,18 +1252,101 @@
 						"com"
 					],
 					"path": [
-						"feed",
-						"1"
+						"friend"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "create loan request",
+			"name": "get usr1's feed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/feed",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "usr1 deletes friend 2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/friend/2",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"friend",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create loan request 1=>5",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"fromUid\": 1,\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
@@ -882,13 +1375,19 @@
 			"response": []
 		},
 		{
-			"name": "approve loan request",
+			"name": "approve loan request 5=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user5Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"fromUid\": 5,\n  \"toUid\": 1,\n  \"requestid\": 4\n}",
+					"raw": "{\n  \"toUid\": 1,\n  \"requestid\": 4\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -921,13 +1420,19 @@
 			"response": []
 		},
 		{
-			"name": "create loan request dec",
+			"name": "create loan request dec 1=>5",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"fromUid\": 1,\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
+					"raw": "{\n  \"toUid\": 5,\n  \"amount\": 100,\n  \"description\": \"need free money\",\n  \"category\": \"RENT\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -953,13 +1458,19 @@
 			"response": []
 		},
 		{
-			"name": "decline loan request",
+			"name": "decline loan request 5=>1",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user5Token}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"requestid\" : \"6\",\n    \"fromUid\" : \"5\",\n    \"toUid\" : \"1\"\n}",
+					"raw": "{\n    \"requestid\" : \"6\",\n    \"toUid\" : \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -990,6 +1501,68 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "get user 1 analytics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user1Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/analytic",
+					"protocol": "http",
+					"host": [
+						"easymoneytest-env",
+						"eba-gxycxg4j",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"analytic"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "user1Token",
+			"value": ""
+		},
+		{
+			"key": "user2Token",
+			"value": ""
+		},
+		{
+			"key": "user3Token",
+			"value": ""
+		},
+		{
+			"key": "user4Token",
+			"value": ""
+		},
+		{
+			"key": "user5Token",
+			"value": ""
 		}
 	]
 }
