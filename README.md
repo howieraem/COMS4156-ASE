@@ -12,7 +12,15 @@ Junhao Lin, Ruize Li, Ken Xiong, Jianyang Duan
 We decide to demo personal user related use case, i.e. personal end users can view the feed, make money requests/transfers to someone
 else, and update their user profile. You can think of venmo/zelle as a real-life example.
 
+## How some third party could develop using our service
 
+Our service has integrated authentication service along with additional money services targeting different types of users and use cases. Third party developers need to first
+setup using our auth service, and handle unauthorized errors properly in the client, as most of our services are not available without logging in. One exception
+is that the search service does not require auth, and developers should gate it properly for DoS reasons.
+
+We provided some common money service apis that are mostly extensible, clients can achieve more complex features by extending our services with their own code, or even
+other services. For example, the addresses can be integrated with some auto complete address service, and same thing for the telephones, emails, and so on. In
+our setting, one user has one bank account, and clients can further this and can potentially integerate it with some banking service to include multiple bank accounts.
 
 ## How to view CI/CD Reports
 
