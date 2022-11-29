@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class RequestAcceptDeclineReq {
   @NotNull
-  private Long fromUid;
-  @NotNull
   private Long toUid;
   @NotNull
   private Long requestid;

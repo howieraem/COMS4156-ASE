@@ -196,7 +196,6 @@ public class RequestControllerTest {
   public void acceptRequestSuccess() throws Exception {
     // Arrange
     RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
@@ -221,7 +220,6 @@ public class RequestControllerTest {
   public void acceptRequestFailedByInvalidRequest() throws Exception {
     // Arrange
     RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.acceptRequest(requestId, fromUid, toUid))
@@ -246,7 +244,6 @@ public class RequestControllerTest {
   public void declineRequestSuccess() throws Exception {
     // Arrange
     RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService
@@ -275,7 +272,6 @@ public class RequestControllerTest {
   public void declineRequestFailedByInvalidRequest() throws Exception {
     // Arrange
     RequestAcceptDeclineReq req = new RequestAcceptDeclineReq();
-    req.setFromUid(fromUid);
     req.setToUid(toUid);
     req.setRequestid(requestId);
     Mockito.when(requestService.declineRequest(requestId, fromUid, toUid))

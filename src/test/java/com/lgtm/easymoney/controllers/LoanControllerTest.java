@@ -92,7 +92,6 @@ public class LoanControllerTest {
     requestReq.setDescription(description);
     // request for loan approve/decline
     requestAcceptDeclineReq = new RequestAcceptDeclineReq();
-    requestAcceptDeclineReq.setFromUid(toUid);
     requestAcceptDeclineReq.setToUid(fromUid);
     requestAcceptDeclineReq.setRequestid(requestId);
     // response for loan request
