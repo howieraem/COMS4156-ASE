@@ -18,4 +18,6 @@ public class ValidationConsts {
   public static final String ROUTING_NUMBER_REGEX = DIGITS_REGEX + ROUTING_NUMBER_LEN + "}";
   public static final String PHONE_NUMBER_REGEX = DIGITS_REGEX + PHONE_LEN + "}";
   public static final int MAX_USER_TYPE_LEN = 9;
+
+  public static final String ACCOUNT_NAME_REGEX = "^[A-Za-z\\\\s]+$";
 }
