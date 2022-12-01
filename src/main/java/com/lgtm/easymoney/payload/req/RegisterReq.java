@@ -29,7 +29,8 @@ public class RegisterReq {
   @Pattern(regexp = ValidationConsts.PHONE_NUMBER_REGEX)
   private String phone;
 
-  @NotBlank
+  @NotNull
+  @Pattern(regexp = ValidationConsts.ACCOUNT_NAME_REGEX)
   private String accountName;
 
   @NotNull

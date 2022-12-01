@@ -167,6 +167,16 @@ public class AuthControllerTest {
     registerReq.setAccountName("");
     postRegister(registerReq).andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.errorFields").value("accountName"));
+
+    // account name contains digits
+    registerReq.setAccountName("test123");
+    postRegister(registerReq).andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errorFields").value("accountName"));
+
+    // account name contains special characters
+    registerReq.setAccountName("test?test");
+    postRegister(registerReq).andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errorFields").value("accountName"));
   }
 
   @Test

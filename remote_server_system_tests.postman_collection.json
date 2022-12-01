@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\",\n    \"accountName\" : \"test12\",\n    \"accountNumber\" : \"43654\",\n    \"routingNumber\" : \"222222224\",\n    \"phone\" : \"9094567891\",\n    \"userType\" : \"personal\"\n}",
+					"raw": "{\n    \"email\" : \"222@gmail.com\",\n    \"password\" : \"123\",\n    \"accountName\" : \"test test\",\n    \"accountNumber\" : \"43654\",\n    \"routingNumber\" : \"222222224\",\n    \"phone\" : \"9094567891\",\n    \"userType\" : \"personal\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -45,7 +45,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\",\n    \"accountName\" : \"test12\",\n    \"accountNumber\" : \"43654\",\n    \"routingNumber\" : \"222222221\",\n    \"phone\" : \"9094567891\",\n    \"userType\" : \"personal\"\n}",
+					"raw": "{\n    \"email\" : \"2223@gmail.com\",\n    \"password\" : \"123\",\n    \"accountName\" : \"test user\",\n    \"accountNumber\" : \"43654\",\n    \"routingNumber\" : \"222222221\",\n    \"phone\" : \"9094567891\",\n    \"userType\" : \"personal\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -109,7 +109,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\",\n    \"accountName\" : \"test\",\n    \"accountNumber\" : \"7555608\",\n    \"routingNumber\" : \"987654321\",\n    \"userType\" : \"business\"\n}",
+					"raw": "{\n    \"email\" : \"test@te3t.com\",\n    \"password\" : \"heyheyhey\",\n    \"accountName\" : \"test biz\",\n    \"accountNumber\" : \"7555608\",\n    \"routingNumber\" : \"987654321\",\n    \"userType\" : \"business\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
