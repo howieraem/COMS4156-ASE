@@ -1083,7 +1083,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/1@",
+					"raw": "http://easymoneytest-env.eba-gxycxg4j.us-east-1.elasticbeanstalk.com/search/info/22",
 					"protocol": "http",
 					"host": [
 						"easymoneytest-env",
@@ -1095,7 +1095,7 @@
 					"path": [
 						"search",
 						"info",
-						"1@"
+						"22"
 					]
 				}
 			},
