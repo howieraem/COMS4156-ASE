@@ -286,8 +286,9 @@ public class TransactionServiceImplTest {
 
   @Test
   public void generateListResponseFromTransactionsSuccess() {
-    List<TransactionRsp> expectedRsp = List.of(new TransactionRsp(id1, id2, transaction.getId(), amount,
-        TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime));
+    List<TransactionRsp> expectedRsp = List.of(
+        new TransactionRsp(id1, id2, transaction.getId(), amount,
+                           TransactionStatus.TRANS_PENDING, description, category, lastUpdateTime));
     List<TransactionRsp> returnedRsp =
         transactionService.generateListResponseFromTransactions(List.of(transaction));
     assertEquals(returnedRsp, expectedRsp);

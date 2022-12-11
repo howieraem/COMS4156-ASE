@@ -195,7 +195,8 @@ public class LoanServiceImplTest {
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
     Mockito.when(requestService.createRequest(user2, user1, amount, String.valueOf(transactionId),
         Category.LOAN_PAYBACK)).thenReturn(payback);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 3L, amount, TransactionStatus.LOAN_APPROVED,
+    TransactionRsp loanRsp = new TransactionRsp(
+        id2, id1, 3L, amount, TransactionStatus.LOAN_APPROVED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan, payback))).thenReturn(List.of(loanRsp, paybackRsp));
@@ -296,7 +297,8 @@ public class LoanServiceImplTest {
     loan.setId(transactionId);
 
     Mockito.when(transactionService.saveTransaction(any())).thenReturn(loan);
-    TransactionRsp loanRsp = new TransactionRsp(id2, id1, 1L, amount, TransactionStatus.LOAN_DECLINED,
+    TransactionRsp loanRsp = new TransactionRsp(
+        id2, id1, 1L, amount, TransactionStatus.LOAN_DECLINED,
         description, category, lastUpdateTime);
     Mockito.when(transactionService.generateListResponseFromTransactions(
         List.of(loan))).thenReturn(List.of(loanRsp));
