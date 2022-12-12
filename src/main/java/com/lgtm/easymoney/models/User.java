@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,6 +65,7 @@ public class User implements Serializable {
   @Column(length = ValidationConsts.MAX_USER_TYPE_LEN, nullable = false)
   private UserType type;
 
+  @Digits(integer = 63, fraction = 2)
   @Column(nullable = false)
   private BigDecimal balance = BigDecimal.ZERO;
 
